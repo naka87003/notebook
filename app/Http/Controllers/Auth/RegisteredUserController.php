@@ -46,22 +46,22 @@ class RegisteredUserController extends Controller
         EmailPreference::create([
             'user_id' => $user->id,
             'type' => 'like',
-            'value' => false
+            'value' => 0
         ]);
         EmailPreference::create([
             'user_id' => $user->id,
             'type' => 'follow',
-            'value' => true
+            'value' => 1
         ]);
         EmailPreference::create([
             'user_id' => $user->id,
             'type' => 'comment',
-            'value' => true
+            'value' => 1
         ]);
         EmailPreference::create([
             'user_id' => $user->id,
             'type' => 'reply',
-            'value' => true
+            'value' => 1
         ]);
 
         event(new Registered($user));

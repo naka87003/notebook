@@ -20,7 +20,7 @@ const form = useForm({
   title: '',
   content: '',
   category: 1,
-  public: true,
+  public: 1,
   tag: null,
   starts: dayjs().add(1, 'hour').format('YYYY-MM-DDTHH:00'),
   ends: dayjs().add(2, 'hour').format('YYYY-MM-DDTHH:00'),
