@@ -20,13 +20,16 @@ const previewImagePath = computed(() => {
 
 <template>
   <v-card rounded="0">
-    <v-toolbar density="comfortable" color="transparent" :title="targetNote.title">
+    <v-toolbar density="compact" color="transparent">
+      <template #title>
+        <span class="text-body-1">{{ targetNote.title }}</span>
+      </template>
       <template v-slot:prepend>
-        <v-icon :icon="targetNote.category.mdi_name" size="large" class="ms-3"></v-icon>
+        <v-icon :icon="targetNote.category.mdi_name" class="ms-3"></v-icon>
       </template>
       <template v-slot:append>
         <v-btn @click="$emit('close')">
-          <v-icon size="x-large" icon="mdi-close" />
+          <v-icon size="large" icon="mdi-close" />
           <v-tooltip activator="parent" location="bottom" text="Close" />
         </v-btn>
       </template>

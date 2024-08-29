@@ -29,9 +29,9 @@ const showTaggedNotes = () => {
 
 <template>
   <v-card :color="note.category.vuetify_theme_color_name" variant="tonal" class="mx-auto"
-    :prepend-icon="note.category.mdi_name" :title="note.title" rounded="0">
-    <template v-slot:prepend>
-      <v-icon size="large"></v-icon>
+    :prepend-icon="note.category.mdi_name" :title="note.title" density="compact" rounded="0">
+    <template #title>
+      <span class="text-body-1">{{ note.title }}</span>
     </template>
     <template v-slot:append>
       <p class="text-caption">
