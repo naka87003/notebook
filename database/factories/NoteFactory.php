@@ -22,8 +22,8 @@ class NoteFactory extends Factory
     {
         $userId = User::all()->random()->id;
         return [
-            'title' => fake()->randomElement([fake()->sentence(rand(1, 10)), null]),
-            'content' => fake()->paragraphs(rand(1, rand(1, 10)), true),
+            'title' => fake()->randomElement([fake()->sentence(rand(1, 5)), null]),
+            'content' => fake()->paragraphs(rand(1, rand(1, 7)), true),
             'public' => true,
             'user_id' => $userId,
             'category_id' => 1,
@@ -39,13 +39,13 @@ class NoteFactory extends Factory
     {
         return $this->state(function (array $attributes) {
             $userId = User::all()->random()->id;
-            $dt = Carbon::parse(fake()->dateTimeBetween('now', '+3 month'));
+            $dt = Carbon::parse(fake()->dateTimeBetween('-1 month', '+2 month'));
             $start = $dt->toDateTimeString();
             $end = $dt->addHours(rand(1, 10))->toDateTimeString();
 
             return [
-                'title' => fake()->sentence(rand(1, 10)),
-                'content' => fake()->randomElement([fake()->paragraphs(rand(1, rand(1, 10)), true), null, null]),
+                'title' => fake()->sentence(rand(1, 5)),
+                'content' => fake()->randomElement([fake()->paragraphs(rand(1, rand(1, 7)), true), null, null]),
                 'user_id' => $userId,
                 'category_id' => 3,
                 'status_id' => 1,
