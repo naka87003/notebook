@@ -34,7 +34,7 @@ const dialog = ref({
   archiveConfirm: false,
   retrieveConfirm: false,
   deleteConfirm: false,
-  searchText: false,
+  searchText:false,
   sortMenu: false,
   filterMenu: false,
   enlargedImage: false,
@@ -272,20 +272,20 @@ provide('updatePosts', updatePosts);
       </v-text-field>
       <v-btn class="hidden-sm-and-up" @click="dialog.searchText = true">
         <v-icon size="x-large" icon="mdi-magnify" :class="{ 'text-red': searchEntered }" />
-        <v-tooltip activator="parent" location="bottom" text="Search" open-on-click />
+        <v-tooltip activator="parent" location="bottom" text="Search" />
       </v-btn>
       <v-spacer></v-spacer>
       <v-btn @click="dialog.create = true">
         <v-icon size="x-large" icon="mdi-plus" />
-        <v-tooltip activator="parent" location="bottom" text="New" open-on-click />
+        <v-tooltip activator="parent" location="bottom" text="New" />
       </v-btn>
       <v-btn :class="{ 'text-red': sortChanged }" @click="dialog.sortMenu = true">
         <v-icon size="x-large" :icon="sortIcon" />
-        <v-tooltip activator="parent" location="bottom" text="Sort" open-on-click />
+        <v-tooltip activator="parent" location="bottom" text="Sort" />
       </v-btn>
       <v-btn :class="{ 'text-red': filterChanged }" @click="dialog.filterMenu = true">
         <v-icon size="x-large" icon="mdi-filter-menu-outline" />
-        <v-tooltip activator="parent" location="bottom" text="Filter" open-on-click />
+        <v-tooltip activator="parent" location="bottom" text="Filter" />
       </v-btn>
     </template>
     <v-container>
@@ -299,8 +299,7 @@ provide('updatePosts', updatePosts);
           Let's click the plus button above to create your first note!
         </v-alert>
       </template>
-      <v-alert v-else-if="isInProgress === false && notes.size === 0" variant="text" class="text-center"
-        text="No data available" />
+      <v-alert v-else-if="isInProgress === false && notes.size === 0" variant="text" class="text-center" text="No data available" />
       <v-infinite-scroll v-else :onLoad="load" class="w-100 overflow-hidden" empty-text="">
         <v-row>
           <template v-for="note in notes.values()" :key="note.id">
@@ -310,19 +309,19 @@ provide('updatePosts', updatePosts);
                 <template #actions>
                   <v-btn size="small" @click="showEditDialog(note)">
                     <v-icon size="large" icon="mdi-pencil-outline" />
-                    <v-tooltip activator="parent" location="bottom" text="Edit" open-on-click />
+                    <v-tooltip activator="parent" location="bottom" text="Edit" />
                   </v-btn>
                   <v-btn v-if="note.status.name === 'archived'" size="small" @click="showRetrieveConfirmDialog(note)">
                     <v-icon size="large" icon="mdi-keyboard-return" />
-                    <v-tooltip activator="parent" location="bottom" text="Retrieve" open-on-click />
+                    <v-tooltip activator="parent" location="bottom" text="Retrieve" />
                   </v-btn>
                   <v-btn v-else size="small" @click="showArchiveConfirmDialog(note)">
                     <v-icon size="large" icon="mdi-archive-plus-outline" />
-                    <v-tooltip activator="parent" location="bottom" text="Archive" open-on-click />
+                    <v-tooltip activator="parent" location="bottom" text="Archive" />
                   </v-btn>
                   <v-btn size="small" @click="showDeleteConfirmDialog(note)">
                     <v-icon size="large" icon="mdi-delete-outline" />
-                    <v-tooltip activator="parent" location="bottom" text="Delete" open-on-click />
+                    <v-tooltip activator="parent" location="bottom" text="Delete" />
                   </v-btn>
                 </template>
               </NoteItem>
