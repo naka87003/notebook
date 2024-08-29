@@ -53,7 +53,7 @@ class NoteController extends Controller
     public function store(Request $request): RedirectResponse
     {
         $request->validate([
-            'content' => 'required_unless:category,3|max:500',
+            'content' => 'required_unless:category,3|max:1000',
             'image' => 'nullable|image|max:10240',
             'title' => 'required_if:category,3|max:50',
             'public' => 'required|boolean',
@@ -100,7 +100,7 @@ class NoteController extends Controller
     public function update(Request $request, Note $note)
     {
         $request->validate([
-            'content' => 'required_unless:category,3|max:500',
+            'content' => 'required_unless:category,3|max:1000',
             'image' => 'nullable|image|max:10240',
             'title' => 'required_if:category,3|max:50',
             'public' => 'required|boolean',

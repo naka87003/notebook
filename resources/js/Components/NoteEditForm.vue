@@ -146,7 +146,7 @@ const copyDateToEnd = () => {
                 <div class="text-subtitle-1 text-medium-emphasis">Content</div>
                 <v-textarea v-model="form.content" hide-details="auto" type="text" density="compact"
                   placeholder="Enter Content" variant="outlined" :error="Boolean(form.errors.content)"
-                  :error-messages="form.errors.content" required autofocus auto-grow
+                  :error-messages="form.errors.content" required autofocus auto-grow counter="1000" maxLength="1000"
                   @input="form.errors.content = null" />
               </v-col>
               <v-col cols="12">
