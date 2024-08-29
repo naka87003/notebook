@@ -53,7 +53,7 @@ class ProfileController extends Controller
         $user = $request->user();
 
         $request->validate([
-            'image' => 'image|max:2048'
+            'image' => 'image|max:10240'
         ]);
 
         // 画像ファイルインスタンス取得
