@@ -168,7 +168,7 @@ provide('updatePosts', updatePosts);
       </v-text-field>
       <v-btn class="hidden-sm-and-up" @click="dialog.searchText = true">
         <v-icon size="x-large" icon="mdi-magnify" :class="{ 'text-red': searchEntered }" />
-        <v-tooltip activator="parent" location="bottom" text="New" />
+        <v-tooltip activator="parent" location="bottom" text="Search" />
       </v-btn>
       <v-spacer></v-spacer>
       <v-btn :class="{ 'text-red': filter.following }" @click="filterFollowing">
