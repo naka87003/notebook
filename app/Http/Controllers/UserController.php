@@ -31,7 +31,7 @@ class UserController extends Controller
             $query->offset($request->offset);
         }
 
-        $followers = $query->orderByPivot('created_at', 'desc')->get();
+        $followers = $query->orderByPivot('created_at', 'desc')->limit(10)->get();
 
         return response()->json($followers);
     }
@@ -44,7 +44,7 @@ class UserController extends Controller
             $query->offset($request->offset);
         }
 
-        $followees = $query->orderByPivot('created_at', 'desc')->get();
+        $followees = $query->orderByPivot('created_at', 'desc')->limit(10)->get();
 
         return response()->json($followees);
     }
