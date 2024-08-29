@@ -1,7 +1,7 @@
 <script setup lang="ts">
 import type { Note } from '@/interfaces';
 import { router } from '@inertiajs/vue3';
-import { computed } from 'vue';
+import { computed, ref } from 'vue';
 import { simplifyDateTime, splitByNewline, relativeDateTime } from '@/common';
 
 const props = defineProps<{
@@ -15,6 +15,8 @@ defineEmits<{
   showComments: [];
 }>();
 
+const truncate = ref(true);
+
 const previewImagePath = computed(() => {
   return props.note.image_path ? '/storage/' + props.note.image_path : null;
 });
@@ -25,6 +27,19 @@ const showTaggedNotes = () => {
     status: props.note.status_id
   });
 };
+
+const arrCommentLines = computed(() => splitByNewline(props.note.content ?? ''));
+
+const isTruncated = computed(() => truncate.value && arrCommentLines.value.length > 5);
+
+const paragraphs = computed(() => {
+  let lines = arrCommentLines.value;
+  if (truncate.value && lines.length > 5) {
+    lines = lines.slice(0, 5);
+    lines[lines.length - 1] += '...';
+  }
+  return lines;
+});
 </script>
 
 <template>
@@ -44,7 +59,9 @@ const showTaggedNotes = () => {
         <p class="text-body-2">from {{ simplifyDateTime(note.starts_at) }}</p>
         <p class="text-body-2">to {{ simplifyDateTime(note.ends_at) }}</p>
       </v-alert>
-      <p v-for="paragraph in splitByNewline(note.content ?? '')" class="note-paragraph text-body-1">{{ paragraph }}</p>
+      <p v-for="paragraph in paragraphs" class="note-paragraph text-body-1">{{ paragraph }}</p>
+      <v-btn v-if="isTruncated" class="text-capitalize ps-0" color="primary" variant="text" density="compact"
+      @click="truncate = false">Show more</v-btn>
       <v-img v-if="previewImagePath" :src="previewImagePath" width="300" class="mt-3 cursor-pointer" style="z-index: 1;"
         lazy-src="/lazy-src.gif" @click="$emit('showEnlargedImage', previewImagePath)">
         <template v-slot:placeholder>
