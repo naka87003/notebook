@@ -42,14 +42,14 @@ const resizeWindow = () => {
   <GuestLayout>
 
     <Head title="Log in" />
-    <v-card class="mx-auto" elevation="8" :max-width="isExtraSmallWidth ? '370' : '448'" rounded="lg">
+    <v-card class="mx-auto" elevation="8" :max-width="isExtraSmallWidth ? '350' : '448'" rounded="lg">
       <v-toolbar density="comfortable" color="transparent">
         <v-toolbar-title class="text-h6">
           Login
         </v-toolbar-title>
       </v-toolbar>
       <v-divider />
-      <v-card-text :class="isExtraSmallWidth ? 'px-8' : 'px-12'">
+      <v-card-text :class="isExtraSmallWidth ? 'px-6' : 'px-12'">
         <v-alert v-if="status" :text="status" type="success" variant="tonal" class="mb-3" closable />
         <form @submit.prevent="submit" @keyup.enter="submit">
           <div class="text-subtitle-1 text-medium-emphasis">Email</div>

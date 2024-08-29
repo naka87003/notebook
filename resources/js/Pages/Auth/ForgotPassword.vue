@@ -1,12 +1,26 @@
 <script setup lang="ts">
 import GuestLayout from '@/Layouts/GuestLayout.vue';
 import { Head, useForm } from '@inertiajs/vue3';
+import { computed, onMounted, ref } from 'vue';
 
 defineProps<{ status?: string }>();
 
 const form = useForm({
   email: '',
 });
+
+const windowWidth = ref(1000)
+
+const isExtraSmallWidth = computed(() => windowWidth.value < 500);
+
+onMounted(() => {
+  window.addEventListener('resize', resizeWindow)
+  resizeWindow();
+});
+
+const resizeWindow = () => {
+  windowWidth.value = window.innerWidth;
+};
 
 const submit = () => {
   form.post(route('password.email'));
@@ -17,14 +31,14 @@ const submit = () => {
   <GuestLayout>
 
     <Head title="Forgot Password" />
-    <v-card class="mx-auto" elevation="8" max-width="448" rounded="lg">
+    <v-card class="mx-auto" elevation="8" :max-width="isExtraSmallWidth ? '350' : '448'" rounded="lg">
       <v-toolbar density="comfortable" color="transparent">
         <v-toolbar-title class="text-h6">
           Password Reset
         </v-toolbar-title>
       </v-toolbar>
       <v-divider />
-      <v-card-text class="px-12 pb-10">
+      <v-card-text class="pb-8" :class="isExtraSmallWidth ? 'px-6' : 'px-12'">
         <v-alert v-if="status" :text="status" class="mb-6 " type="success" variant="tonal" closable />
         <v-card class="mb-6" color="surface-variant" variant="tonal">
           <v-card-text class="text-medium-emphasis text-caption">

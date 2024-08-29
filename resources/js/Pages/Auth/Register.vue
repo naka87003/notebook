@@ -1,7 +1,7 @@
 <script setup lang="ts">
 import GuestLayout from '@/Layouts/GuestLayout.vue';
 import { Head, router, useForm } from '@inertiajs/vue3';
-import { ref } from 'vue';
+import { computed, onMounted, ref } from 'vue';
 
 const form = useForm({
 	name: '',
@@ -11,6 +11,19 @@ const form = useForm({
 });
 
 const visible = ref(false);
+
+const windowWidth = ref(1000)
+
+const isExtraSmallWidth = computed(() => windowWidth.value < 500);
+
+onMounted(() => {
+  window.addEventListener('resize', resizeWindow)
+  resizeWindow();
+});
+
+const resizeWindow = () => {
+  windowWidth.value = window.innerWidth;
+};
 
 const submit = () => {
 	form.post(route('register'), {
@@ -27,14 +40,14 @@ const pageTransition = (name: string) => {
 	<GuestLayout>
 
 		<Head title="Register" />
-		<v-card class="mx-auto" elevation="8" max-width="448" rounded="lg">
+		<v-card class="mx-auto mb-10" elevation="8" :max-width="isExtraSmallWidth ? '350' : '448'" rounded="lg">
 			<v-toolbar density="comfortable" color="transparent">
 				<v-toolbar-title class="text-h6">
 					Register
 				</v-toolbar-title>
 			</v-toolbar>
 			<v-divider />
-			<v-card-text class="px-12">
+			<v-card-text :class="isExtraSmallWidth ? 'px-6' : 'px-12'">
 				<form @submit.prevent="submit">
 					<div class="text-subtitle-1 text-medium-emphasis">Name</div>
 					<v-text-field v-model="form.name" type="text" density="compact" placeholder="Enter your name"
