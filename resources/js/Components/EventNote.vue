@@ -61,7 +61,7 @@ const previewImagePath = computed(() => {
           <span class="text-caption">{{ targetNote.tag?.name }}</span>
         </v-btn>
         <v-icon v-if="targetNote.status.name === 'archived'" size="small" class="me-5" icon="mdi-archive-outline" />
-        <v-icon v-if="targetNote.public === false" size="small" class="me-5" icon="mdi-lock-outline"></v-icon>
+        <v-icon v-if="!targetNote.public" size="small" class="me-5" icon="mdi-lock-outline"></v-icon>
       </template>
       <v-spacer />
       <slot name="actions" :targetNote />

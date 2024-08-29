@@ -15,7 +15,7 @@ export type Note = {
   starts_at?: string;
   ends_at?: string;
   content?: string;
-  public: boolean;
+  public: number;
   image_path?: string;
   category_id: number;
   tag_id?: number;
@@ -122,7 +122,7 @@ export type EmailPrerefence = {
   id: number;
   user_id: number;
   type: string;
-  value: boolean;
+  value: number;
   created_at: string;
   updated_at: string;
 };

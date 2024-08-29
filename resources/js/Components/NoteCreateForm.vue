@@ -222,8 +222,8 @@ const copyDateToEnd = () => {
                 <div class="text-subtitle-1 text-medium-emphasis">Visibility</div>
                 <v-radio-group v-model="form.public" column :error-messages="form.errors.public"
                   :error="Boolean(form.errors.public)" hide-details="auto">
-                  <v-radio label="Public" :value="true" />
-                  <v-radio label="Private" :value="false" />
+                  <v-radio label="Public" :value="1" />
+                  <v-radio label="Private" :value="0" />
                 </v-radio-group>
               </v-col>
             </v-row>

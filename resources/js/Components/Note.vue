@@ -67,7 +67,7 @@ const showTaggedNotes = () => {
         </v-btn>
       </template>
       <v-btn v-if="note.status.name === 'archived'" size="small" icon="mdi-archive-outline" readonly />
-      <v-btn v-if="note.public === false" size="small" icon="mdi-lock-outline" readonly />
+      <v-btn v-if="!note.public" size="small" icon="mdi-lock-outline" readonly />
       <v-btn v-if="note.public && note.comments_count" prepend-icon="mdi-comment-outline"
         :readonly="Boolean(commentLinkDisabled)" @click="$emit('showComments')">
         {{ note.comments_count || '' }}

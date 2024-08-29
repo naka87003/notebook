@@ -34,7 +34,7 @@ const form = useForm({ emailPreferences: defaultFormProps });
                 </v-card>
                 <form @submit.prevent="form.patch(route('preferences.update'))">
                   <template v-for="item in emailPreferences">
-                    <v-checkbox v-model="form.emailPreferences[item.type]" class="mb-n10">
+                    <v-checkbox v-model="form.emailPreferences[item.type]" class="mb-n10" :true-value="1" :false-value="0">
                       <template #label>
                         {{ item.type }}
                       </template>
