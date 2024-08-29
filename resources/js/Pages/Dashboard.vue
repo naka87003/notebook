@@ -203,8 +203,8 @@ const showSnackBar = (msg: string): void => {
 
 const refreshDisplay = async (): Promise<void> => {
   isInProgress.value = true;
-  const result = await loadNotes();
   notes.value.clear();
+  const result = await loadNotes();
   for (const note of result) {
     notes.value.set(note.id, note);
   }
