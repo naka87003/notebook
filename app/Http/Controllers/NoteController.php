@@ -54,7 +54,7 @@ class NoteController extends Controller
     {
         $request->validate([
             'content' => 'required_unless:category,3|max:500',
-            'image' => 'nullable|image|max:2048',
+            'image' => 'nullable|image|max:10240',
             'title' => 'required_if:category,3|max:50',
             'public' => 'required|boolean',
             'category' => 'required|numeric',
@@ -101,7 +101,7 @@ class NoteController extends Controller
     {
         $request->validate([
             'content' => 'required_unless:category,3|max:500',
-            'image' => 'nullable|image|max:2048',
+            'image' => 'nullable|image|max:10240',
             'title' => 'required_if:category,3|max:50',
             'public' => 'required|boolean',
             'category' => 'required|numeric',
