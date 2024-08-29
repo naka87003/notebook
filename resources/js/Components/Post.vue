@@ -30,12 +30,12 @@ const previewImagePath = computed(() => {
 
 const arrCommentLines = computed(() => splitByNewline(props.note.content ?? ''));
 
-const isTruncated = computed(() => truncate.value && arrCommentLines.value.length > 8);
+const isTruncated = computed(() => truncate.value && arrCommentLines.value.length > 5);
 
 const paragraphs = computed(() => {
   let lines = arrCommentLines.value;
-  if (truncate.value && lines.length > 8) {
-    lines = lines.slice(0, 7);
+  if (truncate.value && lines.length > 5) {
+    lines = lines.slice(0, 4);
     lines[lines.length - 1] += '...';
   }
   return lines;
