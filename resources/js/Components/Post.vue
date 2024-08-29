@@ -35,7 +35,7 @@ const isTruncated = computed(() => truncate.value && arrCommentLines.value.lengt
 const paragraphs = computed(() => {
   let lines = arrCommentLines.value;
   if (truncate.value && lines.length > 5) {
-    lines = lines.slice(0, 4);
+    lines = lines.slice(0, 5);
     lines[lines.length - 1] += '...';
   }
   return lines;

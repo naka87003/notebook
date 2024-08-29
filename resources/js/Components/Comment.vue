@@ -52,7 +52,7 @@ const arrCommentLines = computed(() => splitByNewline(props.comment.content ?? '
 const paragraphs = computed(() => {
   let lines = arrCommentLines.value;
   if (truncate.value && lines.length > 10) {
-    lines = lines.slice(0, 9);
+    lines = lines.slice(0, 10);
     lines[lines.length - 1] += '...';
   }
   return lines;
