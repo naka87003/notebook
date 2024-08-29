@@ -46,7 +46,7 @@ const showTaggedNotes = () => {
       </v-alert>
       <p v-for="paragraph in splitByNewline(note.content ?? '')" class="note-paragraph text-body-1">{{ paragraph }}</p>
       <v-img v-if="previewImagePath" :src="previewImagePath" width="300" class="mt-3 cursor-pointer" style="z-index: 1;"
-        @click="$emit('showEnlargedImage', previewImagePath)">
+        lazy-src="/lazy-src.gif" @click="$emit('showEnlargedImage', previewImagePath)">
         <template v-slot:placeholder>
           <div class="d-flex align-center justify-center fill-height">
             <v-progress-circular color="grey-lighten-4" indeterminate></v-progress-circular>

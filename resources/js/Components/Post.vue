@@ -79,7 +79,7 @@ const showSelectedUserPosts = (userId: number) => {
       <v-btn v-if="isTruncated" class="text-capitalize ps-0" color="primary" variant="text" density="compact"
         @click="truncate = false">Show more</v-btn>
       <v-img v-if="previewImagePath" :src="previewImagePath" width="300" class="mt-3 cursor-pointer" style="z-index: 1;"
-        lazy-src="https://picsum.photos/id/11/100/60" @click="showEnlargedImage(previewImagePath)">
+        lazy-src="/lazy-src.gif" @click="showEnlargedImage(previewImagePath)">
         <template v-slot:placeholder>
           <div class="d-flex align-center justify-center fill-height">
             <v-progress-circular color="grey-lighten-4" indeterminate></v-progress-circular>
