@@ -14,12 +14,12 @@ const props = defineProps<{ filter: PostsFilter }>();
 
 const userItems: Ref<User[]> = defineModel('userItems');
 
-const message = ref('Please enter at least 3 characters.');
+const message = ref('Please enter any text.');
 
 const user: Ref<number> = ref(props.filter.user)
 
 const loadUsers = useDebounceFn(async (searchText: string): Promise<void> => {
-  if (searchText.length > 2) {
+  if (searchText.length > 0) {
     message.value = 'Searching...';
     await axios.get(route('users.users'), {
       params: {
@@ -36,7 +36,7 @@ const loadUsers = useDebounceFn(async (searchText: string): Promise<void> => {
         console.log(error);
       });
   } else {
-    message.value = 'Please enter at least 3 characters.';
+    message.value = 'Please enter any text.';
   }
 }, 500)
 </script>
