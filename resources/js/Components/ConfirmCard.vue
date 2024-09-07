@@ -1,5 +1,5 @@
 <script setup lang="ts">
-withDefaults(defineProps<{
+const { title = 'Title', message = 'Message', confirmBtnName = 'Confirm' } = defineProps<{
   icon?: string;
   title?: string;
   message?: string;
@@ -7,7 +7,7 @@ withDefaults(defineProps<{
   confirmBtnName?: string;
   confirmBtnColor?: string;
   variant?: string;
-}>(), { title: 'Title', message: 'Message', confirmBtnName: 'Confirm' });
+}>();
 
 defineEmits<{
   close: [],
