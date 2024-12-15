@@ -8,6 +8,7 @@
     <!-- OGP -->
     <meta property="og:url" content="{{ env('APP_URL') }}">
     <meta property="og:type" content="website">
+    <meta property="og:title" content="{{ config('app.name', 'Laravel') }}">
     <meta property="og:description" content="Feel free to write notes and share them with others.">
     <meta property="og:image" content="{{ asset('/notebook.jpeg') }}">
 
