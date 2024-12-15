@@ -8,8 +8,8 @@ defineProps<{
   status?: string
 }>();
 const form = useForm({
-  email: '',
-  password: '',
+  email: 'test@example.com',
+  password: 'password',
   remember: false,
 });
 const visible = ref(false);
