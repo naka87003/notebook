@@ -1,5 +1,9 @@
 <script setup lang="ts">
-const { title = 'Title', message = 'Message', confirmBtnName = 'Confirm' } = defineProps<{
+const {
+  title = 'Title',
+  message = 'Message',
+  confirmBtnName = 'Confirm',
+} = defineProps<{
   icon?: string;
   title?: string;
   message?: string;
@@ -10,8 +14,8 @@ const { title = 'Title', message = 'Message', confirmBtnName = 'Confirm' } = def
 }>();
 
 defineEmits<{
-  close: [],
-  confirmed: []
+  close: [];
+  confirmed: [];
 }>();
 </script>
 <template>
@@ -41,7 +45,9 @@ defineEmits<{
     <template v-slot:actions>
       <v-spacer></v-spacer>
       <v-btn variant="plain" @click="$emit('close')">Cancel</v-btn>
-      <v-btn :color="confirmBtnColor" variant="tonal" @click="$emit('confirmed')">{{ confirmBtnName }}</v-btn>
+      <v-btn :color="confirmBtnColor" variant="tonal" @click="$emit('confirmed')">
+        {{ confirmBtnName }}
+      </v-btn>
     </template>
   </v-card>
 </template>

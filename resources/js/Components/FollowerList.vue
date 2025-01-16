@@ -10,7 +10,7 @@ const props = defineProps<{
 }>();
 
 defineEmits<{
-  close: []
+  close: [];
 }>();
 
 const items: Ref<User[]> = ref([]);
@@ -23,9 +23,9 @@ onMounted(async () => {
 const loadItems = async (): Promise<User[]> => {
   const response = await axios.get(route('users.followers', props.selectedUser.id), {
     params: {
-      offset: items.value.length
-    }
-  })
+      offset: items.value.length,
+    },
+  });
   return response.data;
 };
 
@@ -41,7 +41,7 @@ const load = async ({ done }): Promise<void> => {
 
 const showSelectedUserPosts = (userId: number) => {
   router.get(route('timeline'), {
-    user: userId
+    user: userId,
   });
 };
 </script>
@@ -59,10 +59,25 @@ const showSelectedUserPosts = (userId: number) => {
     </v-toolbar>
     <v-divider />
     <v-card-text class="pa-0">
-      <v-alert v-if="items.length === 0" variant="text" class="text-center" text="No data available" />
-      <v-infinite-scroll v-if="items.length > 0" :onLoad="load" class="w-100 overflow-hidden" empty-text="">
+      <v-alert
+        v-if="items.length === 0"
+        variant="text"
+        class="text-center"
+        text="No data available"
+      />
+      <v-infinite-scroll
+        v-if="items.length > 0"
+        :onLoad="load"
+        class="w-100 overflow-hidden"
+        empty-text=""
+      >
         <template v-for="item in items" :key="item.id">
-          <v-alert class="cursor-pointer" density="compact" variant="text" @click="showSelectedUserPosts(item.id)">
+          <v-alert
+            class="cursor-pointer"
+            density="compact"
+            variant="text"
+            @click="showSelectedUserPosts(item.id)"
+          >
             <template v-slot:prepend>
               <v-avatar color="surface-light">
                 <v-img v-if="item.image_path" :src="'storage/' + item.image_path" />

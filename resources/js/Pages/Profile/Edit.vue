@@ -13,15 +13,14 @@ defineProps<{
 </script>
 
 <template>
-
   <Head title="Profile" />
   <AuthenticatedLayout>
     <v-container>
       <v-row>
-        <v-col cols="12" >
-          <UpdateAvatarImageForm/>
+        <v-col cols="12">
+          <UpdateAvatarImageForm />
         </v-col>
-        <v-col cols="12" >
+        <v-col cols="12">
           <UpdateProfileInformationForm :must-verify-email="mustVerifyEmail" :status />
         </v-col>
         <v-col cols="12">

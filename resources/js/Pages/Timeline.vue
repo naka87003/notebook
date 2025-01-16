@@ -1,7 +1,7 @@
 <script setup lang="ts">
 import { Head } from '@inertiajs/vue3';
 import { ref, computed, onMounted, provide, type Ref } from 'vue';
-import { watchDebounced } from '@vueuse/core'
+import { watchDebounced } from '@vueuse/core';
 import type { Note, PostsFilter, User } from '@/interfaces';
 import axios from 'axios';
 import AuthenticatedLayout from '@/Layouts/AuthenticatedLayout.vue';
@@ -21,7 +21,7 @@ const dialog = ref({
   filterUserMenu: false,
   enlargedImage: false,
   postComments: false,
-  searchText: false
+  searchText: false,
 });
 
 const isInProgress = ref(true);
@@ -36,27 +36,29 @@ const notes = ref(new Map<number, Note>());
 
 const snackbar = ref({
   display: false,
-  message: ''
+  message: '',
 });
 
 const filter: Ref<PostsFilter> = ref({
   onlyMyLiked: false,
   user: props.user ?? null,
-  following: false
+  following: false,
 });
 
 const userItems: Ref<User[]> = ref(props.userItem ? [props.userItem] : []);
 
-const selectedUser = computed((): User | undefined => userItems.value.find((item) => item.id === filter.value.user));
+const selectedUser = computed((): User | undefined =>
+  userItems.value.find((item) => item.id === filter.value.user)
+);
 
 const searchEntered = computed((): boolean => Boolean(search.value));
 
 const targetNote = computed(() => notes.value.get(targetNoteId.value));
 
-watchDebounced(search,
-  () => refreshDisplay(),
-  { debounce: 500, maxWait: 1000 },
-);
+watchDebounced(search, () => refreshDisplay(), {
+  debounce: 500,
+  maxWait: 1000,
+});
 
 onMounted(async () => {
   const result = await loadNotes();
@@ -75,9 +77,9 @@ const loadNotes = async (): Promise<Note[]> => {
     params: {
       offset: notes.value.size,
       search: search.value,
-      ...filter.value
-    }
-  })
+      ...filter.value,
+    },
+  });
   return response.data;
 };
 
@@ -153,15 +155,23 @@ provide('updatePosts', updatePosts);
 </script>
 
 <template>
-
   <Head title="Timeline" />
   <v-snackbar v-model="snackbar.display" location="top right" color="success" timeout="3000">
-    <v-icon class="me-3" style="margin-bottom: 2px;">mdi-check-circle</v-icon>{{ snackbar.message }}
+    <v-icon class="me-3" style="margin-bottom: 2px">mdi-check-circle</v-icon>{{ snackbar.message }}
   </v-snackbar>
   <AuthenticatedLayout>
     <template #action>
-      <v-text-field v-model="search" class="hidden-xs" density="compact" label="Search" variant="solo-filled" flat
-        hide-details single-line clearable>
+      <v-text-field
+        v-model="search"
+        class="hidden-xs"
+        density="compact"
+        label="Search"
+        variant="solo-filled"
+        flat
+        hide-details
+        single-line
+        clearable
+      >
         <template #prepend-inner>
           <v-icon icon="mdi-magnify" :class="{ 'text-red': searchEntered }" />
         </template>
@@ -190,13 +200,22 @@ provide('updatePosts', updatePosts);
           <SelectedUserMenu :selectedUser />
         </v-col>
       </v-row>
-      <v-alert v-if="isInProgress === false && notes.size === 0" variant="text" class="text-center" text="No data available" />
+      <v-alert
+        v-if="isInProgress === false && notes.size === 0"
+        variant="text"
+        class="text-center"
+        text="No data available"
+      />
       <v-infinite-scroll v-else :onLoad="load" class="w-100 overflow-hidden" empty-text="">
         <v-row>
           <template v-for="note in notes.values()" :key="note.id">
             <v-col cols="12">
-              <Post :note @showEnlargedImage="showEnlargedImage" @showComments="showComments(note.id)"
-                @update="updatePosts(note.id)" />
+              <Post
+                :note
+                @showEnlargedImage="showEnlargedImage"
+                @showComments="showComments(note.id)"
+                @update="updatePosts(note.id)"
+              />
             </v-col>
           </template>
         </v-row>
@@ -206,8 +225,12 @@ provide('updatePosts', updatePosts);
       <SearchTextForm :search @close="dialog.searchText = false" @apply="searchApply" />
     </v-dialog>
     <v-dialog v-model="dialog.filterUserMenu" max-width="600" scrollable>
-      <FilterUserMenu v-model:userItems="userItems" :filter @close="dialog.filterUserMenu = false"
-        @apply="filterUser" />
+      <FilterUserMenu
+        v-model:userItems="userItems"
+        :filter
+        @close="dialog.filterUserMenu = false"
+        @apply="filterUser"
+      />
     </v-dialog>
     <v-dialog v-model="dialog.enlargedImage" close-on-content-click maxWidth="1000px">
       <v-img :src="previewImagePath" height="90vh" />

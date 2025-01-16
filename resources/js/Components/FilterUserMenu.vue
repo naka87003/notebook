@@ -16,29 +16,32 @@ const userItems: Ref<User[]> = defineModel('userItems');
 
 const message = ref('Please enter any text.');
 
-const user: Ref<number> = ref(props.filter.user)
+const user: Ref<number> = ref(props.filter.user);
 
 const loadUsers = useDebounceFn(async (searchText: string): Promise<void> => {
   if (searchText.length > 0) {
     message.value = 'Searching...';
-    await axios.get(route('users.users'), {
-      params: {
-        search: searchText
-      }
-    })
-      .then(response => {
+    await axios
+      .get(route('users.users'), {
+        params: {
+          search: searchText,
+        },
+      })
+      .then((response) => {
         userItems.value = Array.from(
-          new Map([...userItems.value, ...response.data,].map((user: User) => [user.id, user])).values()
+          new Map(
+            [...userItems.value, ...response.data].map((user: User) => [user.id, user])
+          ).values()
         );
         message.value = 'No data available';
       })
-      .catch(error => {
+      .catch((error) => {
         console.log(error);
       });
   } else {
     message.value = 'Please enter any text.';
   }
-}, 500)
+}, 500);
 </script>
 <template>
   <v-card>
@@ -58,9 +61,19 @@ const loadUsers = useDebounceFn(async (searchText: string): Promise<void> => {
     <v-card-text>
       <v-row>
         <v-col cols="12">
-          <v-autocomplete v-model="user" hide-details="auto" density="compact" placeholder="Select User"
-            variant="outlined" :items="userItems" item-title="name" item-value="id" :no-data-text="message" clearable
-            @update:search="loadUsers">
+          <v-autocomplete
+            v-model="user"
+            hide-details="auto"
+            density="compact"
+            placeholder="Select User"
+            variant="outlined"
+            :items="userItems"
+            item-title="name"
+            item-value="id"
+            :no-data-text="message"
+            clearable
+            @update:search="loadUsers"
+          >
             <template v-slot:item="{ props, item }">
               <v-list-item v-bind="props" :title="item.raw.name">
                 <template v-slot:prepend>

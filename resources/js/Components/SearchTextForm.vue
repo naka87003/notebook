@@ -31,8 +31,16 @@ const resetFilter = () => {
     </v-toolbar>
     <v-divider />
     <v-card-text class="pa-3">
-      <v-text-field v-model="search" sdensity="compact" label="Search text" variant="solo-filled" flat hide-details
-        single-line clearable>
+      <v-text-field
+        v-model="search"
+        sdensity="compact"
+        label="Search text"
+        variant="solo-filled"
+        flat
+        hide-details
+        single-line
+        clearable
+      >
       </v-text-field>
     </v-card-text>
     <v-divider />

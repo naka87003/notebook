@@ -5,7 +5,7 @@ import { computed, ref } from 'vue';
 import { simplifyDateTime, splitByNewline, relativeDateTime } from '@/common';
 
 const props = defineProps<{
-  note: Note
+  note: Note;
   commentLinkDisabled?: boolean;
 }>();
 
@@ -24,7 +24,7 @@ const previewImagePath = computed(() => {
 const showTaggedNotes = () => {
   router.get(route('dashboard'), {
     tag: props.note.tag.id,
-    status: props.note.status_id
+    status: props.note.status_id,
   });
 };
 
@@ -43,8 +43,15 @@ const paragraphs = computed(() => {
 </script>
 
 <template>
-  <v-card :color="note.category.vuetify_theme_color_name" variant="tonal" class="mx-auto"
-    :prepend-icon="note.category.mdi_name" :title="note.title" density="compact" rounded="0">
+  <v-card
+    :color="note.category.vuetify_theme_color_name"
+    variant="tonal"
+    class="mx-auto"
+    :prepend-icon="note.category.mdi_name"
+    :title="note.title"
+    density="compact"
+    rounded="0"
+  >
     <template #title>
       <span class="text-body-1">{{ note.title }}</span>
     </template>
@@ -59,11 +66,27 @@ const paragraphs = computed(() => {
         <p class="text-body-2">from {{ simplifyDateTime(note.starts_at) }}</p>
         <p class="text-body-2">to {{ simplifyDateTime(note.ends_at) }}</p>
       </v-alert>
-      <p v-for="paragraph in paragraphs" class="note-paragraph text-body-1">{{ paragraph }}</p>
-      <v-btn v-if="isTruncated" class="text-capitalize ps-0" color="primary" variant="text" density="compact"
-      @click="truncate = false">Show more</v-btn>
-      <v-img v-if="previewImagePath" :src="previewImagePath" width="300" class="mt-3 cursor-pointer" style="z-index: 1;"
-        lazy-src="/lazy-src.gif" @click="$emit('showEnlargedImage', previewImagePath)">
+      <p v-for="paragraph in paragraphs" class="note-paragraph text-body-1">
+        {{ paragraph }}
+      </p>
+      <v-btn
+        v-if="isTruncated"
+        class="text-capitalize ps-0"
+        color="primary"
+        variant="text"
+        density="compact"
+        @click="truncate = false"
+        >Show more</v-btn
+      >
+      <v-img
+        v-if="previewImagePath"
+        :src="previewImagePath"
+        width="300"
+        class="mt-3 cursor-pointer"
+        style="z-index: 1"
+        lazy-src="/lazy-src.gif"
+        @click="$emit('showEnlargedImage', previewImagePath)"
+      >
         <template v-slot:placeholder>
           <div class="d-flex align-center justify-center fill-height">
             <v-progress-circular color="grey-lighten-4" indeterminate></v-progress-circular>
@@ -89,14 +112,27 @@ const paragraphs = computed(() => {
           <v-tooltip activator="parent" location="bottom" text="Filter by tag" />
         </v-btn>
       </template>
-      <v-btn v-if="note.status.name === 'archived'" size="small" icon="mdi-archive-outline" readonly />
+      <v-btn
+        v-if="note.status.name === 'archived'"
+        size="small"
+        icon="mdi-archive-outline"
+        readonly
+      />
       <v-btn v-if="!note.public" size="small" icon="mdi-lock-outline" readonly />
-      <v-btn v-if="note.public && note.comments_count" prepend-icon="mdi-comment-outline"
-        :readonly="Boolean(commentLinkDisabled)" @click="$emit('showComments')">
+      <v-btn
+        v-if="note.public && note.comments_count"
+        prepend-icon="mdi-comment-outline"
+        :readonly="Boolean(commentLinkDisabled)"
+        @click="$emit('showComments')"
+      >
         {{ note.comments_count || '' }}
         <v-tooltip activator="parent" location="bottom" text="Show comments" />
       </v-btn>
-      <v-btn v-if="note.public && note.likes_count" prepend-icon="mdi-heart" @click="$emit('showLikedUserList')">
+      <v-btn
+        v-if="note.public && note.likes_count"
+        prepend-icon="mdi-heart"
+        @click="$emit('showLikedUserList')"
+      >
         {{ note.likes_count }}
         <v-tooltip activator="parent" location="bottom" text="Show liked users" />
       </v-btn>
@@ -108,7 +144,12 @@ const paragraphs = computed(() => {
 
 <style scoped>
 .note-paragraph {
-  background-image: linear-gradient(180deg, rgba(204, 204, 204, 0) 0%, rgba(204, 204, 204, 0) 98.5%, rgba(100, 100, 100, 100) 100%);
+  background-image: linear-gradient(
+    180deg,
+    rgba(204, 204, 204, 0) 0%,
+    rgba(204, 204, 204, 0) 98.5%,
+    rgba(100, 100, 100, 100) 100%
+  );
   background-repeat: repeat-y;
   background-size: 100% 1.5em;
   line-height: 1.5;

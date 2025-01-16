@@ -8,7 +8,7 @@ const form = useForm({
 });
 
 const dialog = ref({
-  deleteConfirm: false
+  deleteConfirm: false,
 });
 
 const alertMsg = ref();
@@ -29,7 +29,7 @@ const uploadImage = () => {
     onSuccess: () => {
       alertMsg.value = 'Uploaded.';
       form.image = null;
-    }
+    },
   });
 };
 
@@ -39,7 +39,7 @@ const deleteImage = () => {
     onSuccess: () => {
       alertMsg.value = 'Deleted.';
       form.image = null;
-    }
+    },
   });
 };
 </script>
@@ -65,9 +65,19 @@ const deleteImage = () => {
         </v-list-item>
         <form @submit.prevent="form.patch(route('profile.update'))" enctype="multipart/form-data">
           <div class="text-subtitle-1 text-medium-emphasis">Image Upload</div>
-          <v-file-input ref="preview" v-model="form.image" density="compact" label="New image file input"
-            variant="outlined" :error="Boolean(form.errors.image)" :error-messages="form.errors.image" required
-            max-width="600" accept="image/png, image/jpeg" @update:modelValue="form.errors.image = null" />
+          <v-file-input
+            ref="preview"
+            v-model="form.image"
+            density="compact"
+            label="New image file input"
+            variant="outlined"
+            :error="Boolean(form.errors.image)"
+            :error-messages="form.errors.image"
+            required
+            max-width="600"
+            accept="image/png, image/jpeg"
+            @update:modelValue="form.errors.image = null"
+          />
         </form>
         <Transition>
           <div v-if="form.recentlySuccessful">
@@ -78,21 +88,39 @@ const deleteImage = () => {
       <v-divider />
       <template v-slot:actions>
         <v-spacer />
-        <v-btn color="primary" size="large" variant="tonal" :class="{ 'text-disabled': form.processing }"
-          :disabled="form.processing" @click="uploadImage">
+        <v-btn
+          color="primary"
+          size="large"
+          variant="tonal"
+          :class="{ 'text-disabled': form.processing }"
+          :disabled="form.processing"
+          @click="uploadImage"
+        >
           Upload
         </v-btn>
-        <v-btn color="error" size="large" variant="tonal" :class="{ 'text-disabled': form.processing }"
-          :disabled="form.processing || $page.props.auth.user.image_path === null" @click="dialog.deleteConfirm = true">
+        <v-btn
+          color="error"
+          size="large"
+          variant="tonal"
+          :class="{ 'text-disabled': form.processing }"
+          :disabled="form.processing || $page.props.auth.user.image_path === null"
+          @click="dialog.deleteConfirm = true"
+        >
           Delete
         </v-btn>
       </template>
     </v-card>
   </section>
   <v-dialog v-model="dialog.deleteConfirm" max-width="600">
-    <ConfirmCard icon="mdi-delete-outline" title="Delete Avatar Image"
+    <ConfirmCard
+      icon="mdi-delete-outline"
+      title="Delete Avatar Image"
       message="Are you sure you want to delete your avatar image?"
-      description="Once the image is deleted, it will be permanently deleted." confirmBtnName="Delete"
-      confirmBtnColor="error" @confirmed="deleteImage" @close="dialog.deleteConfirm = false" />
+      description="Once the image is deleted, it will be permanently deleted."
+      confirmBtnName="Delete"
+      confirmBtnColor="error"
+      @confirmed="deleteImage"
+      @close="dialog.deleteConfirm = false"
+    />
   </v-dialog>
 </template>

@@ -4,26 +4,26 @@ import vue from '@vitejs/plugin-vue';
 import path from 'path';
 
 export default defineConfig({
-    plugins: [
-        laravel({
-            input: 'resources/js/app.js',
-            refresh: true,
-        }),
-        vue({
-            template: {
-                transformAssetUrls: {
-                    base: null,
-                    includeAbsolute: false,
-                },
-            },
-        }),
-    ],
-    server: {
-        host: true
-    },
-    resolve: {
-        alias: {
-            $image: path.resolve('public'),
+  plugins: [
+    laravel({
+      input: 'resources/js/app.js',
+      refresh: true,
+    }),
+    vue({
+      template: {
+        transformAssetUrls: {
+          base: null,
+          includeAbsolute: false,
         },
+      },
+    }),
+  ],
+  server: {
+    host: true,
+  },
+  resolve: {
+    alias: {
+      $image: path.resolve('public'),
     },
+  },
 });

@@ -19,7 +19,9 @@ const userImagePath = computed((): string | null => {
   return user.image_path;
 });
 
-const avatarImagePath = computed(() => userImagePath.value ? 'storage/' + userImagePath.value : null);
+const avatarImagePath = computed(() =>
+  userImagePath.value ? 'storage/' + userImagePath.value : null
+);
 
 const pageTransition = (name: string) => {
   router.visit(route(name));
@@ -41,32 +43,48 @@ const pageTransition = (name: string) => {
     <v-card-text class="pa-0">
       <v-list lines="two">
         <v-list-subheader>Page</v-list-subheader>
-        <v-list-item title="Notes" density="compact" :active="currentPageName === 'dashboard'"
-          @click="pageTransition('dashboard')">
+        <v-list-item
+          title="Notes"
+          density="compact"
+          :active="currentPageName === 'dashboard'"
+          @click="pageTransition('dashboard')"
+        >
           <template v-slot:prepend>
             <v-avatar density="compact">
               <v-icon>mdi-note-multiple-outline</v-icon>
             </v-avatar>
           </template>
         </v-list-item>
-        <v-list-item title="Calendar" density="compact" :active="currentPageName === 'calendar'"
-          @click="pageTransition('calendar')">
+        <v-list-item
+          title="Calendar"
+          density="compact"
+          :active="currentPageName === 'calendar'"
+          @click="pageTransition('calendar')"
+        >
           <template v-slot:prepend>
             <v-avatar density="compact">
               <v-icon>mdi-calendar-outline</v-icon>
             </v-avatar>
           </template>
         </v-list-item>
-        <v-list-item title="Timeline" density="compact" :active="currentPageName === 'timeline'"
-          @click="pageTransition('timeline')">
+        <v-list-item
+          title="Timeline"
+          density="compact"
+          :active="currentPageName === 'timeline'"
+          @click="pageTransition('timeline')"
+        >
           <template v-slot:prepend>
             <v-avatar density="compact">
               <v-icon>mdi-timeline-outline</v-icon>
             </v-avatar>
           </template>
         </v-list-item>
-        <v-list-item title="Tags" density="compact" :active="currentPageName === 'tags.index'"
-          @click="pageTransition('tags.index')">
+        <v-list-item
+          title="Tags"
+          density="compact"
+          :active="currentPageName === 'tags.index'"
+          @click="pageTransition('tags.index')"
+        >
           <template v-slot:prepend>
             <v-avatar density="compact">
               <v-icon>mdi-tag-multiple-outline</v-icon>
@@ -93,8 +111,13 @@ const pageTransition = (name: string) => {
         </v-list-item>
         <v-divider></v-divider>
         <v-list-subheader>Account</v-list-subheader>
-        <v-list-item :title="$page.props.auth.user.name" :subtitle="$page.props.auth.user.email" density="compact"
-          :active="currentPageName === 'profile.edit'" @click="pageTransition('profile.edit')">
+        <v-list-item
+          :title="$page.props.auth.user.name"
+          :subtitle="$page.props.auth.user.email"
+          density="compact"
+          :active="currentPageName === 'profile.edit'"
+          @click="pageTransition('profile.edit')"
+        >
           <template v-slot:prepend>
             <v-avatar color="surface-light" density="compact">
               <v-img v-if="avatarImagePath" :src="avatarImagePath" />
@@ -102,8 +125,12 @@ const pageTransition = (name: string) => {
             </v-avatar>
           </template>
         </v-list-item>
-        <v-list-item title="Preferences" density="compact"
-          :active="currentPageName === 'preferences.edit'" @click="pageTransition('preferences.edit')">
+        <v-list-item
+          title="Preferences"
+          density="compact"
+          :active="currentPageName === 'preferences.edit'"
+          @click="pageTransition('preferences.edit')"
+        >
           <template v-slot:prepend>
             <v-avatar density="compact">
               <v-icon>mdi-cog-outline</v-icon>

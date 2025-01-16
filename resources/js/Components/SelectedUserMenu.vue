@@ -13,32 +13,38 @@ const props = defineProps<{
 
 const dialog = ref({
   followerList: false,
-  followeeList: false
+  followeeList: false,
 });
 
 const isFollowing = ref(false);
 const count = ref({
   followees: 0,
-  followers: 0
+  followers: 0,
 });
 
 const isMyself = computed(() => props.selectedUser.id === usePage().props.auth.user.id);
 
-watch(() => props.selectedUser, async () => {
-  await axios.get(route('users.user', props.selectedUser.id))
-    .then(response => {
-      count.value.followees = response.data.followees_count;
-      count.value.followers = response.data.followers_count;
-      isFollowing.value = response.data.followedByLoginUser;
-    })
-    .catch(error => {
-      console.log(error);
-    });
-}, { immediate: true });
+watch(
+  () => props.selectedUser,
+  async () => {
+    await axios
+      .get(route('users.user', props.selectedUser.id))
+      .then((response) => {
+        count.value.followees = response.data.followees_count;
+        count.value.followers = response.data.followers_count;
+        isFollowing.value = response.data.followedByLoginUser;
+      })
+      .catch((error) => {
+        console.log(error);
+      });
+  },
+  { immediate: true }
+);
 
 const follow = async () => {
   if (isMyself.value === false) {
-    await axios.post(route('follows.follow', props.selectedUser.id))
+    await axios
+      .post(route('follows.follow', props.selectedUser.id))
       .then(function () {
         isFollowing.value = true;
         count.value.followers++;
@@ -47,9 +53,10 @@ const follow = async () => {
         console.log(error);
       });
   }
-}
+};
 const unfollow = async () => {
-  await axios.delete(route('follows.unfollow', props.selectedUser.id))
+  await axios
+    .delete(route('follows.unfollow', props.selectedUser.id))
     .then(function () {
       isFollowing.value = false;
       count.value.followers--;
@@ -82,11 +89,18 @@ const unfollow = async () => {
     </v-card-actions>
     <v-divider class="mb-1" />
     <v-card-actions>
-      <v-btn class="text-capitalize ms-1" :class="{ 'hidden-xs': isMyself === false }"
-        @click="dialog.followeeList = true">
+      <v-btn
+        class="text-capitalize ms-1"
+        :class="{ 'hidden-xs': isMyself === false }"
+        @click="dialog.followeeList = true"
+      >
         {{ count.followees }} Following
       </v-btn>
-      <v-btn class="text-capitalize" :class="{ 'hidden-xs': isMyself === false }" @click="dialog.followerList = true">
+      <v-btn
+        class="text-capitalize"
+        :class="{ 'hidden-xs': isMyself === false }"
+        @click="dialog.followerList = true"
+      >
         {{ count.followers }} Followers
       </v-btn>
       <v-spacer></v-spacer>

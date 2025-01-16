@@ -5,13 +5,13 @@ import type { Sort } from '@/interfaces';
 const emit = defineEmits<{
   close: [];
   apply: [newSort: Sort];
-}>()
+}>();
 
 const props = defineProps<{ sort: Sort }>();
 
 const newSort = ref({
   key: props.sort.key,
-  order: props.sort.order
+  order: props.sort.order,
 });
 
 const resetSort = () => {

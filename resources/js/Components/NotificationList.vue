@@ -11,7 +11,7 @@ defineProps<{
 
 const emit = defineEmits<{
   close: [];
-  markAllAsRead: []
+  markAllAsRead: [];
 }>();
 
 const items: Ref<Notification[]> = ref([]);
@@ -24,9 +24,9 @@ onMounted(async () => {
 const loadItems = async (): Promise<Notification[]> => {
   const response = await axios.get(route('notifications'), {
     params: {
-      offset: items.value.length
-    }
-  })
+      offset: items.value.length,
+    },
+  });
   return response.data;
 };
 
@@ -63,11 +63,12 @@ const markAsRead = async (notificationId: string) => {
 };
 
 const markAllAsRead = async () => {
-  await axios.put(route('notifications.markAllAsRead'))
+  await axios
+    .put(route('notifications.markAllAsRead'))
     .then(async () => {
       emit('markAllAsRead');
     })
-    .catch(error => {
+    .catch((error) => {
       console.log(error);
     });
 };
@@ -102,11 +103,26 @@ const titleMsg = (item: Notification) => {
     </v-toolbar>
     <v-divider />
     <v-card-text class="pa-0">
-      <v-alert v-if="items.length === 0" variant="text" class="text-center" text="No data available" />
-      <v-infinite-scroll v-if="items.length > 0" :onLoad="load" class="w-100 overflow-hidden" empty-text="">
+      <v-alert
+        v-if="items.length === 0"
+        variant="text"
+        class="text-center"
+        text="No data available"
+      />
+      <v-infinite-scroll
+        v-if="items.length > 0"
+        :onLoad="load"
+        class="w-100 overflow-hidden"
+        empty-text=""
+      >
         <template v-for="item in items" :key="item.id">
-          <v-alert class="cursor-pointer" density="compact" variant="text" :color="item.read_at ? '' : 'info'"
-            @click="selectItem(item)">
+          <v-alert
+            class="cursor-pointer"
+            density="compact"
+            variant="text"
+            :color="item.read_at ? '' : 'info'"
+            @click="selectItem(item)"
+          >
             <template v-slot:prepend>
               <v-avatar color="surface-light">
                 <v-img v-if="item.user.image_path" :src="'/storage/' + item.user.image_path" />
@@ -127,7 +143,12 @@ const titleMsg = (item: Notification) => {
     <template v-slot:actions>
       <v-btn variant="plain" @click="$emit('close')">Close</v-btn>
       <v-spacer></v-spacer>
-      <v-btn color="secondary" variant="tonal" :disabled="unreadNotificationCount === 0" @click="markAllAsRead">
+      <v-btn
+        color="secondary"
+        variant="tonal"
+        :disabled="unreadNotificationCount === 0"
+        @click="markAllAsRead"
+      >
         Mark All as Read
       </v-btn>
     </template>

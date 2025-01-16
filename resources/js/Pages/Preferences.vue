@@ -4,7 +4,7 @@ import AuthenticatedLayout from '@/Layouts/AuthenticatedLayout.vue';
 import { Head, useForm } from '@inertiajs/vue3';
 
 const props = defineProps<{
-  emailPreferences: EmailPrerefence[]
+  emailPreferences: EmailPrerefence[];
 }>();
 
 const defaultFormProps = {};
@@ -17,7 +17,6 @@ const form = useForm({ emailPreferences: defaultFormProps });
 </script>
 
 <template>
-
   <Head title="Preferences" />
   <AuthenticatedLayout>
     <v-container>
@@ -34,7 +33,12 @@ const form = useForm({ emailPreferences: defaultFormProps });
                 </v-card>
                 <form @submit.prevent="form.patch(route('preferences.update'))">
                   <template v-for="item in emailPreferences">
-                    <v-checkbox v-model="form.emailPreferences[item.type]" class="mb-n10" :true-value="1" :false-value="0">
+                    <v-checkbox
+                      v-model="form.emailPreferences[item.type]"
+                      class="mb-n10"
+                      :true-value="1"
+                      :false-value="0"
+                    >
                       <template #label>
                         {{ item.type }}
                       </template>
@@ -50,9 +54,20 @@ const form = useForm({ emailPreferences: defaultFormProps });
               <v-divider />
               <template v-slot:actions>
                 <v-spacer />
-                <v-btn color="primary" size="large" variant="tonal" :class="{ 'text-disabled': form.processing }"
+                <v-btn
+                  color="primary"
+                  size="large"
+                  variant="tonal"
+                  :class="{
+                    'text-disabled': form.processing,
+                  }"
                   :disabled="form.processing"
-                  @click="form.patch(route('preferences.update'), { preserveScroll: true })">
+                  @click="
+                    form.patch(route('preferences.update'), {
+                      preserveScroll: true,
+                    })
+                  "
+                >
                   Save
                 </v-btn>
               </template>

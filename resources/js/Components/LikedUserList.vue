@@ -10,7 +10,7 @@ const props = defineProps<{
 }>();
 
 defineEmits<{
-  close: []
+  close: [];
 }>();
 
 const items: Ref<Like[]> = ref([]);
@@ -23,9 +23,9 @@ onMounted(async () => {
 const loadItems = async (): Promise<Like[]> => {
   const response = await axios.get(route('notes.likes', props.targetNote.id), {
     params: {
-      offset: items.value.length
-    }
-  })
+      offset: items.value.length,
+    },
+  });
   return response.data;
 };
 
@@ -41,7 +41,7 @@ const load = async ({ done }): Promise<void> => {
 
 const showSelectedUserPosts = (userId: number) => {
   router.get(route('timeline'), {
-    user: userId
+    user: userId,
   });
 };
 </script>
@@ -62,9 +62,19 @@ const showSelectedUserPosts = (userId: number) => {
     </v-toolbar>
     <v-divider />
     <v-card-text class="pa-0">
-      <v-infinite-scroll v-if="items.length > 0" :onLoad="load" class="w-100 overflow-hidden" empty-text="">
+      <v-infinite-scroll
+        v-if="items.length > 0"
+        :onLoad="load"
+        class="w-100 overflow-hidden"
+        empty-text=""
+      >
         <template v-for="item in items" :key="item.id">
-          <v-alert class="cursor-pointer" density="compact" variant="text" @click="showSelectedUserPosts(item.user.id)">
+          <v-alert
+            class="cursor-pointer"
+            density="compact"
+            variant="text"
+            @click="showSelectedUserPosts(item.user.id)"
+          >
             <template v-slot:prepend>
               <v-avatar color="surface-light">
                 <v-img v-if="item.user.image_path" :src="'storage/' + item.user.image_path" />

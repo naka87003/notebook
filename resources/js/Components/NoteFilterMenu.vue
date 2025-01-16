@@ -19,14 +19,14 @@ const items = ref({
     { id: 1, name: 'Normal', mdi_name: 'mdi-book-open-outline' },
     { id: 2, name: 'Archive', mdi_name: 'mdi-archive-outline' },
   ],
-  tag: [] as Tag[]
+  tag: [] as Tag[],
 });
 
 const newFilter: Ref<NotesFilter> = ref({
   category: props.filter.category,
   tag: props.filter.tag,
   status: props.filter.status,
-  onlyLiked: props.filter.onlyLiked
+  onlyLiked: props.filter.onlyLiked,
 });
 
 onMounted(async () => {
@@ -60,7 +60,12 @@ const resetFilter = () => {
       <v-row>
         <v-col cols="12">
           <div class="text-subtitle-1 text-medium-emphasis">Category</div>
-          <v-checkbox v-for="item in items.category" v-model="newFilter.category" :value="item.id" class="mb-n10">
+          <v-checkbox
+            v-for="item in items.category"
+            v-model="newFilter.category"
+            :value="item.id"
+            class="mb-n10"
+          >
             <template #label>
               <v-icon :icon="item.mdi_name" class="mx-3"></v-icon>
               {{ item.name }}
@@ -80,8 +85,19 @@ const resetFilter = () => {
         </v-col>
         <v-col cols="12">
           <div class="text-subtitle-1 text-medium-emphasis">Tag</div>
-          <v-autocomplete v-model="newFilter.tag" hide-details="auto" :items="items.tag" density="compact"
-            placeholder="Select Tag" variant="outlined" item-title="name" item-value="id" chips closable-chips multiple>
+          <v-autocomplete
+            v-model="newFilter.tag"
+            hide-details="auto"
+            :items="items.tag"
+            density="compact"
+            placeholder="Select Tag"
+            variant="outlined"
+            item-title="name"
+            item-value="id"
+            chips
+            closable-chips
+            multiple
+          >
             <template v-slot:item="{ props, item }">
               <v-list-item v-bind="props" prepend-icon="mdi-tag" :title="item.raw.name">
                 <template v-slot:prepend>

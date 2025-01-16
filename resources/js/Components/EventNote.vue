@@ -6,12 +6,12 @@ import { simplifyDateTime, splitByNewline } from '@/common';
 const props = defineProps<{ targetNote: Note }>();
 
 const emit = defineEmits<{
-  close: []
+  close: [];
 }>();
 
 const dialog = ref({
-  enlargedImage: false
-})
+  enlargedImage: false,
+});
 
 const previewImagePath = computed(() => {
   return props.targetNote.image_path ? 'storage/' + props.targetNote.image_path : null;
@@ -40,11 +40,19 @@ const previewImagePath = computed(() => {
         <p class="text-body-2">from {{ simplifyDateTime(targetNote.starts_at) }}</p>
         <p class="text-body-2">to {{ simplifyDateTime(targetNote.ends_at) }}</p>
       </v-alert>
-      <p v-for="paragraph in splitByNewline(targetNote.content ?? '')" class="note-paragraph text-body-1">{{ paragraph
-        }}
+      <p
+        v-for="paragraph in splitByNewline(targetNote.content ?? '')"
+        class="note-paragraph text-body-1"
+      >
+        {{ paragraph }}
       </p>
-      <v-img v-if="previewImagePath" :src="previewImagePath" width="300" class="mt-3 cursor-pointer"
-        @click="dialog.enlargedImage = true" />
+      <v-img
+        v-if="previewImagePath"
+        :src="previewImagePath"
+        width="300"
+        class="mt-3 cursor-pointer"
+        @click="dialog.enlargedImage = true"
+      />
     </v-card-text>
     <v-card-actions v-if="targetNote.tag" class="hidden-sm-and-up mx-2">
       <v-btn>
@@ -63,8 +71,18 @@ const previewImagePath = computed(() => {
           </template>
           <span class="text-caption">{{ targetNote.tag?.name }}</span>
         </v-btn>
-        <v-icon v-if="targetNote.status.name === 'archived'" size="small" class="me-5" icon="mdi-archive-outline" />
-        <v-icon v-if="!targetNote.public" size="small" class="me-5" icon="mdi-lock-outline"></v-icon>
+        <v-icon
+          v-if="targetNote.status.name === 'archived'"
+          size="small"
+          class="me-5"
+          icon="mdi-archive-outline"
+        />
+        <v-icon
+          v-if="!targetNote.public"
+          size="small"
+          class="me-5"
+          icon="mdi-lock-outline"
+        ></v-icon>
       </template>
       <v-spacer />
       <slot name="actions" :targetNote />
@@ -77,7 +95,12 @@ const previewImagePath = computed(() => {
 
 <style scoped>
 .note-paragraph {
-  background-image: linear-gradient(180deg, rgba(204, 204, 204, 0) 0%, rgba(204, 204, 204, 0) 98.5%, rgba(100, 100, 100, 100) 100%);
+  background-image: linear-gradient(
+    180deg,
+    rgba(204, 204, 204, 0) 0%,
+    rgba(204, 204, 204, 0) 98.5%,
+    rgba(100, 100, 100, 100) 100%
+  );
   background-repeat: repeat-y;
   background-size: 100% 1.5em;
   line-height: 1.5;

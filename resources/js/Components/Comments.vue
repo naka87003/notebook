@@ -21,8 +21,8 @@ const form = useForm({
 });
 
 const dialog = ref({
-  deleteConfirm: false
-})
+  deleteConfirm: false,
+});
 
 const targetCommentId = ref();
 
@@ -33,7 +33,9 @@ const userImagePath = computed((): string | null => {
   return user.image_path;
 });
 
-const avatarImagePath = computed(() => userImagePath.value ? '/storage/' + userImagePath.value : null);
+const avatarImagePath = computed(() =>
+  userImagePath.value ? '/storage/' + userImagePath.value : null
+);
 
 onMounted(async () => {
   const result = await loadItems();
@@ -47,7 +49,9 @@ const loadItems = async (fresh: boolean = false): Promise<Comment[]> => {
   if (fresh === false) {
     params['offset'] = comments.value.size;
   }
-  const response = await axios.get(route('comments', props.targetNote.id), { params })
+  const response = await axios.get(route('comments', props.targetNote.id), {
+    params,
+  });
   return response.data;
 };
 
@@ -74,7 +78,7 @@ const addComment = async () => {
         comments.value.set(comment.id, comment);
       }
       updatePosts(props.targetNote.id);
-    }
+    },
   });
 };
 
@@ -85,12 +89,13 @@ const showDeleteConfirmDialog = (id: number): void => {
 
 const deleteComment = async () => {
   dialog.value.deleteConfirm = false;
-  await axios.delete(route('comments.destroy', targetCommentId.value))
+  await axios
+    .delete(route('comments.destroy', targetCommentId.value))
     .then(async () => {
       comments.value.delete(targetCommentId.value);
       updatePosts(props.targetNote.id);
     })
-    .catch(error => {
+    .catch((error) => {
       console.log(error);
     });
 };
@@ -123,9 +128,19 @@ const updateComment = async (id: number) => {
             <v-card density="compact" variant="text">
               <v-card-text class="pa-0">
                 <form @submit.prevent="addComment">
-                  <v-textarea v-model="form.comment" density="compact" variant="underlined" placeholder="Add a comment"
-                    hide-details clearable auto-grow rows="1" :error="Boolean(form.errors.comment)" counter="140"
-                    maxLength="140">
+                  <v-textarea
+                    v-model="form.comment"
+                    density="compact"
+                    variant="underlined"
+                    placeholder="Add a comment"
+                    hide-details
+                    clearable
+                    auto-grow
+                    rows="1"
+                    :error="Boolean(form.errors.comment)"
+                    counter="140"
+                    maxLength="140"
+                  >
                     <template v-slot:prepend>
                       <v-avatar color="surface-light" size="small">
                         <v-img v-if="avatarImagePath" :src="avatarImagePath" />
@@ -135,17 +150,34 @@ const updateComment = async (id: number) => {
                   </v-textarea>
                   <v-card-actions v-show="form.comment" class="mb-n4 pa-0">
                     <v-spacer />
-                    <v-btn size="small" variant="tonal" color="secondary" class="text-capitalize"
-                      :class="{ 'text-disabled': form.processing }" :disabled="form.processing"
-                      @click="addComment">Comment</v-btn>
+                    <v-btn
+                      size="small"
+                      variant="tonal"
+                      color="secondary"
+                      class="text-capitalize"
+                      :class="{
+                        'text-disabled': form.processing,
+                      }"
+                      :disabled="form.processing"
+                      @click="addComment"
+                      >Comment</v-btn
+                    >
                   </v-card-actions>
                 </form>
               </v-card-text>
             </v-card>
-            <v-infinite-scroll v-if="comments.size > 0" :onLoad="load" class="w-100 overflow-hidden" empty-text="">
+            <v-infinite-scroll
+              v-if="comments.size > 0"
+              :onLoad="load"
+              class="w-100 overflow-hidden"
+              empty-text=""
+            >
               <template v-for="comment in comments.values()" :key="comment.id">
-                <CommentItem :comment @delete="showDeleteConfirmDialog(comment.id)"
-                  @updateComment="updateComment(comment.id)" />
+                <CommentItem
+                  :comment
+                  @delete="showDeleteConfirmDialog(comment.id)"
+                  @updateComment="updateComment(comment.id)"
+                />
               </template>
             </v-infinite-scroll>
           </v-col>
@@ -154,9 +186,15 @@ const updateComment = async (id: number) => {
     </v-card-text>
   </v-card>
   <v-dialog v-model="dialog.deleteConfirm" max-width="600">
-    <ConfirmCard icon="mdi-delete-outline" title="Delete Comment"
+    <ConfirmCard
+      icon="mdi-delete-outline"
+      title="Delete Comment"
       message="Are you sure you want to delete this comment?"
-      description="Once the comment is deleted, it will be permanently deleted." confirmBtnName="Delete"
-      confirmBtnColor="error" @confirmed="deleteComment" @close="dialog.deleteConfirm = false" />
+      description="Once the comment is deleted, it will be permanently deleted."
+      confirmBtnName="Delete"
+      confirmBtnColor="error"
+      @confirmed="deleteComment"
+      @close="dialog.deleteConfirm = false"
+    />
   </v-dialog>
 </template>

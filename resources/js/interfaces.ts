@@ -66,7 +66,7 @@ export type Tag = {
 export type TagCount = {
   normal_count: number;
   archived_count: number;
-}
+};
 
 export type Status = {
   id: number;

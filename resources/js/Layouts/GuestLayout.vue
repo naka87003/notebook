@@ -1,15 +1,19 @@
 <script setup>
 import ApplicationLogo from '@/Components/ApplicationLogo.vue';
-import { useTheme } from 'vuetify'
+import { useTheme } from 'vuetify';
 import { useDark } from '@vueuse/core';
 import { watch } from 'vue';
 
 const theme = useTheme();
 const isDark = useDark();
 
-watch(isDark, (value) => {
-  theme.global.name.value = value ? 'dark' : 'light';
-}, { immediate: true });
+watch(
+  isDark,
+  (value) => {
+    theme.global.name.value = value ? 'dark' : 'light';
+  },
+  { immediate: true }
+);
 </script>
 
 <template>
@@ -22,11 +26,11 @@ watch(isDark, (value) => {
 <style scoped>
 .bg {
   width: 100%;
-  min-height:100vh;
+  min-height: 100vh;
   position: absolute;
   top: 0;
   left: 0;
-  background: url("$image/notebook.jpeg");
+  background: url('$image/notebook.jpeg');
   background-position: center;
   background-size: cover;
   background-repeat: no-repeat;

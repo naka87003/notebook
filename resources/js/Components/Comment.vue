@@ -25,12 +25,12 @@ const replies = ref(new Map<number, Reply>());
 const truncate = ref(true);
 
 const dialog = ref({
-  deleteConfirm: false
+  deleteConfirm: false,
 });
 
 const display = ref({
   replyForm: false,
-  replies: false
+  replies: false,
 });
 
 const targetReplyId = ref();
@@ -40,7 +40,9 @@ const userImagePath = computed((): string | null => {
   return user.image_path;
 });
 
-const avatarImagePath = computed(() => userImagePath.value ? '/storage/' + userImagePath.value : null);
+const avatarImagePath = computed(() =>
+  userImagePath.value ? '/storage/' + userImagePath.value : null
+);
 
 const isMyComment = computed((): boolean => {
   const user = usePage().props.auth.user as User;
@@ -62,7 +64,7 @@ const isTruncated = computed(() => truncate.value && arrCommentLines.value.lengt
 
 const showSelectedUserPosts = (userId: number) => {
   router.get(route('timeline'), {
-    user: userId
+    user: userId,
   });
 };
 
@@ -71,7 +73,9 @@ const loadItems = async (fresh: boolean = false): Promise<Reply[]> => {
   if (fresh === false) {
     params['offset'] = replies.value.size;
   }
-  const response = await axios.get(route('replies', props.comment.id), { params })
+  const response = await axios.get(route('replies', props.comment.id), {
+    params,
+  });
   return response.data;
 };
 
@@ -93,7 +97,7 @@ const addReply = async () => {
     onSuccess: async () => {
       form.reset();
       replyAdded();
-    }
+    },
   });
 };
 
@@ -114,12 +118,13 @@ const showDeleteConfirmDialog = (id: number): void => {
 
 const deleteReply = async () => {
   dialog.value.deleteConfirm = false;
-  await axios.delete(route('replies.destroy', targetReplyId.value))
+  await axios
+    .delete(route('replies.destroy', targetReplyId.value))
     .then(async () => {
       replies.value.delete(targetReplyId.value);
       emit('updateComment');
     })
-    .catch(error => {
+    .catch((error) => {
       console.log(error);
     });
 };
@@ -128,39 +133,74 @@ const deleteReply = async () => {
 <template>
   <v-alert density="compact" variant="text" class="pa-0">
     <template v-slot:prepend>
-      <v-avatar color="grey-darken-3 cursor-pointer" size="small" style="z-index: 1;"
-        @click="showSelectedUserPosts(comment.user_id)">
+      <v-avatar
+        color="grey-darken-3 cursor-pointer"
+        size="small"
+        style="z-index: 1"
+        @click="showSelectedUserPosts(comment.user_id)"
+      >
         <v-img v-if="comment.user.image_path" :src="'/storage/' + comment.user.image_path" />
         <v-icon v-else icon="mdi-account" />
       </v-avatar>
     </template>
     <template #title>
       <span class="text-caption text-truncate">{{ comment.user.name }}</span>
-      <span class="text-caption text-no-wrap text-disabled ms-2">{{ relativeDateTime(comment.created_at) }}</span>
+      <span class="text-caption text-no-wrap text-disabled ms-2">{{
+        relativeDateTime(comment.created_at)
+      }}</span>
     </template>
     <template #append>
       <v-menu v-if="isMyComment">
         <template v-slot:activator="{ props }">
-          <v-icon v-bind="props" icon="mdi-dots-vertical" variant="plain" size="small"/>
+          <v-icon v-bind="props" icon="mdi-dots-vertical" variant="plain" size="small" />
         </template>
         <v-list class="pa-0">
-          <v-list-item density="compact" prepend-icon="mdi-delete-outline" slim @click="$emit('delete')">
+          <v-list-item
+            density="compact"
+            prepend-icon="mdi-delete-outline"
+            slim
+            @click="$emit('delete')"
+          >
             <v-list-item-title>Delete</v-list-item-title>
           </v-list-item>
         </v-list>
       </v-menu>
     </template>
-    <p class="text-body-2" v-for="paragraph in paragraphs">{{ paragraph }}</p>
-    <v-btn v-if="isTruncated" class="text-capitalize ps-0" color="primary" variant="text" density="compact"
-      @click="truncate = false">Show more</v-btn>
+    <p class="text-body-2" v-for="paragraph in paragraphs">
+      {{ paragraph }}
+    </p>
+    <v-btn
+      v-if="isTruncated"
+      class="text-capitalize ps-0"
+      color="primary"
+      variant="text"
+      density="compact"
+      @click="truncate = false"
+      >Show more</v-btn
+    >
     <div>
-      <v-icon flat size="x-small" icon="mdi-reply-outline" @click="display.replyForm = !display.replyForm" />
+      <v-icon
+        flat
+        size="x-small"
+        icon="mdi-reply-outline"
+        @click="display.replyForm = !display.replyForm"
+      />
     </div>
     <v-card v-show="display.replyForm" density="compact" variant="text">
       <v-card-text class="pt-0 px-0">
         <form @submit.prevent="addReply">
-          <v-textarea v-model="form.reply" density="compact" variant="underlined" placeholder="Add a reply" hide-details
-            clearable auto-grow rows="1" counter="140" maxLength="140">
+          <v-textarea
+            v-model="form.reply"
+            density="compact"
+            variant="underlined"
+            placeholder="Add a reply"
+            hide-details
+            clearable
+            auto-grow
+            rows="1"
+            counter="140"
+            maxLength="140"
+          >
             <template v-slot:prepend>
               <v-avatar color="surface-light" size="small">
                 <v-img v-if="avatarImagePath" :src="avatarImagePath" />
@@ -171,23 +211,49 @@ const deleteReply = async () => {
         </form>
         <v-card-actions v-show="form.reply" class="mb-n4 pa-0">
           <v-spacer />
-          <v-btn size="small" variant="tonal" color="secondary" class="text-capitalize"
-            :class="{ 'text-disabled': form.processing }" :disabled="form.processing" @click="addReply">Reply</v-btn>
+          <v-btn
+            size="small"
+            variant="tonal"
+            color="secondary"
+            class="text-capitalize"
+            :class="{ 'text-disabled': form.processing }"
+            :disabled="form.processing"
+            @click="addReply"
+            >Reply</v-btn
+          >
         </v-card-actions>
       </v-card-text>
     </v-card>
-    <v-btn v-if="comment.replies_count" variant="text"
-      :prepend-icon="display.replies ? 'mdi-chevron-up' : 'mdi-chevron-down'" class="text-lowercase px-0"
-      color="primary" @click="display.replies = !display.replies">{{ comment.replies_count }} replies</v-btn>
-    </v-alert>
-    <v-infinite-scroll v-if="display.replies" :onLoad="load" class="ms-10 mt-n3 overflow-hidden" empty-text="">
-      <template v-for="reply in replies.values()" :key="reply.id">
-        <ReplyItem :reply @replyAdded="replyAdded" @delete="showDeleteConfirmDialog(reply.id)" />
-      </template>
-    </v-infinite-scroll>
+    <v-btn
+      v-if="comment.replies_count"
+      variant="text"
+      :prepend-icon="display.replies ? 'mdi-chevron-up' : 'mdi-chevron-down'"
+      class="text-lowercase px-0"
+      color="primary"
+      @click="display.replies = !display.replies"
+      >{{ comment.replies_count }} replies</v-btn
+    >
+  </v-alert>
+  <v-infinite-scroll
+    v-if="display.replies"
+    :onLoad="load"
+    class="ms-10 mt-n3 overflow-hidden"
+    empty-text=""
+  >
+    <template v-for="reply in replies.values()" :key="reply.id">
+      <ReplyItem :reply @replyAdded="replyAdded" @delete="showDeleteConfirmDialog(reply.id)" />
+    </template>
+  </v-infinite-scroll>
   <v-dialog v-model="dialog.deleteConfirm" max-width="600">
-    <ConfirmCard icon="mdi-delete-outline" title="Delete Reply" message="Are you sure you want to delete this reply?"
-      description="Once the reply is deleted, it will be permanently deleted." confirmBtnName="Delete"
-      confirmBtnColor="error" @confirmed="deleteReply" @close="dialog.deleteConfirm = false" />
+    <ConfirmCard
+      icon="mdi-delete-outline"
+      title="Delete Reply"
+      message="Are you sure you want to delete this reply?"
+      description="Once the reply is deleted, it will be permanently deleted."
+      confirmBtnName="Delete"
+      confirmBtnColor="error"
+      @confirmed="deleteReply"
+      @close="dialog.deleteConfirm = false"
+    />
   </v-dialog>
 </template>
