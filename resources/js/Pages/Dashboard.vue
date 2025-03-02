@@ -24,10 +24,7 @@ const props = defineProps<{
 
 const isInProgress = ref(true);
 
-const search = ref('');
-
-const notes = ref(new Map<number, Note>());
-
+// Dialog
 const dialog = ref({
   create: false,
   edit: false,
@@ -41,76 +38,55 @@ const dialog = ref({
   likedUserList: false,
   noteComments: false,
 });
+const showEditDialog = (note: Note): void => {
+  targetNoteId.value = note.id;
+  dialog.value.edit = true;
+};
+const showArchiveConfirmDialog = (note: Note): void => {
+  targetNoteId.value = note.id;
+  dialog.value.archiveConfirm = true;
+};
+const showRetrieveConfirmDialog = (note: Note): void => {
+  targetNoteId.value = note.id;
+  dialog.value.retrieveConfirm = true;
+};
+const showDeleteConfirmDialog = (note: Note): void => {
+  targetNoteId.value = note.id;
+  dialog.value.deleteConfirm = true;
+};
+const showLikedUserList = (note: Note) => {
+  targetNoteId.value = note.id;
+  dialog.value.likedUserList = true;
+};
+const showComments = (note: Note) => {
+  targetNoteId.value = note.id;
+  dialog.value.noteComments = true;
+};
+
+// Snackbar
 const snackbar = ref({
   display: false,
   message: '',
 });
+const showSnackBar = (msg: string): void => {
+  snackbar.value.message = msg;
+  snackbar.value.display = true;
+};
+const noteCreated = async () => {
+  dialog.value.create = false;
+  await refreshDisplay();
+  showSnackBar('Created Successfully.');
+};
+const noteUpdated = async () => {
+  dialog.value.edit = false;
+  await refreshDisplay();
+  showSnackBar('Updated Successfully.');
+};
 
-const sort: Ref<Sort> = ref({
-  key: 'updated_at',
-  order: 'desc',
-});
-
-const filter: Ref<NotesFilter> = ref({
-  category: [1, 2, 3],
-  tag: [],
-  status: props.status ?? 1,
-  onlyLiked: false,
-});
-
-const previewImagePath = ref('');
-
+// Note
+const notes = ref(new Map<number, Note>());
 const targetNoteId: Ref<number> = ref(null);
-
 const targetNote = computed(() => notes.value.get(targetNoteId.value));
-
-const searchEntered = computed((): boolean => Boolean(search.value));
-
-const sortChanged = computed(
-  (): boolean => sort.value.key !== 'updated_at' || sort.value.order !== 'desc'
-);
-
-const sortIcon = computed((): string => {
-  if (sort.value.key === 'starts_at') {
-    return sort.value.order === 'asc'
-      ? 'mdi-sort-calendar-ascending'
-      : 'mdi-sort-calendar-descending';
-  } else {
-    return sort.value.order === 'asc'
-      ? 'mdi-sort-clock-ascending-outline'
-      : 'mdi-sort-clock-descending-outline';
-  }
-});
-
-const filterChanged = computed(
-  (): boolean =>
-    filter.value.category.length !== 3 ||
-    filter.value.status !== 1 ||
-    filter.value.tag.length !== 0 ||
-    filter.value.onlyLiked === true
-);
-
-watchDebounced(search, () => refreshDisplay(), {
-  debounce: 500,
-  maxWait: 1000,
-});
-
-onMounted(async () => {
-  if (props.tag !== undefined) {
-    filter.value.tag.push(props.tag);
-  }
-  const result = await loadNotes();
-  for (const note of result) {
-    notes.value.set(note.id, note);
-  }
-
-  if (props.note) {
-    notes.value.set(props.note.id, props.note);
-    showComments(props.note);
-  }
-  isInProgress.value = false;
-});
-
 const loadNotes = async (): Promise<Note[]> => {
   const response = await axios.get(route('notes.index'), {
     params: {
@@ -122,7 +98,6 @@ const loadNotes = async (): Promise<Note[]> => {
   });
   return response.data;
 };
-
 const load = async ({ done }): Promise<void> => {
   const result = await loadNotes();
   if (result.length > 0) {
@@ -134,39 +109,20 @@ const load = async ({ done }): Promise<void> => {
     done('empty');
   }
 };
-
-const noteCreated = async () => {
-  dialog.value.create = false;
-  await refreshDisplay();
-  showSnackBar('Created Successfully.');
+const refreshDisplay = async (): Promise<void> => {
+  isInProgress.value = true;
+  notes.value.clear();
+  const result = await loadNotes();
+  for (const note of result) {
+    notes.value.set(note.id, note);
+  }
+  isInProgress.value = false;
 };
-
-const noteUpdated = async () => {
-  dialog.value.edit = false;
-  await refreshDisplay();
-  showSnackBar('Updated Successfully.');
+const updatePosts = async (id: number) => {
+  const response = await axios.get(route('notes.note', id));
+  notes.value.set(id, response.data);
 };
-
-const showEditDialog = (note: Note): void => {
-  targetNoteId.value = note.id;
-  dialog.value.edit = true;
-};
-
-const showArchiveConfirmDialog = (note: Note): void => {
-  targetNoteId.value = note.id;
-  dialog.value.archiveConfirm = true;
-};
-
-const showRetrieveConfirmDialog = (note: Note): void => {
-  targetNoteId.value = note.id;
-  dialog.value.retrieveConfirm = true;
-};
-
-const showDeleteConfirmDialog = (note: Note): void => {
-  targetNoteId.value = note.id;
-  dialog.value.deleteConfirm = true;
-};
-
+provide('updatePosts', updatePosts);
 const archiveNote = async (): Promise<void> => {
   dialog.value.archiveConfirm = false;
   await axios
@@ -179,7 +135,6 @@ const archiveNote = async (): Promise<void> => {
       console.log(error);
     });
 };
-
 const retrieveNote = async (): Promise<void> => {
   dialog.value.retrieveConfirm = false;
   await axios
@@ -192,7 +147,6 @@ const retrieveNote = async (): Promise<void> => {
       console.log(error);
     });
 };
-
 const deleteNote = async (): Promise<void> => {
   dialog.value.deleteConfirm = false;
   await axios
@@ -206,26 +160,37 @@ const deleteNote = async (): Promise<void> => {
     });
 };
 
-const showSnackBar = (msg: string): void => {
-  snackbar.value.message = msg;
-  snackbar.value.display = true;
-};
-
-const refreshDisplay = async (): Promise<void> => {
-  isInProgress.value = true;
-  notes.value.clear();
-  const result = await loadNotes();
-  for (const note of result) {
-    notes.value.set(note.id, note);
-  }
-  isInProgress.value = false;
-};
-
+// Search
+const search = ref('');
+const searchEntered = computed((): boolean => Boolean(search.value));
 const searchApply = (newSearch: string) => {
   dialog.value.searchText = false;
   search.value = newSearch;
 };
+watchDebounced(search, () => refreshDisplay(), {
+  debounce: 500,
+  maxWait: 1000,
+});
 
+// Sort
+const sort: Ref<Sort> = ref({
+  key: 'updated_at',
+  order: 'desc',
+});
+const sortChanged = computed(
+  (): boolean => sort.value.key !== 'updated_at' || sort.value.order !== 'desc'
+);
+const sortIcon = computed((): string => {
+  if (sort.value.key === 'starts_at') {
+    return sort.value.order === 'asc'
+      ? 'mdi-sort-calendar-ascending'
+      : 'mdi-sort-calendar-descending';
+  } else {
+    return sort.value.order === 'asc'
+      ? 'mdi-sort-clock-ascending-outline'
+      : 'mdi-sort-clock-descending-outline';
+  }
+});
 const sortApply = async (newSort: Sort): Promise<void> => {
   dialog.value.sortMenu = false;
   sort.value.key = newSort.key;
@@ -233,6 +198,20 @@ const sortApply = async (newSort: Sort): Promise<void> => {
   await refreshDisplay();
 };
 
+// Filter
+const filter: Ref<NotesFilter> = ref({
+  category: [1, 2, 3],
+  tag: [],
+  status: props.status ?? 1,
+  onlyLiked: false,
+});
+const filterChanged = computed(
+  (): boolean =>
+    filter.value.category.length !== 3 ||
+    filter.value.status !== 1 ||
+    filter.value.tag.length !== 0 ||
+    filter.value.onlyLiked === true
+);
 const filterApply = async (newFilter: NotesFilter): Promise<void> => {
   dialog.value.filterMenu = false;
   filter.value.category = newFilter.category;
@@ -242,28 +221,29 @@ const filterApply = async (newFilter: NotesFilter): Promise<void> => {
   await refreshDisplay();
 };
 
+// Image
+const previewImagePath = ref('');
 const showEnlargedImage = (src: string) => {
   dialog.value.enlargedImage = true;
   previewImagePath.value = src;
 };
-
-const showLikedUserList = (note: Note) => {
-  dialog.value.likedUserList = true;
-  targetNoteId.value = note.id;
-};
-
-const showComments = (note: Note) => {
-  targetNoteId.value = note.id;
-  dialog.value.noteComments = true;
-};
-
-const updatePosts = async (id: number) => {
-  const response = await axios.get(route('notes.note', id));
-  notes.value.set(id, response.data);
-};
-
 provide('showEnlargedImage', showEnlargedImage);
-provide('updatePosts', updatePosts);
+
+// Lifecycle Events
+onMounted(async () => {
+  if (props.tag !== undefined) {
+    filter.value.tag.push(props.tag);
+  }
+  const result = await loadNotes();
+  for (const note of result) {
+    notes.value.set(note.id, note);
+  }
+  if (props.note) {
+    notes.value.set(props.note.id, props.note);
+    showComments(props.note);
+  }
+  isInProgress.value = false;
+});
 </script>
 
 <template>
