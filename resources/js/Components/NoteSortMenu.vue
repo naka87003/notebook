@@ -24,10 +24,10 @@ const resetSort = () => {
   <v-card>
     <v-toolbar density="comfortable" color="transparent">
       <v-toolbar-title class="text-h6" text="Sort Menu"></v-toolbar-title>
-      <template v-slot:prepend>
+      <template #prepend>
         <v-icon class="ms-3" icon="mdi-sort" />
       </template>
-      <template v-slot:append>
+      <template #append>
         <v-btn @click="$emit('close')">
           <v-icon size="x-large" icon="mdi-close" />
           <v-tooltip activator="parent" location="bottom" text="Close" />
@@ -58,7 +58,7 @@ const resetSort = () => {
       </v-row>
     </v-card-text>
     <v-divider />
-    <template v-slot:actions>
+    <template #actions>
       <v-btn variant="plain" @click="resetSort">Reset</v-btn>
       <v-spacer></v-spacer>
       <v-btn variant="plain" @click="$emit('close')">Close</v-btn>

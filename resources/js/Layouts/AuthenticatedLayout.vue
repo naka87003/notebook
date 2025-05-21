@@ -109,7 +109,7 @@ const markAllAsRead = () => {
           <v-tooltip activator="parent" location="bottom" text="Notification" />
         </v-btn>
         <v-menu class="hidden-sm-and-down">
-          <template v-slot:activator="{ props }">
+          <template #activator="{ props }">
             <v-btn v-bind="props" stacked class="hidden-sm-and-down">
               <v-avatar color="surface-light cursor-pointer" size="small">
                 <v-img v-if="avatarImagePath" :src="avatarImagePath" />
@@ -126,7 +126,7 @@ const markAllAsRead = () => {
               <v-list-item-subtitle>
                 {{ $page.props.auth.user.email }}
               </v-list-item-subtitle>
-              <template v-slot:prepend>
+              <template #prepend>
                 <v-avatar color="surface-light">
                   <v-img v-if="avatarImagePath" :src="avatarImagePath" />
                   <v-icon v-else icon="mdi-account" />
@@ -135,22 +135,22 @@ const markAllAsRead = () => {
             </v-list-item>
             <v-divider class="my-3" />
             <v-list-item
-              @click="pageTransition('profile.edit')"
               :active="route().current() === 'profile.edit'"
               prepend-icon="mdi-account-box-edit-outline"
               slim
+              @click="pageTransition('profile.edit')"
             >
               <v-list-item-title>Edit Profile</v-list-item-title>
             </v-list-item>
             <v-list-item
-              @click="pageTransition('preferences.edit')"
               :active="route().current() === 'preferences.edit'"
               prepend-icon="mdi-cog-outline"
               slim
+              @click="pageTransition('preferences.edit')"
             >
               <v-list-item-title>Preferences</v-list-item-title>
             </v-list-item>
-            <v-list-item @click="logout" prepend-icon="mdi-logout" slim>
+            <v-list-item prepend-icon="mdi-logout" slim @click="logout">
               <v-list-item-title>Logout</v-list-item-title>
             </v-list-item>
           </v-list>
@@ -168,17 +168,17 @@ const markAllAsRead = () => {
     <v-main>
       <v-dialog v-model="dialog.humburgerMenu" scrollable>
         <HumburgerMenu
-          :currentPageName
-          v-model:isDark="isDark"
+          v-model:is-dark="isDark"
+          :current-page-name
           @logout="logout"
           @close="dialog.humburgerMenu = false"
         />
       </v-dialog>
-      <v-dialog v-model="dialog.notifications" maxWidth="600px" scrollable>
+      <v-dialog v-model="dialog.notifications" max-width="600px" scrollable>
         <NotificationList
-          :unreadNotificationCount
+          :unread-notification-count
           @close="dialog.notifications = false"
-          @markAllAsRead="markAllAsRead"
+          @mark-all-as-read="markAllAsRead"
         />
       </v-dialog>
       <slot />

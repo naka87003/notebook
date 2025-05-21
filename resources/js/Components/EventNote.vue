@@ -5,7 +5,7 @@ import { simplifyDateTime, splitByNewline } from '@/common';
 
 const props = defineProps<{ targetNote: Note }>();
 
-const emit = defineEmits<{
+defineEmits<{
   close: [];
 }>();
 
@@ -24,10 +24,10 @@ const previewImagePath = computed(() => {
       <template #title>
         <span class="text-body-1">{{ targetNote.title }}</span>
       </template>
-      <template v-slot:prepend>
+      <template #prepend>
         <v-icon :icon="targetNote.category.mdi_name" class="ms-3"></v-icon>
       </template>
-      <template v-slot:append>
+      <template #append>
         <v-btn @click="$emit('close')">
           <v-icon size="large" icon="mdi-close" />
           <v-tooltip activator="parent" location="bottom" text="Close" />
@@ -41,7 +41,8 @@ const previewImagePath = computed(() => {
         <p class="text-body-2">to {{ simplifyDateTime(targetNote.ends_at) }}</p>
       </v-alert>
       <p
-        v-for="paragraph in splitByNewline(targetNote.content ?? '')"
+        v-for="(paragraph, index) in splitByNewline(targetNote.content ?? '')"
+        :key="index"
         class="note-paragraph text-body-1"
       >
         {{ paragraph }}
@@ -85,10 +86,10 @@ const previewImagePath = computed(() => {
         ></v-icon>
       </template>
       <v-spacer />
-      <slot name="actions" :targetNote />
+      <slot name="actions" :target-note />
     </v-card-actions>
   </v-card>
-  <v-dialog v-model="dialog.enlargedImage" close-on-content-click maxWidth="1000px">
+  <v-dialog v-model="dialog.enlargedImage" close-on-content-click max-width="1000px">
     <v-img :src="previewImagePath" height="90vh" />
   </v-dialog>
 </template>

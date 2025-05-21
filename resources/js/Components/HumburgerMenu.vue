@@ -12,7 +12,7 @@ defineEmits<{
   close: [];
 }>();
 
-const isDark = defineModel('isDark');
+const isDark = defineModel<boolean>('isDark');
 
 const userImagePath = computed((): string | null => {
   const user = usePage().props.auth.user as User;
@@ -32,7 +32,7 @@ const pageTransition = (name: string) => {
   <v-card>
     <v-toolbar density="comfortable" color="transparent">
       <v-toolbar-title class="text-h6" text="Menu"></v-toolbar-title>
-      <template v-slot:append>
+      <template #append>
         <v-btn @click="$emit('close')">
           <v-icon size="x-large" icon="mdi-close" />
           <v-tooltip activator="parent" location="bottom" text="Close" />
@@ -49,7 +49,7 @@ const pageTransition = (name: string) => {
           :active="currentPageName === 'dashboard'"
           @click="pageTransition('dashboard')"
         >
-          <template v-slot:prepend>
+          <template #prepend>
             <v-avatar density="compact">
               <v-icon>mdi-note-multiple-outline</v-icon>
             </v-avatar>
@@ -61,7 +61,7 @@ const pageTransition = (name: string) => {
           :active="currentPageName === 'calendar'"
           @click="pageTransition('calendar')"
         >
-          <template v-slot:prepend>
+          <template #prepend>
             <v-avatar density="compact">
               <v-icon>mdi-calendar-outline</v-icon>
             </v-avatar>
@@ -73,7 +73,7 @@ const pageTransition = (name: string) => {
           :active="currentPageName === 'timeline'"
           @click="pageTransition('timeline')"
         >
-          <template v-slot:prepend>
+          <template #prepend>
             <v-avatar density="compact">
               <v-icon>mdi-timeline-outline</v-icon>
             </v-avatar>
@@ -85,7 +85,7 @@ const pageTransition = (name: string) => {
           :active="currentPageName === 'tags.index'"
           @click="pageTransition('tags.index')"
         >
-          <template v-slot:prepend>
+          <template #prepend>
             <v-avatar density="compact">
               <v-icon>mdi-tag-multiple-outline</v-icon>
             </v-avatar>
@@ -118,7 +118,7 @@ const pageTransition = (name: string) => {
           :active="currentPageName === 'profile.edit'"
           @click="pageTransition('profile.edit')"
         >
-          <template v-slot:prepend>
+          <template #prepend>
             <v-avatar color="surface-light" density="compact">
               <v-img v-if="avatarImagePath" :src="avatarImagePath" />
               <v-icon v-else icon="mdi-account" />
@@ -131,14 +131,14 @@ const pageTransition = (name: string) => {
           :active="currentPageName === 'preferences.edit'"
           @click="pageTransition('preferences.edit')"
         >
-          <template v-slot:prepend>
+          <template #prepend>
             <v-avatar density="compact">
               <v-icon>mdi-cog-outline</v-icon>
             </v-avatar>
           </template>
         </v-list-item>
         <v-list-item title="Logout" density="compact" @click="$emit('logout')">
-          <template v-slot:prepend>
+          <template #prepend>
             <v-avatar density="compact">
               <v-icon>mdi-logout</v-icon>
             </v-avatar>
@@ -147,7 +147,7 @@ const pageTransition = (name: string) => {
       </v-list>
     </v-card-text>
     <v-divider />
-    <template v-slot:actions>
+    <template #actions>
       <v-spacer></v-spacer>
       <v-btn variant="plain" @click="$emit('close')">Close</v-btn>
     </template>

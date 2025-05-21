@@ -73,18 +73,18 @@ const submit = () => {
             Password
           </div>
           <v-text-field
+            v-model="form.password"
             :append-inner-icon="visible ? 'mdi-eye-off' : 'mdi-eye'"
             :type="visible ? 'text' : 'password'"
             density="compact"
             placeholder="Enter your password"
             prepend-inner-icon="mdi-lock-outline"
             variant="outlined"
-            v-model="form.password"
             :error="Boolean(form.errors.password)"
             :error-messages="form.errors.password"
-            @click:append-inner="visible = !visible"
             autocomplete="new-password"
             required
+            @click:append-inner="visible = !visible"
             @input="form.errors.password = null"
           />
 
@@ -94,18 +94,18 @@ const submit = () => {
             Confirm Password
           </div>
           <v-text-field
+            v-model="form.password_confirmation"
             :append-inner-icon="visible ? 'mdi-eye-off' : 'mdi-eye'"
             :type="visible ? 'text' : 'password'"
             density="compact"
             placeholder="Enter your password again"
             prepend-inner-icon="mdi-lock-outline"
             variant="outlined"
-            v-model="form.password_confirmation"
             :error="Boolean(form.errors.password_confirmation)"
             :error-messages="form.errors.password_confirmation"
-            @click:append-inner="visible = !visible"
             autocomplete="new-password"
             required
+            @click:append-inner="visible = !visible"
             @input="form.errors.password_confirmation = null"
           />
           <v-btn

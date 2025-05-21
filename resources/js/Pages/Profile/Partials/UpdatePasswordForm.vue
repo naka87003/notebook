@@ -36,31 +36,38 @@ const updatePassword = () => {
     <v-card title="Update Password">
       <v-divider />
       <v-card-text>
-        <v-card class="mb-6" color="surface-variant" variant="tonal">
+        <v-card
+          class="mb-6"
+          color="surface-variant"
+          variant="tonal"
+        >
           <v-card-text class="text-medium-emphasis text-caption">
             <p>Ensure your account is using a long, random password to stay secure.</p>
           </v-card-text>
         </v-card>
-        <form @submit.prevent="updatePassword" class="mt-6 space-y-6">
+        <form
+          class="mt-6 space-y-6"
+          @submit.prevent="updatePassword"
+        >
           <div
             class="text-subtitle-1 text-medium-emphasis d-flex align-center justify-space-between"
           >
             Current Password
           </div>
           <v-text-field
+            v-model="form.current_password"
             :append-inner-icon="visible ? 'mdi-eye-off' : 'mdi-eye'"
             :type="visible ? 'text' : 'password'"
             density="compact"
             placeholder="Enter your password"
             prepend-inner-icon="mdi-lock-outline"
             variant="outlined"
-            v-model="form.current_password"
             :error="Boolean(form.errors.current_password)"
             :error-messages="form.errors.current_password"
-            @click:append-inner="visible = !visible"
             autocomplete="current-password"
             required
             max-width="600"
+            @click:append-inner="visible = !visible"
             @input="form.errors.current_password = null"
           />
           <div
@@ -69,19 +76,19 @@ const updatePassword = () => {
             Password
           </div>
           <v-text-field
+            v-model="form.password"
             :append-inner-icon="visible ? 'mdi-eye-off' : 'mdi-eye'"
             :type="visible ? 'text' : 'password'"
             density="compact"
             placeholder="Enter your password"
             prepend-inner-icon="mdi-lock-outline"
             variant="outlined"
-            v-model="form.password"
             :error="Boolean(form.errors.password)"
             :error-messages="form.errors.password"
-            @click:append-inner="visible = !visible"
             autocomplete="new-password"
             required
             max-width="600"
+            @click:append-inner="visible = !visible"
             @input="form.errors.password = null"
           />
           <div
@@ -90,30 +97,35 @@ const updatePassword = () => {
             Confirm Password
           </div>
           <v-text-field
+            v-model="form.password_confirmation"
             :append-inner-icon="visible ? 'mdi-eye-off' : 'mdi-eye'"
             :type="visible ? 'text' : 'password'"
             density="compact"
             placeholder="Enter your password again"
             prepend-inner-icon="mdi-lock-outline"
             variant="outlined"
-            v-model="form.password_confirmation"
             :error="Boolean(form.errors.password_confirmation)"
             :error-messages="form.errors.password_confirmation"
-            @click:append-inner="visible = !visible"
             autocomplete="new-password"
             required
             max-width="600"
+            @click:append-inner="visible = !visible"
             @input="form.errors.password_confirmation = null"
           />
           <Transition>
             <div v-if="form.recentlySuccessful">
-              <v-alert text="Saved." type="success" variant="tonal" closable />
+              <v-alert
+                text="Saved."
+                type="success"
+                variant="tonal"
+                closable
+              />
             </div>
           </Transition>
         </form>
       </v-card-text>
       <v-divider />
-      <template v-slot:actions>
+      <template #actions>
         <v-spacer />
         <v-btn
           color="primary"

@@ -69,7 +69,7 @@ const unfollow = async () => {
 
 <template>
   <v-card class="mx-auto pa-1" :title="selectedUser.name" border="sm" elevation="5" rounded="xl">
-    <template v-slot:prepend>
+    <template #prepend>
       <v-avatar color="surface-light">
         <v-img v-if="selectedUser.image_path" :src="'storage/' + selectedUser.image_path" />
         <v-icon v-else icon="mdi-account" />
@@ -104,13 +104,13 @@ const unfollow = async () => {
         {{ count.followers }} Followers
       </v-btn>
       <v-spacer></v-spacer>
-      <FollowButton v-if="isMyself === false" :isFollowing @follow="follow" @unfollow="unfollow" />
+      <FollowButton v-if="isMyself === false" :is-following @follow="follow" @unfollow="unfollow" />
     </v-card-actions>
   </v-card>
-  <v-dialog v-model="dialog.followerList" maxWidth="600px" scrollable>
-    <FollowerList :selectedUser @close="dialog.followerList = false" />
+  <v-dialog v-model="dialog.followerList" max-width="600px" scrollable>
+    <FollowerList :selected-user @close="dialog.followerList = false" />
   </v-dialog>
-  <v-dialog v-model="dialog.followeeList" maxWidth="600px" scrollable>
-    <FolloweeList :selectedUser @close="dialog.followeeList = false" />
+  <v-dialog v-model="dialog.followeeList" max-width="600px" scrollable>
+    <FolloweeList :selected-user @close="dialog.followeeList = false" />
   </v-dialog>
 </template>

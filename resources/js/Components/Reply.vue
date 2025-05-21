@@ -72,7 +72,7 @@ const addReply = async () => {
 
 <template>
   <v-alert density="compact" variant="text" class="pa-0">
-    <template v-slot:prepend>
+    <template #prepend>
       <v-avatar
         color="grey-darken-3 cursor-pointer"
         size="small"
@@ -91,7 +91,7 @@ const addReply = async () => {
     </template>
     <template #append>
       <v-menu v-if="isMyComment">
-        <template v-slot:activator="{ props }">
+        <template #activator="{ props }">
           <v-icon v-bind="props" icon="mdi-dots-vertical" variant="plain" size="small" />
         </template>
         <v-list>
@@ -104,7 +104,7 @@ const addReply = async () => {
     <p v-if="reply.reply_to" class="text-caption text-primary mt-n1">
       {{ '@ ' + reply.addressee.name }}
     </p>
-    <p class="text-body-2" v-for="paragraph in paragraphs">
+    <p v-for="(paragraph, index) in paragraphs" :key="index" class="text-body-2">
       {{ paragraph }}
     </p>
     <v-btn
@@ -138,9 +138,9 @@ const addReply = async () => {
           auto-grow
           rows="1"
           counter="140"
-          maxLength="140"
+          max-length="140"
         >
-          <template v-slot:prepend>
+          <template #prepend>
             <v-avatar color="surface-light" size="small">
               <v-img v-if="avatarImagePath" :src="avatarImagePath" />
               <v-icon v-else icon="mdi-account" />

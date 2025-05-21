@@ -45,10 +45,10 @@ const resetFilter = () => {
   <v-card>
     <v-toolbar density="comfortable" color="transparent">
       <v-toolbar-title class="text-h6" text="Filter Menu"></v-toolbar-title>
-      <template v-slot:prepend>
+      <template #prepend>
         <v-icon class="ms-3" icon="mdi-filter-menu-outline" />
       </template>
-      <template v-slot:append>
+      <template #append>
         <v-btn @click="$emit('close')">
           <v-icon size="x-large" icon="mdi-close" />
           <v-tooltip activator="parent" location="bottom" text="Close" />
@@ -62,6 +62,7 @@ const resetFilter = () => {
           <div class="text-subtitle-1 text-medium-emphasis">Category</div>
           <v-checkbox
             v-for="item in items.category"
+            :key="item.id"
             v-model="newFilter.category"
             :value="item.id"
             class="mb-n10"
@@ -75,7 +76,12 @@ const resetFilter = () => {
         <v-col cols="12">
           <div class="text-subtitle-1 text-medium-emphasis">Status</div>
           <v-radio-group v-model="newFilter.status" column hide-details="auto">
-            <v-radio v-for="item in items.status" :label="item.name" :value="item.id">
+            <v-radio
+              v-for="item in items.status"
+              :key="item.id"
+              :label="item.name"
+              :value="item.id"
+            >
               <template #label>
                 <v-icon :icon="item.mdi_name" class="mx-3"></v-icon>
                 {{ item.name }}
@@ -98,16 +104,16 @@ const resetFilter = () => {
             closable-chips
             multiple
           >
-            <template v-slot:item="{ props, item }">
+            <template #item="{ props, item }">
               <v-list-item v-bind="props" prepend-icon="mdi-tag" :title="item.raw.name">
-                <template v-slot:prepend>
+                <template #prepend>
                   <v-icon icon="mdi-tag" :color="item.raw.hex_color" />
                 </template>
               </v-list-item>
             </template>
-            <template v-slot:chip="{ props, item }">
+            <template #chip="{ props, item }">
               <v-chip v-bind="props" :text="item.raw.name" close-icon="mdi-close">
-                <template v-slot:prepend>
+                <template #prepend>
                   <v-icon icon="mdi-tag" :color="item.raw.hex_color" size="x-large" class="mr-1" />
                 </template>
               </v-chip>
@@ -126,7 +132,7 @@ const resetFilter = () => {
       </v-row>
     </v-card-text>
     <v-divider />
-    <template v-slot:actions>
+    <template #actions>
       <v-btn variant="plain" @click="resetFilter">Reset</v-btn>
       <v-spacer></v-spacer>
       <v-btn variant="plain" @click="$emit('close')">Close</v-btn>

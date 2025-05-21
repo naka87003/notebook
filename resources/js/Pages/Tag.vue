@@ -8,6 +8,7 @@ import TagCreateForm from '@/Components/TagCreateForm.vue';
 import TagEditForm from '@/Components/TagEditForm.vue';
 import type { Tag, TagCount } from '@/interfaces';
 import ConfirmCard from '@/Components/ConfirmCard.vue';
+import type { DataTableHeader } from 'vuetify';
 
 const searchText = ref('');
 
@@ -26,12 +27,13 @@ const snackbar = ref({
 
 const search = ref('');
 const itemsPerPage = ref(10);
-const headers = ref([
+
+const headers = ref<DataTableHeader[]>([
   { title: 'Tag', key: 'name' },
   { title: 'Normal', key: 'normal_count' },
   { title: 'Archived', key: 'archived_count' },
   { title: 'Actions', key: 'actions', sortable: false },
-]) as any;
+]);
 
 const items: Ref<(Tag & TagCount)[]> = ref([]);
 const loading = ref(true);
@@ -141,11 +143,11 @@ const showTaggedNotes = (item: Tag, status: number) => {
         :search
         @update:options="loadItems"
       >
-        <template v-slot:item.name="{ item }">
+        <template #item.name="{ item }">
           <v-icon class="me-3" size="small" :color="item.hex_color" icon="mdi-tag" />
           {{ item.name }}
         </template>
-        <template v-slot:item.normal_count="{ item }">
+        <template #item.normal_count="{ item }">
           <v-btn
             v-if="item.normal_count !== null"
             variant="plain"
@@ -156,7 +158,7 @@ const showTaggedNotes = (item: Tag, status: number) => {
           </v-btn>
           <v-btn v-else variant="plain" disabled>0</v-btn>
         </template>
-        <template v-slot:item.archived_count="{ item }">
+        <template #item.archived_count="{ item }">
           <v-btn
             v-if="item.archived_count !== null"
             variant="plain"
@@ -167,17 +169,17 @@ const showTaggedNotes = (item: Tag, status: number) => {
           </v-btn>
           <v-btn v-else variant="plain" disabled>0</v-btn>
         </template>
-        <template v-slot:item.actions="{ item }">
+        <template #item.actions="{ item }">
           <v-icon icon="mdi-pencil-outline" class="me-3" size="small" @click="editItem(item)" />
           <v-icon icon="mdi-delete-outline" size="small" @click="showDeleteConfirmDialog(item)" />
         </template>
       </v-data-table-server>
     </v-container>
     <v-dialog v-model="dialog.create" max-width="600">
-      <TagCreateForm @close="dialog.create = false" @tagCreated="tagCreated" />
+      <TagCreateForm @close="dialog.create = false" @tag-created="tagCreated" />
     </v-dialog>
     <v-dialog v-model="dialog.edit" max-width="600">
-      <TagEditForm :targetTag @close="dialog.edit = false" @tagUpdated="tagUpdated" />
+      <TagEditForm :target-tag @close="dialog.edit = false" @tag-updated="tagUpdated" />
     </v-dialog>
     <v-dialog v-model="dialog.deleteConfirm" max-width="600">
       <ConfirmCard
@@ -185,8 +187,8 @@ const showTaggedNotes = (item: Tag, status: number) => {
         title="Delete Tag"
         message="Are you sure you want to delete this tag?"
         :description="deleteConfirmDescription"
-        confirmBtnName="Delete"
-        confirmBtnColor="error"
+        confirm-btn-name="Delete"
+        confirm-btn-color="error"
         @confirmed="deleteTag"
         @close="dialog.deleteConfirm = false"
       />

@@ -91,10 +91,10 @@ const titleMsg = (item: Notification) => {
   <v-card class="w-100">
     <v-toolbar>
       <v-toolbar-title>Notifications</v-toolbar-title>
-      <template v-slot:prepend>
+      <template #prepend>
         <v-icon class="ms-3" icon="mdi-bell-outline" />
       </template>
-      <template v-slot:append>
+      <template #append>
         <v-btn @click="$emit('close')">
           <v-icon size="x-large" icon="mdi-close" />
           <v-tooltip activator="parent" location="bottom" text="Close" />
@@ -111,7 +111,7 @@ const titleMsg = (item: Notification) => {
       />
       <v-infinite-scroll
         v-if="items.length > 0"
-        :onLoad="load"
+        :on-load="load"
         class="w-100 overflow-hidden"
         empty-text=""
       >
@@ -123,7 +123,7 @@ const titleMsg = (item: Notification) => {
             :color="item.read_at ? '' : 'info'"
             @click="selectItem(item)"
           >
-            <template v-slot:prepend>
+            <template #prepend>
               <v-avatar color="surface-light">
                 <v-img v-if="item.user.image_path" :src="'/storage/' + item.user.image_path" />
                 <v-icon v-else icon="mdi-account" />
@@ -140,7 +140,7 @@ const titleMsg = (item: Notification) => {
         </template>
       </v-infinite-scroll>
     </v-card-text>
-    <template v-slot:actions>
+    <template #actions>
       <v-btn variant="plain" @click="$emit('close')">Close</v-btn>
       <v-spacer></v-spacer>
       <v-btn

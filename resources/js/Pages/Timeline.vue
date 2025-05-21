@@ -197,7 +197,7 @@ provide('updatePosts', updatePosts);
     <v-container>
       <v-row v-if="selectedUser">
         <v-col cols="12">
-          <SelectedUserMenu :selectedUser />
+          <SelectedUserMenu :selected-user />
         </v-col>
       </v-row>
       <v-alert
@@ -206,14 +206,14 @@ provide('updatePosts', updatePosts);
         class="text-center"
         text="No data available"
       />
-      <v-infinite-scroll v-else :onLoad="load" class="w-100 overflow-hidden" empty-text="">
+      <v-infinite-scroll v-else :on-load="load" class="w-100 overflow-hidden" empty-text="">
         <v-row>
           <template v-for="note in notes.values()" :key="note.id">
             <v-col cols="12">
               <Post
                 :note
-                @showEnlargedImage="showEnlargedImage"
-                @showComments="showComments(note.id)"
+                @show-enlarged-image="showEnlargedImage"
+                @show-comments="showComments(note.id)"
                 @update="updatePosts(note.id)"
               />
             </v-col>
@@ -226,18 +226,18 @@ provide('updatePosts', updatePosts);
     </v-dialog>
     <v-dialog v-model="dialog.filterUserMenu" max-width="600" scrollable>
       <FilterUserMenu
-        v-model:userItems="userItems"
+        v-model:user-items="userItems"
         :filter
         @close="dialog.filterUserMenu = false"
         @apply="filterUser"
       />
     </v-dialog>
-    <v-dialog v-model="dialog.enlargedImage" close-on-content-click maxWidth="1000px">
+    <v-dialog v-model="dialog.enlargedImage" close-on-content-click max-width="1000px">
       <v-img :src="previewImagePath" height="90vh" />
     </v-dialog>
     <v-dialog v-model="dialog.postComments" fullscreen scrollable transition="scroll-x-transition">
-      <Comments :targetNote @close="closeComments">
-        <Post :note="targetNote" commentLinkDisabled />
+      <Comments :target-note @close="closeComments">
+        <Post :note="targetNote" comment-link-disabled />
       </Comments>
     </v-dialog>
   </AuthenticatedLayout>

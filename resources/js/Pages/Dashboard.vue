@@ -303,15 +303,15 @@ onMounted(async () => {
         class="text-center"
         text="No data available"
       />
-      <v-infinite-scroll v-else :onLoad="load" class="w-100 overflow-hidden" empty-text="">
+      <v-infinite-scroll v-else :on-load="load" class="w-100 overflow-hidden" empty-text="">
         <v-row>
           <template v-for="note in notes.values()" :key="note.id">
             <v-col cols="12">
               <NoteItem
                 :note="note"
-                @showEnlargedImage="showEnlargedImage"
-                @showLikedUserList="showLikedUserList(note)"
-                @showComments="showComments(note)"
+                @show-enlarged-image="showEnlargedImage"
+                @show-liked-user-list="showLikedUserList(note)"
+                @show-comments="showComments(note)"
               >
                 <template #actions>
                   <v-btn size="small" @click="showEditDialog(note)">
@@ -343,17 +343,17 @@ onMounted(async () => {
     </v-container>
   </AuthenticatedLayout>
   <v-dialog v-model="dialog.create" fullscreen scrollable>
-    <NoteCreateForm @noteCreated="noteCreated" @close="dialog.create = false" />
+    <NoteCreateForm @note-created="noteCreated" @close="dialog.create = false" />
   </v-dialog>
   <v-dialog v-model="dialog.edit" fullscreen scrollable>
-    <NoteEditForm :targetNote @noteUpdated="noteUpdated" @close="dialog.edit = false" />
+    <NoteEditForm :target-note @note-updated="noteUpdated" @close="dialog.edit = false" />
   </v-dialog>
   <v-dialog v-model="dialog.archiveConfirm" max-width="600">
     <ConfirmCard
       title="Archive Note"
       message="Are you sure you want to archive this note?"
       icon="mdi-archive-plus-outline"
-      confirmBtnName="Archive"
+      confirm-btn-name="Archive"
       @confirmed="archiveNote"
       @close="dialog.archiveConfirm = false"
     />
@@ -363,7 +363,7 @@ onMounted(async () => {
       title="Retrieve"
       message="Are you sure you want to retrieve this note from the archive?"
       icon="mdi-keyboard-return"
-      confirmBtnName="Retrieve"
+      confirm-btn-name="Retrieve"
       @confirmed="retrieveNote"
       @close="dialog.retrieveConfirm = false"
     />
@@ -374,8 +374,8 @@ onMounted(async () => {
       title="Delete Note"
       message="Are you sure you want to delete this note?"
       description="Once the note is deleted, it will be permanently deleted."
-      confirmBtnName="Delete"
-      confirmBtnColor="error"
+      confirm-btn-name="Delete"
+      confirm-btn-color="error"
       @confirmed="deleteNote"
       @close="dialog.deleteConfirm = false"
     />
@@ -389,19 +389,19 @@ onMounted(async () => {
   <v-dialog v-model="dialog.filterMenu" max-width="600" scrollable>
     <NoteFilterMenu :filter @close="dialog.filterMenu = false" @apply="filterApply" />
   </v-dialog>
-  <v-dialog v-model="dialog.enlargedImage" close-on-content-click maxWidth="1000px">
+  <v-dialog v-model="dialog.enlargedImage" close-on-content-click max-width="1000px">
     <v-img :src="previewImagePath" height="90vh" />
   </v-dialog>
-  <v-dialog v-model="dialog.likedUserList" maxWidth="600px" scrollable>
-    <LikedUserList :targetNote @close="dialog.likedUserList = false" />
+  <v-dialog v-model="dialog.likedUserList" max-width="600px" scrollable>
+    <LikedUserList :target-note @close="dialog.likedUserList = false" />
   </v-dialog>
   <v-dialog v-model="dialog.noteComments" fullscreen scrollable transition="scroll-x-transition">
-    <Comments :targetNote @close="dialog.noteComments = false">
+    <Comments :target-note @close="dialog.noteComments = false">
       <NoteItem
         :note="targetNote"
-        commentLinkDisabled
-        @showEnlargedImage="showEnlargedImage"
-        @showLikedUserList="showLikedUserList(targetNote)"
+        comment-link-disabled
+        @show-enlarged-image="showEnlargedImage"
+        @show-liked-user-list="showLikedUserList(targetNote)"
       />
     </Comments>
   </v-dialog>

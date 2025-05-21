@@ -1,6 +1,6 @@
 <script setup lang="ts">
 import { useForm } from '@inertiajs/vue3';
-import { nextTick, ref } from 'vue';
+import { ref } from 'vue';
 
 const confirmingUserDeletion = ref(false);
 const passwordInput = ref(null);
@@ -45,10 +45,10 @@ const closeModal = () => {
         </v-card>
       </v-card-text>
       <v-divider />
-      <template v-slot:actions>
+      <template #actions>
         <v-spacer />
         <v-dialog max-width="1000">
-          <template v-slot:activator="{ props: activatorProps }">
+          <template #activator="{ props: activatorProps }">
             <v-btn
               v-bind="activatorProps"
               color="error"
@@ -60,11 +60,11 @@ const closeModal = () => {
               Delete Account
             </v-btn>
           </template>
-          <template v-slot:default="{ isActive }">
+          <template #default="{ isActive }">
             <v-card>
               <v-toolbar density="comfortable" color="transparent">
-                <v-toolbar-title class="text-h6" text="Delete Account"></v-toolbar-title>
-                <template v-slot:append>
+                <v-toolbar-title class="text-h6" text="Delete Account" />
+                <template #append>
                   <v-btn @click="isActive.value = false">
                     <v-icon size="x-large" icon="mdi-close" />
                     <v-tooltip activator="parent" location="bottom" text="Close" />
@@ -92,19 +92,19 @@ const closeModal = () => {
                   Password
                 </div>
                 <v-text-field
+                  v-model="form.password"
                   :append-inner-icon="visible ? 'mdi-eye-off' : 'mdi-eye'"
                   :type="visible ? 'text' : 'password'"
                   density="compact"
                   placeholder="Enter your password"
                   prepend-inner-icon="mdi-lock-outline"
                   variant="outlined"
-                  v-model="form.password"
                   :error="Boolean(form.errors.password)"
                   :error-messages="form.errors.password"
-                  @click:append-inner="visible = !visible"
                   autocomplete="new-password"
                   required
                   max-width="600"
+                  @click:append-inner="visible = !visible"
                   @input="form.errors.password = null"
                 />
               </v-card-text>
@@ -116,8 +116,8 @@ const closeModal = () => {
                   size="large"
                   variant="tonal"
                   @click="isActive.value = false"
-                ></v-btn>
-                <v-spacer></v-spacer>
+                />
+                <v-spacer />
                 <v-btn
                   color="error"
                   size="large"

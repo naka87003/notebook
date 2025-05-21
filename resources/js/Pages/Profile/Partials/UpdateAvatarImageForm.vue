@@ -55,7 +55,7 @@ const deleteImage = () => {
           </v-card-text>
         </v-card>
         <v-list-item class="mb-5">
-          <template v-slot:prepend>
+          <template #prepend>
             <v-avatar color="surface-light">
               <v-img v-if="previewImagePath" :src="previewImagePath" />
               <v-icon v-else icon="mdi-account" />
@@ -63,7 +63,7 @@ const deleteImage = () => {
           </template>
           <v-list-item-title>{{ $page.props.auth.user.name }}</v-list-item-title>
         </v-list-item>
-        <form @submit.prevent="form.patch(route('profile.update'))" enctype="multipart/form-data">
+        <form enctype="multipart/form-data" @submit.prevent="form.patch(route('profile.update'))">
           <div class="text-subtitle-1 text-medium-emphasis">Image Upload</div>
           <v-file-input
             ref="preview"
@@ -76,7 +76,7 @@ const deleteImage = () => {
             required
             max-width="600"
             accept="image/png, image/jpeg"
-            @update:modelValue="form.errors.image = null"
+            @update:model-value="form.errors.image = null"
           />
         </form>
         <Transition>
@@ -86,7 +86,7 @@ const deleteImage = () => {
         </Transition>
       </v-card-text>
       <v-divider />
-      <template v-slot:actions>
+      <template #actions>
         <v-spacer />
         <v-btn
           color="primary"
@@ -117,8 +117,8 @@ const deleteImage = () => {
       title="Delete Avatar Image"
       message="Are you sure you want to delete your avatar image?"
       description="Once the image is deleted, it will be permanently deleted."
-      confirmBtnName="Delete"
-      confirmBtnColor="error"
+      confirm-btn-name="Delete"
+      confirm-btn-color="error"
       @confirmed="deleteImage"
       @close="dialog.deleteConfirm = false"
     />

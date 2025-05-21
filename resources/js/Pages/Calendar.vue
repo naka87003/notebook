@@ -132,16 +132,16 @@ const deleteNote = async (): Promise<void> => {
         flat
         hide-details
       >
-        <template v-slot:item="{ props, item }">
+        <template #item="{ props, item }">
           <v-list-item v-bind="props" :title="item.raw.value" density="compact">
-            <template v-slot:prepend>
+            <template #prepend>
               <v-icon :icon="item.raw.mdi_name" />
             </template>
           </v-list-item>
         </template>
-        <template v-slot:selection="{ item }">
+        <template #selection="{ item }">
           <v-list-item :title="item.raw.value" density="compact">
-            <template v-slot:prepend>
+            <template #prepend>
               <v-icon :icon="item.raw.mdi_name" />
             </template>
           </v-list-item>
@@ -156,7 +156,7 @@ const deleteNote = async (): Promise<void> => {
     <v-container>
       <v-sheet class="overflow-auto">
         <v-calendar ref="calendar" v-model="value" :events :view-mode="type" :weekdays="weekday">
-          <template v-slot:event="{ event }">
+          <template #event="{ event }">
             <v-btn
               size="small"
               variant="tonal"
@@ -182,7 +182,7 @@ const deleteNote = async (): Promise<void> => {
       </v-sheet>
     </v-container>
     <v-dialog v-model="dialog.eventNote" max-width="1000">
-      <EventNote :targetNote @close="dialog.eventNote = false">
+      <EventNote :target-note @close="dialog.eventNote = false">
         <template #actions="{ targetNote }">
           <v-btn size="small" @click="showEditDialog(targetNote)">
             <v-icon size="large" icon="mdi-pencil-outline" />
@@ -196,13 +196,13 @@ const deleteNote = async (): Promise<void> => {
       </EventNote>
     </v-dialog>
     <v-dialog v-model="dialog.create" fullscreen scrollable>
-      <NoteCreateForm variant="event" @noteCreated="noteCreated" @close="dialog.create = false" />
+      <NoteCreateForm variant="event" @note-created="noteCreated" @close="dialog.create = false" />
     </v-dialog>
     <v-dialog v-model="dialog.edit" fullscreen scrollable>
       <NoteEditForm
-        :targetNote
+        :target-note
         variant="event"
-        @noteUpdated="noteUpdated"
+        @note-updated="noteUpdated"
         @close="dialog.edit = false"
       />
     </v-dialog>
@@ -212,8 +212,8 @@ const deleteNote = async (): Promise<void> => {
         title="Delete Event"
         message="Are you sure you want to delete this event?"
         description="Once the event is deleted, it will be permanently deleted."
-        confirmBtnName="Delete"
-        confirmBtnColor="error"
+        confirm-btn-name="Delete"
+        confirm-btn-color="error"
         @confirmed="deleteNote"
         @close="dialog.deleteConfirm = false"
       />

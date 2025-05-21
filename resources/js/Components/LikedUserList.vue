@@ -53,7 +53,7 @@ const showSelectedUserPosts = (userId: number) => {
         <v-icon icon="mdi-heart" class="ms-3" />
       </template>
       <v-toolbar-title>Liked User List</v-toolbar-title>
-      <template v-slot:append>
+      <template #append>
         <v-btn @click="$emit('close')">
           <v-icon size="x-large" icon="mdi-close" />
           <v-tooltip activator="parent" location="bottom" text="Close" />
@@ -64,7 +64,7 @@ const showSelectedUserPosts = (userId: number) => {
     <v-card-text class="pa-0">
       <v-infinite-scroll
         v-if="items.length > 0"
-        :onLoad="load"
+        :on-load="load"
         class="w-100 overflow-hidden"
         empty-text=""
       >
@@ -75,7 +75,7 @@ const showSelectedUserPosts = (userId: number) => {
             variant="text"
             @click="showSelectedUserPosts(item.user.id)"
           >
-            <template v-slot:prepend>
+            <template #prepend>
               <v-avatar color="surface-light">
                 <v-img v-if="item.user.image_path" :src="'storage/' + item.user.image_path" />
                 <v-icon v-else icon="mdi-account" />

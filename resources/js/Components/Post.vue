@@ -10,7 +10,7 @@ const props = defineProps<{
   commentLinkDisabled?: boolean;
 }>();
 
-const emit = defineEmits<{
+defineEmits<{
   showComments: [];
 }>();
 
@@ -72,7 +72,7 @@ const showSelectedUserPosts = (userId: number) => {
     <template #title>
       <span class="text-body-1">{{ note.title }}</span>
     </template>
-    <template v-slot:append>
+    <template #append>
       <p class="text-caption">
         {{ relativeDateTime(note.updated_at) }}
       </p>
@@ -83,7 +83,7 @@ const showSelectedUserPosts = (userId: number) => {
         <p class="text-body-2">from {{ simplifyDateTime(note.starts_at) }}</p>
         <p class="text-body-2">to {{ simplifyDateTime(note.ends_at) }}</p>
       </v-alert>
-      <p v-for="paragraph in paragraphs" class="note-paragraph text-body-1">
+      <p v-for="(paragraph, index) in paragraphs" :key="index" class="note-paragraph text-body-1">
         {{ paragraph }}
       </p>
       <v-btn
@@ -104,7 +104,7 @@ const showSelectedUserPosts = (userId: number) => {
         lazy-src="/lazy-src.gif"
         @click="showEnlargedImage(previewImagePath)"
       >
-        <template v-slot:placeholder>
+        <template #placeholder>
           <div class="d-flex align-center justify-center fill-height">
             <v-progress-circular color="grey-lighten-4" indeterminate></v-progress-circular>
           </div>
@@ -113,7 +113,7 @@ const showSelectedUserPosts = (userId: number) => {
     </v-card-text>
     <v-card-actions>
       <v-list-item @click="showSelectedUserPosts(note.user.id)">
-        <template v-slot:prepend>
+        <template #prepend>
           <v-avatar color="grey-darken-3" size="small" style="z-index: 1">
             <v-img v-if="note.user.image_path" :src="'/storage/' + note.user.image_path" />
             <v-icon v-else icon="mdi-account" />
@@ -128,8 +128,8 @@ const showSelectedUserPosts = (userId: number) => {
       <v-btn
         prepend-icon="mdi-comment-outline"
         class="hidden-xs"
-        @click="$emit('showComments')"
         :readonly="Boolean(commentLinkDisabled)"
+        @click="$emit('showComments')"
       >
         {{ note.comments_count || '' }}
         <v-tooltip activator="parent" location="bottom" text="Show comments" />
@@ -148,8 +148,8 @@ const showSelectedUserPosts = (userId: number) => {
       <v-spacer />
       <v-btn
         prepend-icon="mdi-comment-outline"
-        @click="$emit('showComments')"
         :readonly="Boolean(commentLinkDisabled)"
+        @click="$emit('showComments')"
       >
         {{ note.comments_count || '' }}
         <v-tooltip activator="parent" location="bottom" text="Show comments" />

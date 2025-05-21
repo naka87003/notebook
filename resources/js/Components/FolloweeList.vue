@@ -50,7 +50,7 @@ const showSelectedUserPosts = (userId: number) => {
   <v-card class="mx-auto w-100">
     <v-toolbar>
       <v-toolbar-title>Following</v-toolbar-title>
-      <template v-slot:append>
+      <template #append>
         <v-btn @click="$emit('close')">
           <v-icon size="x-large" icon="mdi-close" />
           <v-tooltip activator="parent" location="bottom" text="Close" />
@@ -67,7 +67,7 @@ const showSelectedUserPosts = (userId: number) => {
       />
       <v-infinite-scroll
         v-if="items.length > 0"
-        :onLoad="load"
+        :on-load="load"
         class="w-100 overflow-hidden"
         empty-text=""
       >
@@ -78,7 +78,7 @@ const showSelectedUserPosts = (userId: number) => {
             variant="text"
             @click="showSelectedUserPosts(item.id)"
           >
-            <template v-slot:prepend>
+            <template #prepend>
               <v-avatar color="surface-light">
                 <v-img v-if="item.image_path" :src="'storage/' + item.image_path" />
                 <v-icon v-else icon="mdi-account" />

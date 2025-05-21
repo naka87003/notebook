@@ -5,14 +5,14 @@ import { useDebounceFn } from '@vueuse/core';
 import axios from 'axios';
 import { User } from '@/interfaces';
 
-const emit = defineEmits<{
+defineEmits<{
   close: [];
   apply: [user: number];
 }>();
 
 const props = defineProps<{ filter: PostsFilter }>();
 
-const userItems: Ref<User[]> = defineModel('userItems');
+const userItems = defineModel<User[]>('userItems');
 
 const message = ref('Please enter any text.');
 
@@ -47,10 +47,10 @@ const loadUsers = useDebounceFn(async (searchText: string): Promise<void> => {
   <v-card>
     <v-toolbar density="comfortable" color="transparent">
       <v-toolbar-title class="text-h6" text="Filter User"></v-toolbar-title>
-      <template v-slot:prepend>
+      <template #prepend>
         <v-icon class="ms-3" icon="mdi-account-filter-outline" />
       </template>
-      <template v-slot:append>
+      <template #append>
         <v-btn @click="$emit('close')">
           <v-icon size="x-large" icon="mdi-close" />
           <v-tooltip activator="parent" location="bottom" text="Close" />
@@ -74,9 +74,9 @@ const loadUsers = useDebounceFn(async (searchText: string): Promise<void> => {
             clearable
             @update:search="loadUsers"
           >
-            <template v-slot:item="{ props, item }">
+            <template #item="{ props, item }">
               <v-list-item v-bind="props" :title="item.raw.name">
-                <template v-slot:prepend>
+                <template #prepend>
                   <v-avatar color="surface-light">
                     <v-img v-if="item.raw.image_path" :src="'storage/' + item.raw.image_path" />
                     <v-icon v-else icon="mdi-account" />
@@ -84,9 +84,9 @@ const loadUsers = useDebounceFn(async (searchText: string): Promise<void> => {
                 </template>
               </v-list-item>
             </template>
-            <template v-slot:selection="{ item }">
+            <template #selection="{ item }">
               <v-list-item :title="item.raw.name">
-                <template v-slot:prepend>
+                <template #prepend>
                   <v-avatar color="surface-light" size="small">
                     <v-img v-if="item.raw.image_path" :src="'storage/' + item.raw.image_path" />
                     <v-icon v-else icon="mdi-account" />
@@ -99,7 +99,7 @@ const loadUsers = useDebounceFn(async (searchText: string): Promise<void> => {
       </v-row>
     </v-card-text>
     <v-divider />
-    <template v-slot:actions>
+    <template #actions>
       <v-spacer></v-spacer>
       <v-btn variant="plain" @click="$emit('close')">Close</v-btn>
       <v-btn color="primary" variant="tonal" @click="$emit('apply', user)">Apply</v-btn>

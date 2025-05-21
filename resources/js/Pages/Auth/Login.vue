@@ -83,26 +83,26 @@ const resizeWindow = () => {
             <a
               v-if="canResetPassword"
               href="#"
-              @click.prevent="pageTransition('password.request')"
               class="text-caption text-decoration-none text-primary"
               rel="noopener noreferrer"
+              @click.prevent="pageTransition('password.request')"
             >
               Forgot login password?</a
             >
           </div>
           <v-text-field
+            v-model="form.password"
             :append-inner-icon="visible ? 'mdi-eye-off' : 'mdi-eye'"
             :type="visible ? 'text' : 'password'"
             density="compact"
             placeholder="Enter your password"
             prepend-inner-icon="mdi-lock-outline"
             variant="outlined"
-            v-model="form.password"
             :error="Boolean(form.errors.password)"
             :error-messages="form.errors.password"
-            @click:append-inner="visible = !visible"
             autocomplete="current-password"
             required
+            @click:append-inner="visible = !visible"
             @input="form.errors.password = null"
           />
           <v-btn
@@ -117,17 +117,17 @@ const resizeWindow = () => {
             Log In
           </v-btn>
           <v-checkbox
+            v-model:checked="form.remember"
             color="info"
             name="remember"
             label="Remember me"
-            v-model:checked="form.remember"
           ></v-checkbox>
           <v-card-text class="text-center">
             <a
               class="text-primary text-decoration-none"
               href="#"
-              @click.prevent="pageTransition('register')"
               rel="noopener noreferrer"
+              @click.prevent="pageTransition('register')"
             >
               Sign up now <v-icon icon="mdi-chevron-right" />
             </a>

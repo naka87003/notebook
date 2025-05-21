@@ -22,10 +22,10 @@ defineEmits<{
   <v-card>
     <v-toolbar density="comfortable" color="transparent">
       <v-toolbar-title class="text-h6" :text="title"></v-toolbar-title>
-      <template v-if="icon" v-slot:prepend>
+      <template v-if="icon" #prepend>
         <v-icon class="ms-3" :icon />
       </template>
-      <template v-slot:append>
+      <template #append>
         <v-btn @click="$emit('close')">
           <v-icon size="x-large" icon="mdi-close" />
           <v-tooltip activator="parent" location="bottom" text="Close" />
@@ -42,7 +42,7 @@ defineEmits<{
       </v-card>
     </v-card-text>
     <v-divider />
-    <template v-slot:actions>
+    <template #actions>
       <v-spacer></v-spacer>
       <v-btn variant="plain" @click="$emit('close')">Cancel</v-btn>
       <v-btn :color="confirmBtnColor" variant="tonal" @click="$emit('confirmed')">

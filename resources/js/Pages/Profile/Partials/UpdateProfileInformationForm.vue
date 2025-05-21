@@ -54,7 +54,7 @@ const verificationSend = () => {
             required
             autocomplete="name"
             max-width="600"
-            maxLength="20"
+            max-length="20"
             @input="form.errors.name = null"
           />
           <div class="text-subtitle-1 text-medium-emphasis">Email</div>
@@ -84,9 +84,9 @@ const verificationSend = () => {
             :error-messages="form.errors.comment"
             required
             max-width="600"
-            @input="form.errors.comment = null"
             counter="160"
-            maxLength="160"
+            max-length="160"
+            @input="form.errors.comment = null"
           />
         </form>
         <div v-if="mustVerifyEmail && user.email_verified_at === null">
@@ -115,7 +115,7 @@ const verificationSend = () => {
         </Transition>
       </v-card-text>
       <v-divider />
-      <template v-slot:actions>
+      <template #actions>
         <v-spacer />
         <v-btn
           color="primary"

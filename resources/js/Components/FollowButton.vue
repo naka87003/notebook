@@ -53,8 +53,8 @@ const confirmUnfollow = () => {
     <ConfirmCard
       title="Unfollow"
       message="Are you sure you want to unfollow this user?"
-      confirmBtnName="Unfollow"
-      confirmBtnColor="error"
+      confirm-btn-name="Unfollow"
+      confirm-btn-color="error"
       @confirmed="confirmUnfollow"
       @close="dialog.unfollowConfirm = false"
     />

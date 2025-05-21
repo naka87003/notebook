@@ -126,10 +126,10 @@ const copyDateToEnd = () => {
         <template v-if="eventMode">Edit Event</template>
         <template v-else>Edit Note</template>
       </v-toolbar-title>
-      <template v-slot:prepend>
+      <template #prepend>
         <v-icon class="ms-3" icon="mdi-pencil-outline" />
       </template>
-      <template v-slot:append>
+      <template #append>
         <v-btn @click="$emit('close')">
           <v-icon size="x-large" icon="mdi-close" />
           <v-tooltip activator="parent" location="bottom" text="Close" />
@@ -138,7 +138,7 @@ const copyDateToEnd = () => {
     </v-toolbar>
     <v-divider />
     <v-card-text>
-      <form @submit.prevent="submit" enctype="multipart/form-data" s>
+      <form enctype="multipart/form-data" s @submit.prevent="submit">
         <v-row>
           <v-col cols="12" md="6">
             <v-row>
@@ -157,7 +157,7 @@ const copyDateToEnd = () => {
                   autofocus
                   auto-grow
                   counter="1000"
-                  maxLength="1000"
+                  max-length="1000"
                   @input="form.errors.content = null"
                 />
               </v-col>
@@ -175,7 +175,7 @@ const copyDateToEnd = () => {
                   required
                   max-width="600"
                   accept="image/png, image/jpeg"
-                  @update:modelValue="form.errors.image = null"
+                  @update:model-value="form.errors.image = null"
                 />
               </v-col>
             </v-row>
@@ -194,7 +194,7 @@ const copyDateToEnd = () => {
                   :error="Boolean(form.errors.title)"
                   :error-messages="form.errors.title"
                   required
-                  maxLength="20"
+                  max-length="20"
                   @input="form.errors.title = null"
                 />
               </v-col>
@@ -214,16 +214,16 @@ const copyDateToEnd = () => {
                   item-value="id"
                   @input="form.errors.category = null"
                 >
-                  <template v-slot:item="{ props, item }">
+                  <template #item="{ props, item }">
                     <v-list-item v-bind="props" :title="item.raw.name">
-                      <template v-slot:prepend>
+                      <template #prepend>
                         <v-icon :icon="item.raw.mdi_name" />
                       </template>
                     </v-list-item>
                   </template>
-                  <template v-slot:selection="{ item }">
+                  <template #selection="{ item }">
                     <v-list-item :title="item.raw.name">
-                      <template v-slot:prepend>
+                      <template #prepend>
                         <v-icon :icon="item.raw.mdi_name" />
                       </template>
                     </v-list-item>
@@ -239,7 +239,7 @@ const copyDateToEnd = () => {
                   label="All-day"
                   hide-details
                   inset
-                  @update:modelValue="toAllDayRange"
+                  @update:model-value="toAllDayRange"
                 ></v-switch>
                 <template v-if="allDay === false">
                   <v-text-field
@@ -319,16 +319,16 @@ const copyDateToEnd = () => {
                   @input="form.errors.tag = null"
                   @click:append="dialog.tagCreate = true"
                 >
-                  <template v-slot:item="{ props, item }">
+                  <template #item="{ props, item }">
                     <v-list-item v-bind="props" :title="item.raw.name">
-                      <template v-slot:prepend>
+                      <template #prepend>
                         <v-icon icon="mdi-tag" :color="item.raw.hex_color" />
                       </template>
                     </v-list-item>
                   </template>
-                  <template v-slot:selection="{ item }">
+                  <template #selection="{ item }">
                     <v-list-item :title="item.raw.name">
-                      <template v-slot:prepend>
+                      <template #prepend>
                         <v-icon icon="mdi-tag" :color="item.raw.hex_color" />
                       </template>
                     </v-list-item>
@@ -354,7 +354,7 @@ const copyDateToEnd = () => {
       </form>
     </v-card-text>
     <v-divider />
-    <template v-slot:actions>
+    <template #actions>
       <v-spacer></v-spacer>
       <v-btn variant="plain" @click="$emit('close')">Close</v-btn>
       <v-btn color="primary" variant="tonal" :disabled="form.processing" @click="submit"
@@ -363,6 +363,6 @@ const copyDateToEnd = () => {
     </template>
   </v-card>
   <v-dialog v-model="dialog.tagCreate" max-width="600">
-    <TagCreateForm @close="dialog.tagCreate = false" @tagCreated="tagCreated" />
+    <TagCreateForm @close="dialog.tagCreate = false" @tag-created="tagCreated" />
   </v-dialog>
 </template>

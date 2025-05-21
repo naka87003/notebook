@@ -55,7 +55,7 @@ const paragraphs = computed(() => {
     <template #title>
       <span class="text-body-1">{{ note.title }}</span>
     </template>
-    <template v-slot:append>
+    <template #append>
       <p class="text-caption">
         {{ relativeDateTime(note.updated_at) }}
       </p>
@@ -66,7 +66,7 @@ const paragraphs = computed(() => {
         <p class="text-body-2">from {{ simplifyDateTime(note.starts_at) }}</p>
         <p class="text-body-2">to {{ simplifyDateTime(note.ends_at) }}</p>
       </v-alert>
-      <p v-for="paragraph in paragraphs" class="note-paragraph text-body-1">
+      <p v-for="(paragraph, index) in paragraphs" :key="index" class="note-paragraph text-body-1">
         {{ paragraph }}
       </p>
       <v-btn
@@ -87,7 +87,7 @@ const paragraphs = computed(() => {
         lazy-src="/lazy-src.gif"
         @click="$emit('showEnlargedImage', previewImagePath)"
       >
-        <template v-slot:placeholder>
+        <template #placeholder>
           <div class="d-flex align-center justify-center fill-height">
             <v-progress-circular color="grey-lighten-4" indeterminate></v-progress-circular>
           </div>

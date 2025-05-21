@@ -110,7 +110,7 @@ const updateComment = async (id: number) => {
   <v-card>
     <v-toolbar density="compact" color="transparent">
       <v-toolbar-title class="text-h6" text="Comments"></v-toolbar-title>
-      <template v-slot:prepend>
+      <template #prepend>
         <v-btn @click="$emit('close')">
           <v-icon size="x-large" icon="mdi-arrow-left" />
           <v-tooltip activator="parent" location="bottom" text="Back" />
@@ -139,9 +139,9 @@ const updateComment = async (id: number) => {
                     rows="1"
                     :error="Boolean(form.errors.comment)"
                     counter="140"
-                    maxLength="140"
+                    max-length="140"
                   >
-                    <template v-slot:prepend>
+                    <template #prepend>
                       <v-avatar color="surface-light" size="small">
                         <v-img v-if="avatarImagePath" :src="avatarImagePath" />
                         <v-icon v-else icon="mdi-account" />
@@ -168,7 +168,7 @@ const updateComment = async (id: number) => {
             </v-card>
             <v-infinite-scroll
               v-if="comments.size > 0"
-              :onLoad="load"
+              :on-load="load"
               class="w-100 overflow-hidden"
               empty-text=""
             >
@@ -176,7 +176,7 @@ const updateComment = async (id: number) => {
                 <CommentItem
                   :comment
                   @delete="showDeleteConfirmDialog(comment.id)"
-                  @updateComment="updateComment(comment.id)"
+                  @update-comment="updateComment(comment.id)"
                 />
               </template>
             </v-infinite-scroll>
@@ -191,8 +191,8 @@ const updateComment = async (id: number) => {
       title="Delete Comment"
       message="Are you sure you want to delete this comment?"
       description="Once the comment is deleted, it will be permanently deleted."
-      confirmBtnName="Delete"
-      confirmBtnColor="error"
+      confirm-btn-name="Delete"
+      confirm-btn-color="error"
       @confirmed="deleteComment"
       @close="dialog.deleteConfirm = false"
     />
