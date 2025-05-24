@@ -236,9 +236,9 @@ const deleteReply = async () => {
   </v-alert>
   <v-infinite-scroll
     v-if="display.replies"
-    :on-load="load"
     class="ms-10 mt-n3 overflow-hidden"
     empty-text=""
+    @load="load"
   >
     <template v-for="reply in replies.values()" :key="reply.id">
       <ReplyItem :reply @reply-added="replyAdded" @delete="showDeleteConfirmDialog(reply.id)" />

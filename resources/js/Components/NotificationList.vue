@@ -111,9 +111,9 @@ const titleMsg = (item: Notification) => {
       />
       <v-infinite-scroll
         v-if="items.length > 0"
-        :on-load="load"
         class="w-100 overflow-hidden"
         empty-text=""
+        @load="load"
       >
         <template v-for="item in items" :key="item.id">
           <v-alert

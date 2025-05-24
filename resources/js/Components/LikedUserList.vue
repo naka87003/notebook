@@ -64,9 +64,9 @@ const showSelectedUserPosts = (userId: number) => {
     <v-card-text class="pa-0">
       <v-infinite-scroll
         v-if="items.length > 0"
-        :on-load="load"
         class="w-100 overflow-hidden"
         empty-text=""
+        @load="load"
       >
         <template v-for="item in items" :key="item.id">
           <v-alert

@@ -168,9 +168,9 @@ const updateComment = async (id: number) => {
             </v-card>
             <v-infinite-scroll
               v-if="comments.size > 0"
-              :on-load="load"
               class="w-100 overflow-hidden"
               empty-text=""
+              @load="load"
             >
               <template v-for="comment in comments.values()" :key="comment.id">
                 <CommentItem
