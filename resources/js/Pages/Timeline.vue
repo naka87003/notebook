@@ -206,7 +206,7 @@ provide('updatePosts', updatePosts);
         class="text-center"
         text="No data available"
       />
-      <v-infinite-scroll v-else :on-load="load" class="w-100 overflow-hidden" empty-text="">
+      <v-infinite-scroll v-else class="w-100 overflow-hidden" empty-text="" @load="load">
         <v-row>
           <template v-for="note in notes.values()" :key="note.id">
             <v-col cols="12">
