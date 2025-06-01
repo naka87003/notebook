@@ -18,6 +18,11 @@ class Note extends Model
      */
     protected $guarded = [];
 
+    protected $casts = [
+        'starts_at' => 'datetime',
+        'ends_at' => 'datetime',
+    ];
+
     /**
      *  Noteを作成したUserを取得
      */

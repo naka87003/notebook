@@ -2,9 +2,12 @@
 import { ref, computed, onMounted } from 'vue';
 import { useForm, usePage } from '@inertiajs/vue3';
 import dayjs from 'dayjs';
+import utc from 'dayjs/plugin/utc';
 import TagCreateForm from './TagCreateForm.vue';
 import { getTagSelectItems } from '@/common';
 import type { Category, Tag } from '@/interfaces';
+
+dayjs.extend(utc);
 
 const props = defineProps<{
   variant?: string;
@@ -22,8 +25,8 @@ const form = useForm({
   category: 1,
   public: 1,
   tag: null,
-  starts: dayjs().add(1, 'hour').format('YYYY-MM-DDTHH:00'),
-  ends: dayjs().add(2, 'hour').format('YYYY-MM-DDTHH:00'),
+  starts: dayjs().add(1, 'hour').utc().format(),
+  ends: dayjs().add(2, 'hour').utc().format(),
   image: null,
 });
 
@@ -42,21 +45,37 @@ const items = ref({
 
 const eventMode = computed((): boolean => props.variant === 'event');
 
-const startsDate = computed({
+const startsDateTime = computed({
   get() {
-    return dayjs(form.starts).format('YYYY-MM-DD');
+    if (allDay.value) {
+      return dayjs(form.starts).format('YYYY-MM-DD');
+    } else {
+      return dayjs(form.starts).format('YYYY-MM-DD HH:mm');
+    }
   },
   set(newValue) {
-    form.starts = dayjs(newValue).format('YYYY-MM-DD 00:00');
+    if (allDay.value) {
+      form.starts = dayjs(newValue).startOf('day').utc().format();
+    } else {
+      form.starts = dayjs(newValue).utc().format();
+    }
   },
 });
 
-const endsDate = computed({
+const endsDateTime = computed({
   get() {
-    return dayjs(form.ends).format('YYYY-MM-DD');
+    if (allDay.value) {
+      return dayjs(form.ends).format('YYYY-MM-DD');
+    } else {
+      return dayjs(form.ends).format('YYYY-MM-DD HH:mm');
+    }
   },
   set(newValue) {
-    form.ends = dayjs(newValue).format('YYYY-MM-DD 23:59');
+    if (allDay.value) {
+      form.ends = dayjs(newValue).endOf('day').utc().format();
+    } else {
+      form.ends = dayjs(newValue).utc().format();
+    }
   },
 });
 
@@ -76,8 +95,8 @@ onMounted(async () => {
 });
 
 const toAllDayRange = () => {
-  form.starts = dayjs(form.starts).format('YYYY-MM-DD 00:00');
-  form.ends = dayjs(form.ends).format('YYYY-MM-DD 23:59');
+  form.starts = dayjs(form.starts).startOf('day').utc().format();
+  form.ends = dayjs(form.ends).endOf('day').utc().format();
 };
 
 const tagCreated = async () => {
@@ -97,9 +116,9 @@ const submit = () => {
 const copyDateToEnd = () => {
   if (form.starts >= form.ends) {
     if (allDay.value) {
-      form.ends = dayjs(form.starts).format('YYYY-MM-DDT23:59');
+      form.ends = dayjs(form.starts).endOf('day').utc().format();
     } else {
-      form.ends = dayjs(form.starts).add(1, 'hour').format('YYYY-MM-DDTHH:00');
+      form.ends = dayjs(form.starts).add(1, 'hour').utc().format();
     }
   }
 };
@@ -226,64 +245,33 @@ const copyDateToEnd = () => {
                   inset
                   @update:model-value="toAllDayRange"
                 ></v-switch>
-                <template v-if="allDay === false">
-                  <v-text-field
-                    v-model="form.starts"
-                    class="mt-3"
-                    label="Starts"
-                    hide-details="auto"
-                    type="datetime-local"
-                    density="compact"
-                    variant="outlined"
-                    :error="Boolean(form.errors.starts)"
-                    :error-messages="form.errors.starts"
-                    required
-                    @input="form.errors.starts = null"
-                    @update:model-value="copyDateToEnd"
-                  />
-                  <v-text-field
-                    v-model="form.ends"
-                    class="mt-3"
-                    label="Ends"
-                    hide-details="auto"
-                    type="datetime-local"
-                    density="compact"
-                    variant="outlined"
-                    :error="Boolean(form.errors.ends)"
-                    :error-messages="form.errors.ends"
-                    required
-                    @input="form.errors.ends = null"
-                  />
-                </template>
-                <template v-else>
-                  <v-text-field
-                    v-model="startsDate"
-                    class="mt-3"
-                    label="Starts"
-                    hide-details="auto"
-                    type="date"
-                    density="compact"
-                    variant="outlined"
-                    :error="Boolean(form.errors.starts)"
-                    :error-messages="form.errors.starts"
-                    required
-                    @input="form.errors.starts = null"
-                    @update:model-value="copyDateToEnd"
-                  />
-                  <v-text-field
-                    v-model="endsDate"
-                    class="mt-3"
-                    label="Ends"
-                    hide-details="auto"
-                    type="date"
-                    density="compact"
-                    variant="outlined"
-                    :error="Boolean(form.errors.ends)"
-                    :error-messages="form.errors.ends"
-                    required
-                    @input="form.errors.ends = null"
-                  />
-                </template>
+                <v-text-field
+                  v-model="startsDateTime"
+                  class="mt-3"
+                  label="Starts"
+                  hide-details="auto"
+                  :type="allDay ? 'date' : 'datetime-local'"
+                  density="compact"
+                  variant="outlined"
+                  :error="Boolean(form.errors.starts)"
+                  :error-messages="form.errors.starts"
+                  required
+                  @input="form.errors.starts = null"
+                  @update:model-value="copyDateToEnd"
+                />
+                <v-text-field
+                  v-model="endsDateTime"
+                  class="mt-3"
+                  label="Ends"
+                  hide-details="auto"
+                  :type="allDay ? 'date' : 'datetime-local'"
+                  density="compact"
+                  variant="outlined"
+                  :error="Boolean(form.errors.ends)"
+                  :error-messages="form.errors.ends"
+                  required
+                  @input="form.errors.ends = null"
+                />
               </v-col>
               <v-col cols="12">
                 <div class="text-subtitle-1 text-medium-emphasis">Tag</div>
