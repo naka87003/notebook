@@ -3,6 +3,7 @@ import { Head } from '@inertiajs/vue3';
 import axios from 'axios';
 import AuthenticatedLayout from '@/Layouts/AuthenticatedLayout.vue';
 import { type Ref, ref, onMounted } from 'vue';
+import type { CalendarWeekdays } from 'vuetify/lib/composables/calendar.d.ts';
 import { Note as NoteType } from '@/interfaces';
 import EventNote from '@/Components/EventNote.vue';
 import ConfirmCard from '@/Components/ConfirmCard.vue';
@@ -36,7 +37,7 @@ const items = {
   ],
 };
 
-const weekday = ref([0, 1, 2, 3, 4, 5, 6]);
+const weekdays = ref<CalendarWeekdays[]>([0, 1, 2, 3, 4, 5, 6]);
 
 const value = ref();
 
@@ -155,8 +156,8 @@ const deleteNote = async (): Promise<void> => {
     </template>
     <v-container>
       <v-sheet class="overflow-auto">
-        <v-calendar ref="calendar" v-model="value" :events :view-mode="type" :weekdays="weekday">
-          <template #event="{ event }">
+        <v-calendar ref="calendar" v-model="value" :events :view-mode="type" :weekdays>
+          <template #day-event="{ event }">
             <v-btn
               size="small"
               variant="tonal"
