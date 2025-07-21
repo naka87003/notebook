@@ -10,6 +10,7 @@ import FilterUserMenu from '@/Components/FilterUserMenu.vue';
 import SelectedUserMenu from '@/Components/SelectedUserMenu.vue';
 import Comments from '@/Components/Comments.vue';
 import SearchTextForm from '@/Components/SearchTextForm.vue';
+import useNotes from '@/Composables/useNotes';
 
 const props = defineProps<{
   user?: number;
@@ -30,16 +31,10 @@ const search = ref('');
 
 const previewImagePath = ref('');
 
-const targetNoteId: Ref<number> = ref(null);
+// Note
+const { notes, targetNoteId, targetNote, updatePosts } = useNotes();
 
-const notes = ref(new Map<number, Note>());
-
-const snackbar = ref({
-  display: false,
-  message: '',
-});
-
-const filter: Ref<PostsFilter> = ref({
+const filter = ref<PostsFilter>({
   onlyMyLiked: false,
   user: props.user ?? null,
   following: false,
@@ -52,8 +47,6 @@ const selectedUser = computed((): User | undefined =>
 );
 
 const searchEntered = computed((): boolean => Boolean(search.value));
-
-const targetNote = computed(() => notes.value.get(targetNoteId.value));
 
 watchDebounced(search, () => refreshDisplay(), {
   debounce: 500,
@@ -145,20 +138,11 @@ const closeComments = async () => {
   dialog.value.postComments = false;
 };
 
-const updatePosts = async (id: number) => {
-  const response = await axios.get(route('notes.note', id));
-  notes.value.set(id, response.data);
-};
-
 provide('showEnlargedImage', showEnlargedImage);
-provide('updatePosts', updatePosts);
 </script>
 
 <template>
   <Head title="Timeline" />
-  <v-snackbar v-model="snackbar.display" location="top right" color="success" timeout="3000">
-    <v-icon class="me-3" style="margin-bottom: 2px">mdi-check-circle</v-icon>{{ snackbar.message }}
-  </v-snackbar>
   <AuthenticatedLayout>
     <template #action>
       <v-text-field

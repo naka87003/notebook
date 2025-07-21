@@ -14,6 +14,7 @@ import NoteFilterMenu from '@/Components/NoteFilterMenu.vue';
 import LikedUserList from '@/Components/LikedUserList.vue';
 import Comments from '@/Components/Comments.vue';
 import SearchTextForm from '@/Components/SearchTextForm.vue';
+import useNotes from '@/Composables/useNotes';
 
 const props = defineProps<{
   tag?: number;
@@ -84,9 +85,8 @@ const noteUpdated = async () => {
 };
 
 // Note
-const notes = ref(new Map<number, Note>());
-const targetNoteId: Ref<number> = ref(null);
-const targetNote = computed(() => notes.value.get(targetNoteId.value));
+const { notes, targetNoteId, targetNote } = useNotes();
+
 const loadNotes = async (): Promise<Note[]> => {
   const response = await axios.get(route('notes.index'), {
     params: {
@@ -118,11 +118,7 @@ const refreshDisplay = async (): Promise<void> => {
   }
   isInProgress.value = false;
 };
-const updatePosts = async (id: number) => {
-  const response = await axios.get(route('notes.note', id));
-  notes.value.set(id, response.data);
-};
-provide('updatePosts', updatePosts);
+
 const archiveNote = async (): Promise<void> => {
   dialog.value.archiveConfirm = false;
   await axios
