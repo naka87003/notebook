@@ -10,7 +10,7 @@ const isDark = useDark();
 watch(
   isDark,
   (value) => {
-    theme.global.name.value = value ? 'dark' : 'light';
+    theme.change(value ? 'dark' : 'light');
   },
   { immediate: true }
 );
