@@ -1,8 +1,9 @@
 <script setup lang="ts">
 import { router, useForm, usePage } from '@inertiajs/vue3';
-import { relativeDateTime, splitByNewline } from '@/common';
+import { relativeDateTime } from '@/common';
 import { Reply, User } from '@/interfaces';
 import { computed, ref } from 'vue';
+import useParagraphs from '@/Composables/useParagraphs';
 
 const props = defineProps<{
   reply: Reply;
@@ -18,7 +19,9 @@ const form = useForm({
   reply_to: props.reply.user_id,
 });
 
-const truncate = ref(true);
+const content = computed(() => props.reply.content ?? '');
+
+const { truncate, isTruncated, paragraphs } = useParagraphs(content, 10);
 
 const display = ref({
   replyForm: false,
@@ -38,19 +41,6 @@ const isMyComment = computed((): boolean => {
   const user = usePage().props.auth.user as User;
   return props.reply.user_id === user.id;
 });
-
-const arrCommentLines = computed(() => splitByNewline(props.reply.content ?? ''));
-
-const paragraphs = computed(() => {
-  let lines = arrCommentLines.value;
-  if (truncate.value && lines.length > 10) {
-    lines = lines.slice(0, 9);
-    lines[lines.length - 1] += '...';
-  }
-  return lines;
-});
-
-const isTruncated = computed(() => truncate.value && arrCommentLines.value.length > 10);
 
 const showSelectedUserPosts = (userId: number) => {
   router.get(route('timeline'), {

@@ -1,11 +1,12 @@
 <script setup lang="ts">
 import { router, useForm, usePage } from '@inertiajs/vue3';
-import { relativeDateTime, splitByNewline } from '@/common';
+import { relativeDateTime } from '@/common';
 import type { Comment, Reply, User } from '@/interfaces';
 import { computed, ref } from 'vue';
 import axios from 'axios';
 import ReplyItem from './Reply.vue';
 import ConfirmCard from './ConfirmCard.vue';
+import useParagraphs from '@/Composables/useParagraphs';
 
 const props = defineProps<{
   comment: Comment;
@@ -20,9 +21,11 @@ const form = useForm({
   reply: '',
 });
 
-const replies = ref(new Map<number, Reply>());
+const content = computed(() => props.comment.content ?? '');
 
-const truncate = ref(true);
+const { truncate, isTruncated, paragraphs } = useParagraphs(content, 10);
+
+const replies = ref(new Map<number, Reply>());
 
 const dialog = ref({
   deleteConfirm: false,
@@ -48,19 +51,6 @@ const isMyComment = computed((): boolean => {
   const user = usePage().props.auth.user as User;
   return props.comment.user_id === user.id;
 });
-
-const arrCommentLines = computed(() => splitByNewline(props.comment.content ?? ''));
-
-const paragraphs = computed(() => {
-  let lines = arrCommentLines.value;
-  if (truncate.value && lines.length > 10) {
-    lines = lines.slice(0, 10);
-    lines[lines.length - 1] += '...';
-  }
-  return lines;
-});
-
-const isTruncated = computed(() => truncate.value && arrCommentLines.value.length > 10);
 
 const showSelectedUserPosts = (userId: number) => {
   router.get(route('timeline'), {

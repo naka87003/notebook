@@ -1,6 +1,6 @@
 <script setup lang="ts">
 import type { Note } from '@/interfaces';
-import { inject, computed, toRef } from 'vue';
+import { inject, computed } from 'vue';
 import { router, usePage } from '@inertiajs/vue3';
 import axios from 'axios';
 import { simplifyDateTime, relativeDateTime } from '@/common';
@@ -15,13 +15,13 @@ defineEmits<{
   showComments: [];
 }>();
 
-const note = toRef(props, 'note');
+const content = computed(() => props.note.content ?? '');
 
 const showEnlargedImage = inject<(src: string) => void>('showEnlargedImage');
 
 const updatePosts = inject<(id: number) => Promise<void>>('updatePosts');
 
-const { truncate, isTruncated, paragraphs } = useParagraphs(note);
+const { truncate, isTruncated, paragraphs } = useParagraphs(content, 5);
 
 const likeCount = computed((): number => props.note.likes_count);
 

@@ -1,7 +1,7 @@
 <script setup lang="ts">
 import type { Note } from '@/interfaces';
 import { router } from '@inertiajs/vue3';
-import { computed, toRef } from 'vue';
+import { computed } from 'vue';
 import { simplifyDateTime, relativeDateTime } from '@/common';
 import useParagraphs from '@/Composables/useParagraphs';
 
@@ -16,9 +16,9 @@ defineEmits<{
   showComments: [];
 }>();
 
-const note = toRef(props, 'note');
+const content = computed(() => props.note.content ?? '');
 
-const { truncate, isTruncated, paragraphs } = useParagraphs(note);
+const { truncate, isTruncated, paragraphs } = useParagraphs(content, 5);
 
 const previewImagePath = computed(() => {
   return props.note.image_path ? '/storage/' + props.note.image_path : null;
