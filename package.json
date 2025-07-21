@@ -13,13 +13,16 @@
     "@vitejs/plugin-vue": "^6.0.0",
     "@vue/eslint-config-prettier": "^10.2.0",
     "@vue/eslint-config-typescript": "^14.6.0",
+    "@vue/test-utils": "^2.4.6",
     "autoprefixer": "^10.4.21",
     "axios": "^1.10.0",
     "eslint": "^9.31.0",
     "eslint-plugin-vue": "^10.3.0",
+    "jsdom": "^26.1.0",
     "laravel-vite-plugin": "^2.0",
     "prettier": "^3.6.2",
     "vite": "^7.0",
+    "vitest": "^3.2.4",
     "vue": "^3.5.17"
   },
   "dependencies": {
