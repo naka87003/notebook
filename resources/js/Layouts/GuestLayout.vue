@@ -1,19 +1,8 @@
 <script setup>
 import ApplicationLogo from '@/Components/ApplicationLogo.vue';
-import { useTheme } from 'vuetify';
-import { useDark } from '@vueuse/core';
-import { watch } from 'vue';
+import { useDarkMode } from '@/Composables/useDarkMode';
 
-const theme = useTheme();
-const isDark = useDark();
-
-watch(
-  isDark,
-  (value) => {
-    theme.change(value ? 'dark' : 'light');
-  },
-  { immediate: true }
-);
+useDarkMode();
 </script>
 
 <template>

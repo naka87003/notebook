@@ -1,14 +1,12 @@
 <script setup lang="ts">
-import { ref, computed, watch } from 'vue';
+import { ref, computed } from 'vue';
 import { router, usePage } from '@inertiajs/vue3';
-import { useTheme } from 'vuetify';
-import { useDark } from '@vueuse/core';
 import type { User } from '@/interfaces';
 import HumburgerMenu from '@/Components/HumburgerMenu.vue';
 import NotificationList from '@/Components/NotificationList.vue';
+import { useDarkMode } from '@/Composables/useDarkMode';
 
-const theme = useTheme();
-const isDark = useDark();
+const { isDark } = useDarkMode();
 
 const dialog = ref({
   humburgerMenu: false,
@@ -31,14 +29,6 @@ const userImagePath = computed((): string | null => {
 
 const avatarImagePath = computed(() =>
   userImagePath.value ? '/storage/' + userImagePath.value : null
-);
-
-watch(
-  isDark,
-  (value) => {
-    theme.change(value ? 'dark' : 'light');
-  },
-  { immediate: true }
 );
 
 const logout = () => {
