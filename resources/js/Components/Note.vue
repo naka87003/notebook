@@ -1,8 +1,9 @@
 <script setup lang="ts">
 import type { Note } from '@/interfaces';
 import { router } from '@inertiajs/vue3';
-import { computed, ref } from 'vue';
-import { simplifyDateTime, splitByNewline, relativeDateTime } from '@/common';
+import { computed, toRef } from 'vue';
+import { simplifyDateTime, relativeDateTime } from '@/common';
+import useParagraphs from '@/Composables/useParagraphs';
 
 const props = defineProps<{
   note: Note;
@@ -15,7 +16,9 @@ defineEmits<{
   showComments: [];
 }>();
 
-const truncate = ref(true);
+const note = toRef(props, 'note');
+
+const { truncate, isTruncated, paragraphs } = useParagraphs(note);
 
 const previewImagePath = computed(() => {
   return props.note.image_path ? '/storage/' + props.note.image_path : null;
@@ -27,19 +30,6 @@ const showTaggedNotes = () => {
     status: props.note.status_id,
   });
 };
-
-const arrCommentLines = computed(() => splitByNewline(props.note.content ?? ''));
-
-const isTruncated = computed(() => truncate.value && arrCommentLines.value.length > 5);
-
-const paragraphs = computed(() => {
-  let lines = arrCommentLines.value;
-  if (truncate.value && lines.length > 5) {
-    lines = lines.slice(0, 5);
-    lines[lines.length - 1] += '...';
-  }
-  return lines;
-});
 </script>
 
 <template>

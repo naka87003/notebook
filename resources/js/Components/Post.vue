@@ -1,9 +1,10 @@
 <script setup lang="ts">
 import type { Note } from '@/interfaces';
-import { inject, computed, ref } from 'vue';
+import { inject, computed, toRef } from 'vue';
 import { router, usePage } from '@inertiajs/vue3';
 import axios from 'axios';
-import { simplifyDateTime, splitByNewline, relativeDateTime } from '@/common';
+import { simplifyDateTime, relativeDateTime } from '@/common';
+import useParagraphs from '@/Composables/useParagraphs';
 
 const props = defineProps<{
   note: Note;
@@ -14,11 +15,13 @@ defineEmits<{
   showComments: [];
 }>();
 
+const note = toRef(props, 'note');
+
 const showEnlargedImage = inject<(src: string) => void>('showEnlargedImage');
 
 const updatePosts = inject<(id: number) => Promise<void>>('updatePosts');
 
-const truncate = ref(true);
+const { truncate, isTruncated, paragraphs } = useParagraphs(note);
 
 const likeCount = computed((): number => props.note.likes_count);
 
@@ -28,19 +31,6 @@ const isLiked = computed((): boolean =>
 
 const previewImagePath = computed(() => {
   return props.note.image_path ? '/storage/' + props.note.image_path : null;
-});
-
-const arrCommentLines = computed(() => splitByNewline(props.note.content ?? ''));
-
-const isTruncated = computed(() => truncate.value && arrCommentLines.value.length > 5);
-
-const paragraphs = computed(() => {
-  let lines = arrCommentLines.value;
-  if (truncate.value && lines.length > 5) {
-    lines = lines.slice(0, 5);
-    lines[lines.length - 1] += '...';
-  }
-  return lines;
 });
 
 const like = async () => {
