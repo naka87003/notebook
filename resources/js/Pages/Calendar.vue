@@ -1,14 +1,15 @@
 <script setup lang="ts">
 import { Head } from '@inertiajs/vue3';
+import { type Ref, ref, onMounted } from 'vue';
 import axios from 'axios';
 import AuthenticatedLayout from '@/Layouts/AuthenticatedLayout.vue';
-import { type Ref, ref, onMounted } from 'vue';
 import type { CalendarWeekdays } from 'vuetify/lib/composables/calendar.d.ts';
 import { Note as NoteType } from '@/interfaces';
 import EventNote from '@/Components/EventNote.vue';
 import ConfirmCard from '@/Components/ConfirmCard.vue';
 import NoteEditForm from '@/Components/NoteEditForm.vue';
 import NoteCreateForm from '@/Components/NoteCreateForm.vue';
+import useSnackbar from '@/Composables/useSnackbar';
 
 const dialog = ref({
   eventNote: false,
@@ -19,13 +20,7 @@ const dialog = ref({
   deleteConfirm: false,
 });
 
-const snackbar = ref({
-  display: false,
-  message: '',
-});
-
 const type: Ref<'month' | 'day' | 'week'> = ref('month');
-
 const schedule: Ref<NoteType[]> = ref([]);
 const targetNote: Ref<NoteType> = ref();
 
@@ -42,10 +37,6 @@ const weekdays = ref<CalendarWeekdays[]>([0, 1, 2, 3, 4, 5, 6]);
 const value = ref();
 
 const events = ref([]);
-
-onMounted(async () => {
-  getSchedule();
-});
 
 const getSchedule = async () => {
   await axios
@@ -69,23 +60,19 @@ const getSchedule = async () => {
     });
 };
 
-const showSnackBar = (msg: string): void => {
-  snackbar.value.message = msg;
-  snackbar.value.display = true;
-};
-
 const showEvent = (id): void => {
   targetNote.value = schedule.value.find((item) => item.id === id);
   dialog.value.eventNote = true;
 };
 
+// Snackbar
+const { snackbar, showSnackBar } = useSnackbar();
 const noteCreated = async () => {
   dialog.value.create = false;
   await getSchedule();
   dialog.value.eventNote = false;
   showSnackBar('Updated Successfully.');
 };
-
 const noteUpdated = async () => {
   dialog.value.edit = false;
   await getSchedule();
@@ -116,6 +103,10 @@ const deleteNote = async (): Promise<void> => {
       console.log(error);
     });
 };
+
+onMounted(async () => {
+  getSchedule();
+});
 </script>
 
 <template>

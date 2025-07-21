@@ -15,6 +15,7 @@ import LikedUserList from '@/Components/LikedUserList.vue';
 import Comments from '@/Components/Comments.vue';
 import SearchTextForm from '@/Components/SearchTextForm.vue';
 import useNotes from '@/Composables/useNotes';
+import useSnackbar from '@/Composables/useSnackbar';
 
 const props = defineProps<{
   tag?: number;
@@ -65,14 +66,7 @@ const showComments = (note: Note) => {
 };
 
 // Snackbar
-const snackbar = ref({
-  display: false,
-  message: '',
-});
-const showSnackBar = (msg: string): void => {
-  snackbar.value.message = msg;
-  snackbar.value.display = true;
-};
+const { snackbar, showSnackBar } = useSnackbar();
 const noteCreated = async () => {
   dialog.value.create = false;
   await refreshDisplay();
@@ -86,7 +80,6 @@ const noteUpdated = async () => {
 
 // Note
 const { notes, targetNoteId, targetNote } = useNotes();
-
 const loadNotes = async (): Promise<Note[]> => {
   const response = await axios.get(route('notes.index'), {
     params: {
