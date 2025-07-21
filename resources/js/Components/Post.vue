@@ -14,9 +14,9 @@ defineEmits<{
   showComments: [];
 }>();
 
-const showEnlargedImage: (src: string) => void = inject('showEnlargedImage');
+const showEnlargedImage = inject<(src: string) => void>('showEnlargedImage');
 
-const updatePosts: (id: number) => Promise<void> = inject('updatePosts');
+const updatePosts = inject<(id: number) => Promise<void>>('updatePosts');
 
 const truncate = ref(true);
 
@@ -165,17 +165,3 @@ const showSelectedUserPosts = (userId: number) => {
     </v-card-actions>
   </v-card>
 </template>
-
-<style scoped>
-.note-paragraph {
-  background-image: linear-gradient(
-    180deg,
-    rgba(204, 204, 204, 0) 0%,
-    rgba(204, 204, 204, 0) 98.5%,
-    rgba(100, 100, 100, 100) 100%
-  );
-  background-repeat: repeat-y;
-  background-size: 100% 1.5em;
-  line-height: 1.5;
-}
-</style>
