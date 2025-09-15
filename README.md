@@ -4,7 +4,8 @@ In this app, you can freely create, edit, delete, and search notes or memos, as 
 
 ## Powered by 
 
-- **Vue 3**
+- **Vue**
+- **Vuetify**
 - **Inertia.js**
 - **Laravel**
 
