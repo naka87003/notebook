@@ -10,4 +10,4 @@ In this app, you can freely create, edit, delete, and search notes or memos, as 
 
 ## Live Demo
 
-- https://xs257355.xsrv.jp/
+https://xs257355.xsrv.jp/
