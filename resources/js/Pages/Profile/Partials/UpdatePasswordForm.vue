@@ -2,9 +2,6 @@
 import { useForm } from '@inertiajs/vue3';
 import { ref } from 'vue';
 
-const passwordInput = ref(null);
-const currentPasswordInput = ref(null);
-
 const form = useForm({
   current_password: '',
   password: '',
@@ -20,11 +17,9 @@ const updatePassword = () => {
     onError: () => {
       if (form.errors.password) {
         form.reset('password', 'password_confirmation');
-        passwordInput.value.focus();
       }
       if (form.errors.current_password) {
         form.reset('current_password');
-        currentPasswordInput.value.focus();
       }
     },
   });
@@ -36,19 +31,12 @@ const updatePassword = () => {
     <v-card title="Update Password">
       <v-divider />
       <v-card-text>
-        <v-card
-          class="mb-6"
-          color="surface-variant"
-          variant="tonal"
-        >
+        <v-card class="mb-6" color="surface-variant" variant="tonal">
           <v-card-text class="text-medium-emphasis text-caption">
             <p>Ensure your account is using a long, random password to stay secure.</p>
           </v-card-text>
         </v-card>
-        <form
-          class="mt-6 space-y-6"
-          @submit.prevent="updatePassword"
-        >
+        <form class="mt-6 space-y-6" @submit.prevent="updatePassword">
           <div
             class="text-subtitle-1 text-medium-emphasis d-flex align-center justify-space-between"
           >
@@ -114,12 +102,7 @@ const updatePassword = () => {
           />
           <Transition>
             <div v-if="form.recentlySuccessful">
-              <v-alert
-                text="Saved."
-                type="success"
-                variant="tonal"
-                closable
-              />
+              <v-alert text="Saved." type="success" variant="tonal" closable />
             </div>
           </Transition>
         </form>
