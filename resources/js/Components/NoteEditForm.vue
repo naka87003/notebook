@@ -1,11 +1,11 @@
 <script setup lang="ts">
 import { ref, computed, onMounted } from 'vue';
 import { useForm, usePage } from '@inertiajs/vue3';
-import axios from 'axios';
 import dayjs from 'dayjs';
 import utc from 'dayjs/plugin/utc';
 import TagCreateForm from './TagCreateForm.vue';
-import type { Note, Category, Tag } from '@/interfaces';
+import type { Note, Category } from '@/interfaces';
+import useTagSelectedItems from '@/Composables/useTagSelectedItems';
 
 dayjs.extend(utc);
 
@@ -45,7 +45,6 @@ const eventMode = computed((): boolean => props.variant === 'event');
 
 const items = ref({
   category: page.props.categoryItems as Category[],
-  tag: [] as Tag[],
 });
 
 const startsDateTime = computed({
@@ -95,19 +94,9 @@ onMounted(async () => {
     form.starts = props.targetNote.starts_at;
     form.ends = props.targetNote.ends_at;
   }
-  await getTagSelectItems();
 });
 
-const getTagSelectItems = async (): Promise<void> => {
-  await axios
-    .get(route('tags.items.select'))
-    .then((response) => {
-      items.value.tag = response.data;
-    })
-    .catch((error) => {
-      console.log(error);
-    });
-};
+const { state: tagItems, execute } = useTagSelectedItems();
 
 const toAllDayRange = () => {
   form.starts = dayjs(form.starts).startOf('day').utc().format();
@@ -115,8 +104,8 @@ const toAllDayRange = () => {
 };
 
 const tagCreated = async () => {
-  await getTagSelectItems();
-  form.tag = items.value.tag[0].id;
+  await execute();
+  form.tag = tagItems.value[0].id;
   dialog.value.tagCreate = false;
 };
 
@@ -293,7 +282,7 @@ const copyDateToEnd = () => {
                 <v-autocomplete
                   v-model="form.tag"
                   hide-details="auto"
-                  :items="items.tag"
+                  :items="tagItems"
                   density="compact"
                   placeholder="Select Tag"
                   variant="outlined"

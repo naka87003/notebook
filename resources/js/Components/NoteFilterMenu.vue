@@ -1,8 +1,8 @@
 <script setup lang="ts">
-import { ref, onMounted, type Ref } from 'vue';
+import { ref } from 'vue';
 import { usePage } from '@inertiajs/vue3';
-import type { NotesFilter, Category, Tag } from '@/interfaces';
-import { getTagSelectItems } from '@/common';
+import type { NotesFilter, Category } from '@/interfaces';
+import useTagSelectedItems from '@/Composables/useTagSelectedItems';
 
 const emit = defineEmits<{
   close: [];
@@ -19,19 +19,16 @@ const items = ref({
     { id: 1, name: 'Normal', mdi_name: 'mdi-book-open-outline' },
     { id: 2, name: 'Archive', mdi_name: 'mdi-archive-outline' },
   ],
-  tag: [] as Tag[],
 });
 
-const newFilter: Ref<NotesFilter> = ref({
+const newFilter = ref<NotesFilter>({
   category: props.filter.category,
   tag: props.filter.tag,
   status: props.filter.status,
   onlyLiked: props.filter.onlyLiked,
 });
 
-onMounted(async () => {
-  items.value.tag = await getTagSelectItems();
-});
+const { state: tagItems } = useTagSelectedItems();
 
 const resetFilter = () => {
   newFilter.value.category = [1, 2, 3];
@@ -94,7 +91,7 @@ const resetFilter = () => {
           <v-autocomplete
             v-model="newFilter.tag"
             hide-details="auto"
-            :items="items.tag"
+            :items="tagItems"
             density="compact"
             placeholder="Select Tag"
             variant="outlined"
