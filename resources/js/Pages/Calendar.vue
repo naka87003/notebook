@@ -1,6 +1,7 @@
 <script setup lang="ts">
 import { Head } from '@inertiajs/vue3';
-import { ref, onMounted, useTemplateRef } from 'vue';
+import { ref, useTemplateRef, watch } from 'vue';
+import { useAsyncState } from '@vueuse/core';
 import axios from 'axios';
 import AuthenticatedLayout from '@/Layouts/AuthenticatedLayout.vue';
 import type { CalendarWeekdays } from 'vuetify/lib/composables/calendar.d.ts';
@@ -23,7 +24,6 @@ const dialog = ref({
 const calendar = useTemplateRef('calendar');
 
 const type = ref<'month' | 'day' | 'week' | '4day'>('month');
-const schedule = ref<NoteType[]>([]);
 const targetNote = ref<NoteType>();
 
 const weekdays = ref<CalendarWeekdays[]>([0, 1, 2, 3, 4, 5, 6]);
@@ -32,28 +32,29 @@ const focus = ref();
 
 const events = ref([]);
 
-const getSchedule = async () => {
-  await axios
-    .get(route('notes.schedule'), {
-      params: {},
-    })
-    .then((response) => {
-      schedule.value = response.data;
-      events.value = response.data.map((item: NoteType) => {
-        return {
-          id: item.id,
-          name: item.title,
-          start: new Date(item.starts_at),
-          end: new Date(item.ends_at),
-          color: item.tag?.hex_color,
-          timed: true,
-        };
-      });
-    })
-    .catch((error) => {
-      console.log(error);
+const { state: schedule, execute } = useAsyncState(async () => {
+  const response = await axios.get<NoteType[]>(route('notes.schedule'), {
+    params: {},
+  });
+  return response.data;
+}, []);
+
+watch(
+  schedule,
+  (newData) => {
+    events.value = newData.map((item: NoteType) => {
+      return {
+        id: item.id,
+        name: item.title,
+        start: new Date(item.starts_at),
+        end: new Date(item.ends_at),
+        color: item.tag?.hex_color,
+        timed: true,
+      };
     });
-};
+  },
+  { immediate: true }
+);
 
 const showEvent = (nativeEvent, { event }): void => {
   targetNote.value = schedule.value.find((item) => item.id === event.id);
@@ -64,13 +65,13 @@ const showEvent = (nativeEvent, { event }): void => {
 const { snackbar, showSnackBar } = useSnackbar();
 const noteCreated = async () => {
   dialog.value.create = false;
-  await getSchedule();
+  await execute();
   dialog.value.eventNote = false;
   showSnackBar('Updated Successfully.');
 };
 const noteUpdated = async () => {
   dialog.value.edit = false;
-  await getSchedule();
+  await execute();
   dialog.value.eventNote = false;
   showSnackBar('Updated Successfully.');
 };
@@ -90,7 +91,7 @@ const deleteNote = async (): Promise<void> => {
   await axios
     .delete(route('notes.destroy', targetNote.value.id))
     .then(async () => {
-      await getSchedule();
+      await execute();
       dialog.value.eventNote = false;
       showSnackBar('Deleted Successfully.');
     })
@@ -107,10 +108,6 @@ const viewDay = (nativeEvent, { date }) => {
 const setToday = () => {
   focus.value = '';
 };
-
-onMounted(async () => {
-  getSchedule();
-});
 </script>
 
 <template>
