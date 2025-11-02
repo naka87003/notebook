@@ -1,6 +1,6 @@
 <script setup lang="ts">
 import { Head } from '@inertiajs/vue3';
-import { type Ref, ref, onMounted } from 'vue';
+import { ref, onMounted, useTemplateRef } from 'vue';
 import axios from 'axios';
 import AuthenticatedLayout from '@/Layouts/AuthenticatedLayout.vue';
 import type { CalendarWeekdays } from 'vuetify/lib/composables/calendar.d.ts';
@@ -20,21 +20,15 @@ const dialog = ref({
   deleteConfirm: false,
 });
 
-const type: Ref<'month' | 'day' | 'week'> = ref('month');
-const schedule: Ref<NoteType[]> = ref([]);
-const targetNote: Ref<NoteType> = ref();
+const calendar = useTemplateRef('calendar');
 
-const items = {
-  types: [
-    { value: 'month', mdi_name: 'mdi-calendar-month-outline' },
-    { value: 'week', mdi_name: 'mdi-calendar-week-outline' },
-    { value: 'day', mdi_name: 'mdi-calendar-today-outline' },
-  ],
-};
+const type = ref<'month' | 'day' | 'week' | '4day'>('month');
+const schedule = ref<NoteType[]>([]);
+const targetNote = ref<NoteType>();
 
 const weekdays = ref<CalendarWeekdays[]>([0, 1, 2, 3, 4, 5, 6]);
 
-const value = ref();
+const focus = ref();
 
 const events = ref([]);
 
@@ -48,10 +42,11 @@ const getSchedule = async () => {
       events.value = response.data.map((item: NoteType) => {
         return {
           id: item.id,
-          title: item.title,
+          name: item.title,
           start: new Date(item.starts_at),
           end: new Date(item.ends_at),
           color: item.tag?.hex_color,
+          timed: true,
         };
       });
     })
@@ -60,8 +55,8 @@ const getSchedule = async () => {
     });
 };
 
-const showEvent = (id): void => {
-  targetNote.value = schedule.value.find((item) => item.id === id);
+const showEvent = (nativeEvent, { event }): void => {
+  targetNote.value = schedule.value.find((item) => item.id === event.id);
   dialog.value.eventNote = true;
 };
 
@@ -104,6 +99,15 @@ const deleteNote = async (): Promise<void> => {
     });
 };
 
+const viewDay = (nativeEvent, { date }) => {
+  focus.value = date;
+  type.value = 'day';
+};
+
+const setToday = () => {
+  focus.value = '';
+};
+
 onMounted(async () => {
   getSchedule();
 });
@@ -116,61 +120,58 @@ onMounted(async () => {
   </v-snackbar>
   <AuthenticatedLayout>
     <template #action>
-      <v-select
-        v-model="type"
-        :items="items.types"
-        density="compact"
-        variant="solo-filled"
-        flat
-        hide-details
-      >
-        <template #item="{ props, item }">
-          <v-list-item v-bind="props" :title="item.raw.value" density="compact">
-            <template #prepend>
-              <v-icon :icon="item.raw.mdi_name" />
-            </template>
-          </v-list-item>
+      <v-btn class="me-4" variant="tonal" @click="setToday"> Today </v-btn>
+      <v-menu location="bottom end">
+        <template #activator="{ props }">
+          <v-btn variant="tonal" v-bind="props">
+            <span>{{ type }}</span>
+            <v-icon end> mdi-menu-down </v-icon>
+          </v-btn>
         </template>
-        <template #selection="{ item }">
-          <v-list-item :title="item.raw.value" density="compact">
-            <template #prepend>
-              <v-icon :icon="item.raw.mdi_name" />
-            </template>
+        <v-list>
+          <v-list-item @click="type = 'day'">
+            <v-list-item-title>Day</v-list-item-title>
           </v-list-item>
-        </template>
-      </v-select>
-      <v-spacer></v-spacer>
+          <v-list-item @click="type = 'week'">
+            <v-list-item-title>Week</v-list-item-title>
+          </v-list-item>
+          <v-list-item @click="type = 'month'">
+            <v-list-item-title>Month</v-list-item-title>
+          </v-list-item>
+          <v-list-item @click="type = '4day'">
+            <v-list-item-title>4 days</v-list-item-title>
+          </v-list-item>
+        </v-list>
+      </v-menu>
+      <v-spacer />
       <v-btn @click="dialog.create = true">
         <v-icon size="x-large" icon="mdi-plus" />
         <v-tooltip activator="parent" location="bottom" text="New" />
       </v-btn>
     </template>
     <v-container>
-      <v-sheet class="overflow-auto">
-        <v-calendar ref="calendar" v-model="value" :events :view-mode="type" :weekdays>
-          <template #day-event="{ event }">
-            <v-btn
-              size="small"
-              variant="tonal"
-              rounded="0"
-              class="hidden-md-and-down"
-              @click="showEvent(event.id)"
-            >
-              <template #prepend>
-                <v-icon size="x-small" icon="mdi-circle" :color="String(event.color)"></v-icon>
-              </template>
-              <span class="text-truncate" style="max-width: 120px">{{ event.title }}</span>
-            </v-btn>
-            <div class="text-center hidden-lg-and-up">
-              <v-icon
-                size="x-small"
-                icon="mdi-circle"
-                :color="String(event.color)"
-                @click="showEvent(event.id)"
-              />
-            </div>
-          </template>
-        </v-calendar>
+      <v-sheet height="64">
+        <v-toolbar flat>
+          <v-btn size="small" variant="text" icon @click="calendar?.prev()">
+            <v-icon size="small"> mdi-chevron-left </v-icon>
+          </v-btn>
+          <v-btn size="small" variant="text" icon @click="calendar?.next()">
+            <v-icon size="small"> mdi-chevron-right </v-icon>
+          </v-btn>
+          <v-toolbar-title> {{ calendar?.title }} </v-toolbar-title>
+        </v-toolbar>
+      </v-sheet>
+      <v-sheet height="600">
+        <v-calendar
+          ref="calendar"
+          v-model="focus"
+          :events
+          :type
+          :weekdays
+          color="primary"
+          @click:date="viewDay"
+          @click:event="showEvent"
+        />
       </v-sheet>
     </v-container>
     <v-dialog v-model="dialog.eventNote" max-width="1000">
