@@ -43,7 +43,7 @@ const previewImagePath = computed(() => {
       <p
         v-for="(paragraph, index) in splitByNewline(targetNote.content ?? '')"
         :key="index"
-        class="note-paragraph text-body-1"
+        class="note-paragraph text-body-1 text-pre-wrap"
       >
         {{ paragraph }}
       </p>
