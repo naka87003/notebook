@@ -8,8 +8,8 @@ defineProps<{
   status?: string;
 }>();
 const form = useForm({
-  email: 'test@example.com',
-  password: 'password',
+  email: '',
+  password: '',
   remember: false,
 });
 const visible = ref(false);
@@ -27,6 +27,12 @@ const submit = () => {
   form.post(route('login'), {
     onFinish: () => form.reset('password'),
   });
+};
+
+const loginAsGuest = () => {
+  form.email = 'guest@example.com';
+  form.password = 'password';
+  submit();
 };
 
 const pageTransition = (name: string) => {
@@ -121,7 +127,19 @@ const resizeWindow = () => {
             color="info"
             name="remember"
             label="Remember me"
-          ></v-checkbox>
+          />
+          <v-divider class="mb-5" />
+          <v-btn
+            color="secondary"
+            prepend-icon="mdi-account"
+            variant="tonal"
+            :class="{ 'text-disabled': form.processing }"
+            :disabled="form.processing"
+            block
+            @click="loginAsGuest"
+          >
+            Log In as guest
+          </v-btn>
           <v-card-text class="text-center">
             <a
               class="text-primary text-decoration-none"
