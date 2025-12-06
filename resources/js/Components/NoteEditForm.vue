@@ -151,6 +151,23 @@ const copyDateToEnd = () => {
           <v-col cols="12" md="6">
             <v-row>
               <v-col cols="12">
+                <div class="text-subtitle-1 text-medium-emphasis">Title</div>
+                <v-text-field
+                  v-model="form.title"
+                  hide-details="auto"
+                  type="text"
+                  density="compact"
+                  placeholder="Enter Title"
+                  variant="outlined"
+                  :error="Boolean(form.errors.title)"
+                  :error-messages="form.errors.title"
+                  required
+                  autofocus
+                  max-length="20"
+                  @input="form.errors.title = null"
+                />
+              </v-col>
+              <v-col cols="12">
                 <div class="text-subtitle-1 text-medium-emphasis">Content</div>
                 <v-textarea
                   v-model="form.content"
@@ -162,13 +179,16 @@ const copyDateToEnd = () => {
                   :error="Boolean(form.errors.content)"
                   :error-messages="form.errors.content"
                   required
-                  autofocus
                   auto-grow
                   counter="1000"
                   max-length="1000"
                   @input="form.errors.content = null"
                 />
               </v-col>
+            </v-row>
+          </v-col>
+          <v-col cols="12" md="6">
+            <v-row>
               <v-col cols="12">
                 <v-img v-if="previewImagePath" :src="previewImagePath" width="300" />
                 <div class="text-subtitle-1 text-medium-emphasis">Image Upload</div>
@@ -184,26 +204,6 @@ const copyDateToEnd = () => {
                   max-width="600"
                   accept="image/png, image/jpeg"
                   @update:model-value="form.errors.image = null"
-                />
-              </v-col>
-            </v-row>
-          </v-col>
-          <v-col cols="12" md="6">
-            <v-row>
-              <v-col cols="12">
-                <div class="text-subtitle-1 text-medium-emphasis">Title</div>
-                <v-text-field
-                  v-model="form.title"
-                  hide-details="auto"
-                  type="text"
-                  density="compact"
-                  placeholder="Enter Title"
-                  variant="outlined"
-                  :error="Boolean(form.errors.title)"
-                  :error-messages="form.errors.title"
-                  required
-                  max-length="20"
-                  @input="form.errors.title = null"
                 />
               </v-col>
               <v-col v-if="!eventMode" cols="12">
