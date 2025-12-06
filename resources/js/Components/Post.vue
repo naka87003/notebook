@@ -73,7 +73,11 @@ const showSelectedUserPosts = (userId: number) => {
         <p class="text-body-2">from {{ simplifyDateTime(note.starts_at) }}</p>
         <p class="text-body-2">to {{ simplifyDateTime(note.ends_at) }}</p>
       </v-alert>
-      <p v-for="(paragraph, index) in paragraphs" :key="index" class="note-paragraph text-body-1">
+      <p
+        v-for="(paragraph, index) in paragraphs"
+        :key="index"
+        class="note-paragraph text-body-1 text-pre-wrap"
+      >
         {{ paragraph }}
       </p>
       <v-btn
