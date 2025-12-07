@@ -179,20 +179,18 @@ provide('showEnlargedImage', showEnlargedImage);
       </v-btn>
     </template>
     <v-container>
-      <v-row v-if="selectedUser">
-        <v-col cols="12">
-          <SelectedUserMenu :selected-user />
-        </v-col>
-      </v-row>
-      <v-alert
-        v-if="isInProgress === false && notes.size === 0"
-        variant="text"
-        class="text-center"
-        text="No data available"
-      />
-      <v-infinite-scroll v-else class="w-100 overflow-hidden" empty-text="" @load="load">
+      <v-infinite-scroll class="w-100 overflow-hidden" empty-text="" @load="load">
         <v-row>
-          <template v-for="note in notes.values()" :key="note.id">
+          <v-col v-if="selectedUser" cols="12">
+            <SelectedUserMenu :selected-user />
+          </v-col>
+          <v-alert
+            v-if="isInProgress === false && notes.size === 0"
+            variant="text"
+            class="text-center"
+            text="No data available"
+          />
+          <template v-for="note in notes.values()" v-else :key="note.id">
             <v-col cols="12">
               <Post
                 :note
