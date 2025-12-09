@@ -76,7 +76,11 @@ class TagController extends Controller
 
     public function selectItems()
     {
-        $items = Tag::where('user_id', Auth::id())->orderBy('created_at', 'desc')->get();
+        $items = Tag::where('user_id', Auth::id())
+            ->withCount('notes')
+            ->orderBy('notes_count', 'desc')
+            ->orderBy('created_at', 'desc')
+            ->get();
 
         return $items;
     }
