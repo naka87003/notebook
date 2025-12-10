@@ -27,20 +27,20 @@ class TagController extends Controller
     /**
      * Store a newly created resource in storage.
      */
-    public function store(Request $request): RedirectResponse
+    public function store(Request $request)
     {
         $request->validate([
             'name' => 'required|max:20',
             'color' => 'nullable|string',
         ]);
 
-        Tag::create([
+        $tag = Tag::create([
             'name' => $request->name,
             'hex_color' => $request->color,
             'user_id' => Auth::id()
         ]);
 
-        return back();
+        return response()->json(['tag_id' =>  $tag->id]);
     }
 
     /**

@@ -103,9 +103,9 @@ const toAllDayRange = () => {
   form.ends = dayjs(form.ends).endOf('day').utc().format();
 };
 
-const tagCreated = async () => {
+const tagCreated = async (id: number) => {
   await execute();
-  form.tag = tagItems.value[0].id;
+  form.tag = id;
   dialog.value.tagCreate = false;
 };
 

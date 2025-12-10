@@ -1,10 +1,11 @@
 <script setup lang="ts">
 import { ref } from 'vue';
 import { useForm } from '@inertiajs/vue3';
+import axios, { AxiosResponse } from 'axios';
 
 const emit = defineEmits<{
   close: [];
-  tagCreated: [];
+  tagCreated: [id: number];
 }>();
 
 const form = useForm({
@@ -22,12 +23,16 @@ const switchColorValue = () => {
   }
 };
 
-const submit = () => {
-  form.post(route('tags.store'), {
-    onSuccess: () => {
-      emit('tagCreated');
-    },
-  });
+const submit = async () => {
+  await axios
+    .post(route('tags.store'), form)
+    .then(async (res: AxiosResponse<{ tag_id: number }>) => {
+      const { data } = res;
+      emit('tagCreated', data.tag_id);
+    })
+    .catch((error) => {
+      console.log(error);
+    });
 };
 </script>
 <template>
