@@ -100,6 +100,7 @@ const addReply = async () => {
     <v-btn
       v-if="isTruncated"
       class="text-capitalize ps-0"
+      size="small"
       color="primary"
       variant="text"
       density="compact"
