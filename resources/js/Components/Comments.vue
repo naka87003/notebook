@@ -168,7 +168,7 @@ const updateComment = async (id: number) => {
             </v-card>
             <v-infinite-scroll
               v-if="comments.size > 0"
-              class="w-100 overflow-hidden"
+              class="w-100 overflow-hidden py-3"
               empty-text=""
               @load="load"
             >

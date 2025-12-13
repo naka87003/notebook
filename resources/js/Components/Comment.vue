@@ -121,7 +121,7 @@ const deleteReply = async () => {
 </script>
 
 <template>
-  <v-alert density="compact" variant="text" class="pa-0">
+  <v-alert density="compact" variant="text" class="px-0 py-1">
     <template #prepend>
       <v-avatar
         color="grey-darken-3 cursor-pointer"
@@ -226,7 +226,7 @@ const deleteReply = async () => {
   </v-alert>
   <v-infinite-scroll
     v-if="display.replies"
-    class="ms-10 mt-n3 overflow-hidden"
+    class="ms-10 overflow-hidden"
     empty-text=""
     @load="load"
   >
