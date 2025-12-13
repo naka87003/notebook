@@ -39,11 +39,19 @@ const items: Ref<(Tag & TagCount)[]> = ref([]);
 const loading = ref(true);
 const totalItems = ref(0);
 const targetTag = ref();
+const page = ref(1);
 
-watchDebounced(searchText, () => (search.value = String(Date.now())), {
-  debounce: 500,
-  maxWait: 1000,
-});
+watchDebounced(
+  searchText,
+  () => {
+    page.value = 1;
+    search.value = String(Date.now());
+  },
+  {
+    debounce: 500,
+    maxWait: 1000,
+  }
+);
 
 const loadItems = async ({ page, itemsPerPage, sortBy }) => {
   loading.value = true;
@@ -140,6 +148,7 @@ const showTaggedNotes = (item: Tag, status: number) => {
         :items
         :items-length="totalItems"
         :loading="loading"
+        :page
         :search
         @update:options="loadItems"
       >
