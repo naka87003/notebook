@@ -87,16 +87,12 @@ class TagController extends Controller
 
     public function datatableItems(Request $request)
     {
-        $normal = Note::select('tag_id', DB::raw('count(*) AS normal_count'))->where('user_id', Auth::id())->where('status_id', 1)->groupBy('tag_id');
-        $archived = Note::select('tag_id', DB::raw('count(*) AS archived_count'))->where('user_id', Auth::id())->where('status_id', 2)->groupBy('tag_id');
 
-        $query = Tag::where('user_id', Auth::id())
-            ->leftJoinSub($normal, 'normal', function (JoinClause $join) {
-                $join->on('tags.id', '=', 'normal.tag_id');
-            })
-            ->leftJoinSub($archived, 'archived', function (JoinClause $join) {
-                $join->on('tags.id', '=', 'archived.tag_id');
-            });
+        $query = Tag::withCount([
+            'notes',
+            'notes as normal_count' => fn($q) => $q->where('status_id', 1),
+            'notes as archived_count' => fn($q) => $q->where('status_id', 2),
+        ])->where('user_id', Auth::id());
 
         if ($request->search) {
             $query->whereLike('name', "%{$request->search}%");
@@ -112,7 +108,7 @@ class TagController extends Controller
                     $query->orderBy($request->sortBy[0]['key'], $request->sortBy[0]['order']);
             }
         } else {
-            $query->orderBy('updated_at', 'desc');
+            $query->orderBy('notes_count', 'desc')->orderBy('updated_at', 'desc');
         }
 
         $count = $query->count();
