@@ -161,6 +161,7 @@ const deleteReply = async () => {
     </p>
     <v-btn
       v-if="isTruncated"
+      size="small"
       class="text-capitalize ps-0"
       color="primary"
       variant="text"
@@ -216,6 +217,7 @@ const deleteReply = async () => {
     </v-card>
     <v-btn
       v-if="comment.replies_count"
+      size="small"
       variant="text"
       :prepend-icon="display.replies ? 'mdi-chevron-up' : 'mdi-chevron-down'"
       class="text-lowercase px-0"
