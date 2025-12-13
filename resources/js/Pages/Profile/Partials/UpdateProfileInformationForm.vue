@@ -54,7 +54,7 @@ const verificationSend = () => {
             required
             autocomplete="name"
             max-width="600"
-            max-length="20"
+            maxlength="20"
             @input="form.errors.name = null"
           />
           <div class="text-subtitle-1 text-medium-emphasis">Email</div>
@@ -85,7 +85,7 @@ const verificationSend = () => {
             required
             max-width="600"
             counter="160"
-            max-length="160"
+            maxlength="160"
             @input="form.errors.comment = null"
           />
         </form>

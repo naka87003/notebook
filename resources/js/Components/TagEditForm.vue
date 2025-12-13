@@ -65,7 +65,7 @@ const submit = () => {
               :error="Boolean(form.errors.name)"
               :error-messages="form.errors.name"
               required
-              max-length="20"
+              maxlength="20"
               @input="form.errors.name = null"
             />
           </v-col>

@@ -159,7 +159,7 @@ const copyDateToEnd = () => {
                   :error-messages="form.errors.title"
                   required
                   autofocus
-                  max-length="20"
+                  maxlength="20"
                   @input="form.errors.title = null"
                 />
               </v-col>
@@ -177,7 +177,7 @@ const copyDateToEnd = () => {
                   required
                   auto-grow
                   counter="1000"
-                  max-length="1000"
+                  maxlength="1000"
                   @input="form.errors.content = null"
                 />
               </v-col>

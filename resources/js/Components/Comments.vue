@@ -139,7 +139,7 @@ const updateComment = async (id: number) => {
                     rows="1"
                     :error="Boolean(form.errors.comment)"
                     counter="140"
-                    max-length="140"
+                    maxlength="140"
                   >
                     <template #prepend>
                       <v-avatar color="surface-light" size="small">

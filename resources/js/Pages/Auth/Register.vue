@@ -64,7 +64,7 @@ const pageTransition = (name: string) => {
             required
             autofocus
             autocomplete="username"
-            max-length="20"
+            maxlength="20"
             @input="form.errors.name = null"
           />
 

@@ -129,7 +129,7 @@ const addReply = async () => {
           auto-grow
           rows="1"
           counter="140"
-          max-length="140"
+          maxlength="140"
         >
           <template #prepend>
             <v-avatar color="surface-light" size="small">
