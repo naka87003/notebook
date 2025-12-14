@@ -94,7 +94,7 @@ const addReply = async () => {
     <p v-if="reply.reply_to" class="text-caption text-primary mt-n1">
       {{ '@ ' + reply.addressee.name }}
     </p>
-    <p v-for="(paragraph, index) in paragraphs" :key="index" class="text-body-2">
+    <p v-for="(paragraph, index) in paragraphs" :key="index" class="text-body-2 comment-paragraph">
       {{ paragraph }}
     </p>
     <v-btn

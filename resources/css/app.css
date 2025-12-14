@@ -8,4 +8,9 @@
   background-repeat: repeat-y;
   background-size: 100% 1.5em;
   line-height: 1.5;
+  min-height: 1.5em;
+}
+
+.comment-paragraph {
+  min-height: 1.5em;
 }

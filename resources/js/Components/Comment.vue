@@ -156,7 +156,7 @@ const deleteReply = async () => {
         </v-list>
       </v-menu>
     </template>
-    <p v-for="(paragraph, index) in paragraphs" :key="index" class="text-body-2">
+    <p v-for="(paragraph, index) in paragraphs" :key="index" class="text-body-2 comment-paragraph">
       {{ paragraph }}
     </p>
     <v-btn
