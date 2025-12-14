@@ -163,7 +163,7 @@ const copyDateToEnd = () => {
                   :error-messages="form.errors.title"
                   required
                   autofocus
-                  maxlength="20"
+                  maxlength="50"
                   @input="form.errors.title = null"
                 />
               </v-col>
