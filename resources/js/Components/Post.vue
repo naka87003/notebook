@@ -60,7 +60,7 @@ const showSelectedUserPosts = (userId: number) => {
     rounded="0"
   >
     <template #title>
-      <span class="text-body-1">{{ note.title }}</span>
+      <span class="font-handwritten text-body-1">{{ note.title }}</span>
     </template>
     <template #append>
       <p class="text-caption">
@@ -76,7 +76,7 @@ const showSelectedUserPosts = (userId: number) => {
       <p
         v-for="(paragraph, index) in paragraphs"
         :key="index"
-        class="note-paragraph text-body-1 text-pre-wrap"
+        class="font-handwritten note-paragraph text-body-1 text-pre-wrap"
       >
         {{ paragraph }}
       </p>

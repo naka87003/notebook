@@ -1,3 +1,9 @@
+@import url('https://fonts.googleapis.com/css2?family=Zen+Kurenaido&display=swap');
+
+.font-handwritten {
+  font-family: 'Zen Kurenaido', sans-serif !important;
+}
+
 .note-paragraph {
   background-image: linear-gradient(
     180deg,
