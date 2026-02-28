@@ -122,12 +122,7 @@ const resizeWindow = () => {
           >
             Log In
           </v-btn>
-          <v-checkbox
-            v-model:checked="form.remember"
-            color="info"
-            name="remember"
-            label="Remember me"
-          />
+          <v-checkbox v-model="form.remember" color="info" name="remember" label="Remember me" />
           <v-divider class="mb-5" />
           <v-btn
             color="secondary"
