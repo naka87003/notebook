@@ -73,14 +73,14 @@ jobs:
         run: |
           test -n "$SSH_HOST" || { echo "::error::XSERVER_HOST is not configured as a repository variable."; exit 1; }
           test -n "$SSH_USER" || { echo "::error::XSERVER_USER is not configured as a repository variable."; exit 1; }
-          ssh -p 10022 "$SSH_USER@$SSH_HOST" "mkdir -p '$APP_PATH'"
+          ssh -i ~/.ssh/id_ed25519 -o IdentitiesOnly=yes -p 10022 "$SSH_USER@$SSH_HOST" "mkdir -p '$APP_PATH'"
           rsync -az --delete-delay \
             --exclude='.env' \
             --exclude='storage/' \
             --exclude='bootstrap/cache/' \
             --exclude='node_modules/' \
             --exclude='.git/' \
-            -e 'ssh -p 10022' \
+            -e 'ssh -i ~/.ssh/id_ed25519 -o IdentitiesOnly=yes -p 10022' \
             src/ "$SSH_USER@$SSH_HOST:$APP_PATH/"
 
       - name: Run migrations and optimize Laravel
@@ -88,7 +88,7 @@ jobs:
           SSH_HOST: ${{ vars.XSERVER_HOST }}
           SSH_USER: ${{ vars.XSERVER_USER }}
         run: |
-          ssh -p 10022 "$SSH_USER@$SSH_HOST" "
+          ssh -i ~/.ssh/id_ed25519 -o IdentitiesOnly=yes -p 10022 "$SSH_USER@$SSH_HOST" "
             cd '$APP_PATH' &&
             php artisan migrate --force --no-interaction &&
             php artisan optimize:clear &&
