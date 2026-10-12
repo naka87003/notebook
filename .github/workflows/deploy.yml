@@ -91,6 +91,7 @@ jobs:
           SSH_USER: ${{ vars.XSERVER_USER }}
         run: |
           ssh -i ~/.ssh/id_ed25519 -o IdentitiesOnly=yes -p 10022 "$SSH_USER@$SSH_HOST" "
+            rm -f '$DEPLOY_PATH'/bootstrap/cache/*.php &&
             cd '$DEPLOY_PATH' &&
             $PHP_BINARY artisan migrate --force --no-interaction &&
             $PHP_BINARY artisan optimize:clear &&
