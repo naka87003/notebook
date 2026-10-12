@@ -6,7 +6,7 @@ Laravel application for creating, editing, searching, and sharing notes.
 - Backend: Laravel
 - Frontend: Vue, Inertia.js, Vuetify
 
-## 構成
+## Project structure
 
 ```text
 src/                  Laravel application
