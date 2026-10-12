@@ -20,7 +20,7 @@ env:
   PHP_VERSION: '8.4'
   PHP_BINARY: /usr/bin/php8.4
   NODE_VERSION: '20'
-  APP_PATH: /home/xs257355/notebook
+  DEPLOY_PATH: /home/xs257355/xs257355.xsrv.jp/public_html/notebook
 
 jobs:
   deploy:
@@ -74,15 +74,16 @@ jobs:
         run: |
           test -n "$SSH_HOST" || { echo "::error::XSERVER_HOST is not configured as a repository variable."; exit 1; }
           test -n "$SSH_USER" || { echo "::error::XSERVER_USER is not configured as a repository variable."; exit 1; }
-          ssh -i ~/.ssh/id_ed25519 -o IdentitiesOnly=yes -p 10022 "$SSH_USER@$SSH_HOST" "mkdir -p '$APP_PATH'"
+          ssh -i ~/.ssh/id_ed25519 -o IdentitiesOnly=yes -p 10022 "$SSH_USER@$SSH_HOST" "mkdir -p '$DEPLOY_PATH'"
           rsync -az --delete-delay \
             --exclude='.env' \
             --exclude='storage/' \
+            --exclude='public/storage' \
             --exclude='bootstrap/cache/' \
             --exclude='node_modules/' \
             --exclude='.git/' \
             -e 'ssh -i ~/.ssh/id_ed25519 -o IdentitiesOnly=yes -p 10022' \
-            src/ "$SSH_USER@$SSH_HOST:$APP_PATH/"
+            src/ "$SSH_USER@$SSH_HOST:$DEPLOY_PATH/"
 
       - name: Run migrations and optimize Laravel
         env:
@@ -90,7 +91,7 @@ jobs:
           SSH_USER: ${{ vars.XSERVER_USER }}
         run: |
           ssh -i ~/.ssh/id_ed25519 -o IdentitiesOnly=yes -p 10022 "$SSH_USER@$SSH_HOST" "
-            cd '$APP_PATH' &&
+            cd '$DEPLOY_PATH' &&
             $PHP_BINARY artisan migrate --force --no-interaction &&
             $PHP_BINARY artisan optimize:clear &&
             $PHP_BINARY artisan config:cache &&
