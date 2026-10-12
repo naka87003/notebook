@@ -92,6 +92,12 @@ jobs:
         run: |
           ssh -i ~/.ssh/id_ed25519 -o IdentitiesOnly=yes -p 10022 "$SSH_USER@$SSH_HOST" "
             rm -f '$DEPLOY_PATH'/bootstrap/cache/*.php &&
+            mkdir -p '$DEPLOY_PATH/storage/app/public' \
+              '$DEPLOY_PATH/storage/framework/cache/data' \
+              '$DEPLOY_PATH/storage/framework/sessions' \
+              '$DEPLOY_PATH/storage/framework/views' \
+              '$DEPLOY_PATH/storage/logs' \
+              '$DEPLOY_PATH/bootstrap/cache' &&
             cd '$DEPLOY_PATH' &&
             $PHP_BINARY artisan migrate --force --no-interaction &&
             $PHP_BINARY artisan optimize:clear &&
