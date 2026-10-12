@@ -19,7 +19,7 @@ concurrency:
 env:
   PHP_VERSION: '8.4'
   PHP_BINARY: /usr/bin/php8.4
-  NODE_VERSION: '20'
+  NODE_VERSION: '26'
   DEPLOY_PATH: /home/xs257355/xs257355.xsrv.jp/public_html/notebook
 
 jobs:
