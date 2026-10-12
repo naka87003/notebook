@@ -24,6 +24,7 @@ env:
 jobs:
   deploy:
     runs-on: ubuntu-latest
+    environment: XSERVER
 
     steps:
       - name: Check out source
@@ -58,6 +59,8 @@ jobs:
           SSH_PRIVATE_KEY: ${{ secrets.XSERVER_SSH_PRIVATE_KEY }}
           SSH_KNOWN_HOSTS: ${{ vars.XSERVER_SSH_KNOWN_HOSTS }}
         run: |
+          test -n "$SSH_PRIVATE_KEY" || { echo "::error::XSERVER_SSH_PRIVATE_KEY is not configured."; exit 1; }
+          test -n "$SSH_KNOWN_HOSTS" || { echo "::error::XSERVER_SSH_KNOWN_HOSTS is not configured as a repository variable."; exit 1; }
           install -d -m 700 ~/.ssh
           printf '%s\n' "$SSH_PRIVATE_KEY" > ~/.ssh/id_ed25519
           chmod 600 ~/.ssh/id_ed25519
@@ -68,6 +71,8 @@ jobs:
           SSH_HOST: ${{ vars.XSERVER_HOST }}
           SSH_USER: ${{ vars.XSERVER_USER }}
         run: |
+          test -n "$SSH_HOST" || { echo "::error::XSERVER_HOST is not configured as a repository variable."; exit 1; }
+          test -n "$SSH_USER" || { echo "::error::XSERVER_USER is not configured as a repository variable."; exit 1; }
           ssh -p 10022 "$SSH_USER@$SSH_HOST" "mkdir -p '$APP_PATH'"
           rsync -az --delete-delay \
             --exclude='.env' \
