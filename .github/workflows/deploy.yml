@@ -1,0 +1,93 @@
+name: Deploy to Xserver
+
+on:
+  push:
+    branches:
+      - main
+    paths:
+      - 'src/**'
+      - '.github/workflows/deploy.yml'
+  workflow_dispatch:
+
+permissions:
+  contents: read
+
+concurrency:
+  group: production-deploy
+  cancel-in-progress: false
+
+env:
+  PHP_VERSION: '8.4'
+  NODE_VERSION: '20'
+  APP_PATH: /home/xs257355/notebook
+
+jobs:
+  deploy:
+    runs-on: ubuntu-latest
+
+    steps:
+      - name: Check out source
+        uses: actions/checkout@v4
+
+      - name: Set up PHP
+        uses: shivammathur/setup-php@v2
+        with:
+          php-version: ${{ env.PHP_VERSION }}
+          extensions: mbstring, xml, curl, zip, pdo_mysql, gd, intl
+          tools: composer:v2
+
+      - name: Install PHP dependencies
+        working-directory: src
+        run: composer install --no-dev --prefer-dist --optimize-autoloader --no-interaction --no-scripts
+
+      - name: Set up Node.js
+        uses: actions/setup-node@v4
+        with:
+          node-version: ${{ env.NODE_VERSION }}
+          cache: npm
+          cache-dependency-path: src/package-lock.json
+
+      - name: Build frontend assets
+        working-directory: src
+        run: |
+          npm ci
+          npm run build
+
+      - name: Configure SSH
+        env:
+          SSH_PRIVATE_KEY: ${{ secrets.XSERVER_SSH_PRIVATE_KEY }}
+          SSH_KNOWN_HOSTS: ${{ vars.XSERVER_SSH_KNOWN_HOSTS }}
+        run: |
+          install -d -m 700 ~/.ssh
+          printf '%s\n' "$SSH_PRIVATE_KEY" > ~/.ssh/id_ed25519
+          chmod 600 ~/.ssh/id_ed25519
+          printf '%s\n' "$SSH_KNOWN_HOSTS" > ~/.ssh/known_hosts
+
+      - name: Synchronize Laravel application
+        env:
+          SSH_HOST: ${{ vars.XSERVER_HOST }}
+          SSH_USER: ${{ vars.XSERVER_USER }}
+        run: |
+          ssh -p 10022 "$SSH_USER@$SSH_HOST" "mkdir -p '$APP_PATH'"
+          rsync -az --delete-delay \
+            --exclude='.env' \
+            --exclude='storage/' \
+            --exclude='bootstrap/cache/' \
+            --exclude='node_modules/' \
+            --exclude='.git/' \
+            -e 'ssh -p 10022' \
+            src/ "$SSH_USER@$SSH_HOST:$APP_PATH/"
+
+      - name: Run migrations and optimize Laravel
+        env:
+          SSH_HOST: ${{ vars.XSERVER_HOST }}
+          SSH_USER: ${{ vars.XSERVER_USER }}
+        run: |
+          ssh -p 10022 "$SSH_USER@$SSH_HOST" "
+            cd '$APP_PATH' &&
+            php artisan migrate --force --no-interaction &&
+            php artisan optimize:clear &&
+            php artisan config:cache &&
+            php artisan route:cache &&
+            php artisan view:cache
+          "
