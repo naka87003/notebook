@@ -51,7 +51,10 @@ jobs:
 
       - name: Build frontend assets
         working-directory: src
+        env:
+          VITE_APP_NAME: ${{ vars.VITE_APP_NAME }}
         run: |
+          test -n "$VITE_APP_NAME" || { echo "::error::VITE_APP_NAME is not configured in the production environment variables."; exit 1; }
           npm ci
           npm run build
 

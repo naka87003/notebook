@@ -33,4 +33,4 @@ The application is available at http://localhost:8000.
 
 When changes under `src/` are pushed to the `main` branch, GitHub Actions automatically deploys the application to Xserver.
 
-Production connection details are stored in the GitHub Actions `production` environment. The `.env` file and `storage` directory are managed on the server and are not included in this repository.
+Production connection details are stored in the GitHub Actions `production` environment. The `.env` file and `storage` directory are managed on the server and are not included in this repository. Non-sensitive frontend build variables are managed in the `production` environment's GitHub Actions Variables. Do not store secrets in variables whose names start with `VITE_`, as Vite exposes them to the browser.
