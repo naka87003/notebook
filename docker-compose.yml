@@ -11,7 +11,6 @@ services:
     depends_on:
       - app
       - db
-
   app:
     container_name: app-notebook
     build:
@@ -23,21 +22,21 @@ services:
       - ./docker/app/www.conf:/etc/php-fpm.d/www.conf
       - ./docker/app/php.ini:/etc/php.ini
   db:
-    container_name: pgdb-notebook
-    image: postgres:latest
-    ports:
-      - "5432:5432"
-    volumes:
-      - ./docker/postgresql/postgresql.conf:/etc/postgresql/postgresql.conf
-      - pgdb-notebook-volume:/var/lib/postgresql/data
+    image: mysql:8.0.36
+    container_name: db
     environment:
-      POSTGRES_DB: laravel
-      POSTGRES_USER: laravel
-      POSTGRES_PASSWORD: laravel
-  adminer:
-    image: adminer
-    restart: always
+      MYSQL_ROOT_PASSWORD: password
+      MYSQL_DATABASE: laravel
+    command: mysqld --character-set-server=utf8mb4 --collation-server=utf8mb4_unicode_ci
+    volumes:
+      - ./docker/db/my.cnf:/etc/mysql/conf.d/my.cnf
     ports:
-      - 8080:8080
-volumes:
-  pgdb-notebook-volume:
+      - 3306:3306
+  phpmyadmin:
+    container_name: phpmyadmin
+    image: phpmyadmin
+    environment:
+      - PMA_USER=root
+      - PMA_PASSWORD=password
+    ports:
+      - 8080:80

@@ -9,7 +9,7 @@ wget
 # php、モジュール関連インストール
 RUN dnf -y install php less php-intl \
 php-cli php-json php-common php-devel php-fpm \
-php-gd php-mysqlnd php-pgsql php-mbstring php-pdo php-xml
+php-gd php-mysqlnd php-mbstring php-pdo php-xml
 
 # unix socket
 RUN mkdir /var/run/php-fpm
