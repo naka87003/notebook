@@ -37,7 +37,7 @@ const verificationSend = () => {
       <v-card-text>
         <v-card class="mb-6" color="surface-variant" variant="tonal">
           <v-card-text class="text-medium-emphasis text-body-small">
-            <p>Update your account's profile information and email address.</p>
+            Update your account's profile information and email address.
           </v-card-text>
         </v-card>
         <form @submit.prevent="form.patch(route('profile.update'))">
@@ -92,8 +92,8 @@ const verificationSend = () => {
         <div v-if="mustVerifyEmail && user.email_verified_at === null">
           <v-card class="mb-6" color="surface-variant" variant="tonal">
             <v-card-text class="text-medium-emphasis text-body-small">
-              <p>Your email address is unverified.</p>
-              <p>
+              <p class="ma-0">Your email address is unverified.</p>
+              <p class="ma-0">
                 <a class="text-primary" href="#" @click.prevent="verificationSend">Click here</a>
                 to re-send the verification email.
               </p>

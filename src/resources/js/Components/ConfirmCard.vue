@@ -37,7 +37,7 @@ defineEmits<{
       {{ message }}
       <v-card v-if="description" class="ma-2" color="surface-variant" variant="tonal">
         <v-card-text class="text-medium-emphasis text-body-small">
-          <p>{{ description }}</p>
+          {{ description }}
         </v-card-text>
       </v-card>
     </v-card-text>

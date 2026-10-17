@@ -33,7 +33,7 @@ const updatePassword = () => {
       <v-card-text>
         <v-card class="mb-6" color="surface-variant" variant="tonal">
           <v-card-text class="text-medium-emphasis text-body-small">
-            <p>Ensure your account is using a long, random password to stay secure.</p>
+            Ensure your account is using a long, random password to stay secure.
           </v-card-text>
         </v-card>
         <form class="mt-6 space-y-6" @submit.prevent="updatePassword">

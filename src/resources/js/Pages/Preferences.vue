@@ -28,7 +28,7 @@ const form = useForm({ emailPreferences: defaultFormProps });
               <v-card-text>
                 <v-card color="surface-variant" variant="tonal">
                   <v-card-text class="text-medium-emphasis text-body-small">
-                    <p>Update your preferences.</p>
+                    Update your preferences.
                   </v-card-text>
                 </v-card>
                 <form @submit.prevent="form.patch(route('preferences.update'))">

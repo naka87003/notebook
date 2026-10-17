@@ -51,7 +51,7 @@ const deleteImage = () => {
       <v-card-text>
         <v-card class="mb-6" color="surface-variant" variant="tonal">
           <v-card-text class="text-medium-emphasis text-body-small">
-            <p>Upload your image to use as your avatar.</p>
+            Upload your image to use as your avatar.
           </v-card-text>
         </v-card>
         <v-list-item class="mb-5">

@@ -51,8 +51,8 @@ const submit = () => {
         />
         <v-card class="mb-6" color="surface-variant" variant="tonal">
           <v-card-text class="text-medium-emphasis text-body-small">
-            <p>Forgot your password? No problem.</p>
-            <p>
+            <p class="ma-0">Forgot your password? No problem.</p>
+            <p class="ma-0">
               Just let us know your email address and we will email you a password reset link that
               will allow you to choose a new one.
             </p>

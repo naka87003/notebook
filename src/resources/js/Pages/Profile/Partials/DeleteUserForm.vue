@@ -33,11 +33,11 @@ const closeModal = () => {
       <v-card-text>
         <v-card color="surface-variant" variant="tonal">
           <v-card-text class="text-medium-emphasis text-body-small">
-            <p>
+            <p class="ma-0">
               Once your account is deleted, all of its resources and data will be permanently
               deleted.
             </p>
-            <p>
+            <p class="ma-0">
               Before deleting your account, please download any data or information that you wish to
               retain.
             </p>
@@ -76,11 +76,11 @@ const closeModal = () => {
                 Are you sure you want to delete your account?
                 <v-card class="my-3" color="surface-variant" variant="tonal">
                   <v-card-text class="text-medium-emphasis text-body-small">
-                    <p>
+                    <p class="ma-0">
                       Once your account is deleted, all of its resources and data will be
                       permanently deleted.
                     </p>
-                    <p>
+                    <p class="ma-0">
                       please enter your password to confirm you would like to permanently delete
                       your account.
                     </p>

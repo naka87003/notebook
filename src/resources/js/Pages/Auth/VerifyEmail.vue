@@ -57,12 +57,12 @@ const logout = () => {
         />
         <v-card class="mb-6" color="surface-variant" variant="tonal">
           <v-card-text class="text-medium-emphasis text-body-small">
-            <p>Thanks for signing up!</p>
-            <p>
+            <p class="ma-0">Thanks for signing up!</p>
+            <p class="ma-0">
               Before getting started, could you verify your email address by clicking on the link we
               just emailed to you?
             </p>
-            <p>If you didn't receive the email, we will gladly send you another.</p>
+            <p class="ma-0">If you didn't receive the email, we will gladly send you another.</p>
           </v-card-text>
         </v-card>
         <form @submit.prevent="submit">
