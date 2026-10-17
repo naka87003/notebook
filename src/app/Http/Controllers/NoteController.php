@@ -73,7 +73,7 @@ class NoteController extends Controller
             // 画像のサイズを調整
             $manager = new ImageManager(Driver::class);
             $imgPath = storage_path('app/public/' . $newImagePath);
-            $image = $manager->read($imgPath);
+            $image = $manager->decode($imgPath);
             $image->scaleDown(width: 600);
             $image->save(storage_path('app/public/' . $newImagePath));
         }
@@ -132,7 +132,7 @@ class NoteController extends Controller
             // 画像のサイズを調整
             $manager = new ImageManager(Driver::class);
             $imgPath = storage_path('app/public/' . $newImagePath);
-            $image = $manager->read($imgPath);
+            $image = $manager->decode($imgPath);
             $image->scaleDown(width: 600);
             $image->save(storage_path('app/public/' . $newImagePath));
             // 新規画像Pathを更新対象にセット

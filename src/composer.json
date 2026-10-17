@@ -11,7 +11,7 @@
     "php": "^8.4",
     "barryvdh/laravel-debugbar": "^4.4.4",
     "inertiajs/inertia-laravel": "^3.5.1",
-    "intervention/image": "^3.7",
+    "intervention/image": "^4.3.5",
     "laravel/framework": "^13.37.0",
     "laravel/sanctum": "^4.3.3",
     "laravel/tinker": "^3.0",

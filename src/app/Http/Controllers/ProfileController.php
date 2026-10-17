@@ -69,7 +69,7 @@ class ProfileController extends Controller
             // 画像のサイズを調整
             $manager = new ImageManager(Driver::class);
             $imgPath = storage_path('app/public/' . $user->image_path);
-            $image = $manager->read($imgPath);
+            $image = $manager->decode($imgPath);
             $image->scaleDown(width: 100);
             $image->save(storage_path('app/public/' . $user->image_path));
         }
