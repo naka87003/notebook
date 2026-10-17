@@ -3,7 +3,7 @@ import type { Note } from '@/interfaces';
 import { router } from '@inertiajs/vue3';
 import { computed } from 'vue';
 import { simplifyDateTime, relativeDateTime } from '@/common';
-import useParagraphs from '@/Composables/useParagraphs';
+import NoteContent from './NoteContent.vue';
 
 const props = defineProps<{
   note: Note;
@@ -15,10 +15,6 @@ defineEmits<{
   showLikedUserList: [];
   showComments: [];
 }>();
-
-const content = computed(() => props.note.content ?? '');
-
-const { truncate, isTruncated, paragraphs } = useParagraphs(content, 5);
 
 const previewImagePath = computed(() => {
   return props.note.image_path ? '/storage/' + props.note.image_path : null;
@@ -56,22 +52,7 @@ const showTaggedNotes = () => {
         <p class="text-body-medium ma-0">from {{ simplifyDateTime(note.starts_at) }}</p>
         <p class="text-body-medium ma-0">to {{ simplifyDateTime(note.ends_at) }}</p>
       </v-alert>
-      <p
-        v-for="(paragraph, index) in paragraphs"
-        :key="index"
-        class="font-handwritten note-paragraph text-body-large text-pre-wrap"
-      >
-        {{ paragraph }}
-      </p>
-      <v-btn
-        v-if="isTruncated"
-        class="text-capitalize ps-0"
-        color="primary"
-        variant="text"
-        density="compact"
-        @click="truncate = false"
-        >Show more</v-btn
-      >
+      <NoteContent :content="note.content ?? ''" :max-lines="5" />
       <v-img
         v-if="previewImagePath"
         :src="previewImagePath"

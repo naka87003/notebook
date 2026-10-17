@@ -132,7 +132,9 @@ const titleMsg = (item: Notification) => {
             <template #title>
               <span class="text-body-small text-truncate">{{ item.user.name }}</span>
               <v-spacer />
-              <span class="text-body-small text-no-wrap">{{ relativeDateTime(item.created_at) }}</span>
+              <span class="text-body-small text-no-wrap">{{
+                relativeDateTime(item.created_at)
+              }}</span>
             </template>
             <span class="text-body-small">{{ titleMsg(item) }}</span>
           </v-alert>

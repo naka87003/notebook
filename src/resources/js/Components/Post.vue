@@ -4,7 +4,7 @@ import { inject, computed } from 'vue';
 import { router, usePage } from '@inertiajs/vue3';
 import axios from 'axios';
 import { simplifyDateTime, relativeDateTime } from '@/common';
-import useParagraphs from '@/Composables/useParagraphs';
+import NoteContent from './NoteContent.vue';
 
 const props = defineProps<{
   note: Note;
@@ -15,13 +15,9 @@ defineEmits<{
   showComments: [];
 }>();
 
-const content = computed(() => props.note.content ?? '');
-
 const showEnlargedImage = inject<(src: string) => void>('showEnlargedImage');
 
 const updatePosts = inject<(id: number) => Promise<void>>('updatePosts');
-
-const { truncate, isTruncated, paragraphs } = useParagraphs(content, 5);
 
 const likeCount = computed((): number => props.note.likes_count);
 
@@ -73,22 +69,7 @@ const showSelectedUserPosts = (userId: number) => {
         <p class="text-body-medium ma-0">from {{ simplifyDateTime(note.starts_at) }}</p>
         <p class="text-body-medium ma-0">to {{ simplifyDateTime(note.ends_at) }}</p>
       </v-alert>
-      <p
-        v-for="(paragraph, index) in paragraphs"
-        :key="index"
-        class="font-handwritten note-paragraph text-body-large text-pre-wrap"
-      >
-        {{ paragraph }}
-      </p>
-      <v-btn
-        v-if="isTruncated"
-        class="text-capitalize ps-0"
-        color="primary"
-        variant="text"
-        density="compact"
-        @click="truncate = false"
-        >Show more</v-btn
-      >
+      <NoteContent :content="note.content ?? ''" :max-lines="5" />
       <v-img
         v-if="previewImagePath"
         :src="previewImagePath"

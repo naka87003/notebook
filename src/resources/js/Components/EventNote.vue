@@ -1,7 +1,8 @@
 <script setup lang="ts">
 import type { Note } from '@/interfaces';
 import { computed, ref } from 'vue';
-import { simplifyDateTime, splitByNewline } from '@/common';
+import { simplifyDateTime } from '@/common';
+import NoteContent from './NoteContent.vue';
 
 const props = defineProps<{ targetNote: Note }>();
 
@@ -40,13 +41,7 @@ const previewImagePath = computed(() => {
         <p class="text-body-medium ma-0">from {{ simplifyDateTime(targetNote.starts_at) }}</p>
         <p class="text-body-medium ma-0">to {{ simplifyDateTime(targetNote.ends_at) }}</p>
       </v-alert>
-      <p
-        v-for="(paragraph, index) in splitByNewline(targetNote.content ?? '')"
-        :key="index"
-        class="font-handwritten note-paragraph text-body-large text-pre-wrap"
-      >
-        {{ paragraph }}
-      </p>
+      <NoteContent :content="targetNote.content ?? ''" />
       <v-img
         v-if="previewImagePath"
         :src="previewImagePath"

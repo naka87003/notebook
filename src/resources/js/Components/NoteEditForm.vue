@@ -184,6 +184,10 @@ const copyDateToEnd = () => {
                   maxlength="1000"
                   @update:model-value="form.errors.content = null"
                 />
+                <div class="text-body-small text-medium-emphasis mt-1">
+                  For code, add ``` on separate lines before and after it. Add a language after the
+                  opening ```, such as ```js, for syntax highlighting.
+                </div>
               </v-col>
             </v-row>
           </v-col>
@@ -260,7 +264,10 @@ const copyDateToEnd = () => {
                   :error="Boolean(form.errors.starts)"
                   :error-messages="form.errors.starts"
                   required
-                  @update:model-value="form.errors.starts = null; copyDateToEnd()"
+                  @update:model-value="
+                    form.errors.starts = null;
+                    copyDateToEnd();
+                  "
                 />
                 <v-text-field
                   v-model="endsDateTime"
