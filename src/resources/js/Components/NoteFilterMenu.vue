@@ -41,7 +41,7 @@ const resetFilter = () => {
 <template>
   <v-card>
     <v-toolbar density="comfortable" color="transparent">
-      <v-toolbar-title class="text-h6" text="Filter Menu"></v-toolbar-title>
+      <v-toolbar-title class="text-title-large" text="Filter Menu"></v-toolbar-title>
       <template #prepend>
         <v-icon class="ms-3" icon="mdi-filter-menu-outline" />
       </template>
@@ -56,7 +56,7 @@ const resetFilter = () => {
     <v-card-text>
       <v-row>
         <v-col cols="12">
-          <div class="text-subtitle-1 text-medium-emphasis">Category</div>
+          <div class="text-body-large text-medium-emphasis">Category</div>
           <v-checkbox
             v-for="item in items.category"
             :key="item.id"
@@ -71,8 +71,8 @@ const resetFilter = () => {
           </v-checkbox>
         </v-col>
         <v-col cols="12">
-          <div class="text-subtitle-1 text-medium-emphasis">Status</div>
-          <v-radio-group v-model="newFilter.status" column hide-details="auto">
+          <div class="text-body-large text-medium-emphasis">Status</div>
+          <v-radio-group v-model="newFilter.status" hide-details="auto">
             <v-radio
               v-for="item in items.status"
               :key="item.id"
@@ -87,7 +87,7 @@ const resetFilter = () => {
           </v-radio-group>
         </v-col>
         <v-col cols="12">
-          <div class="text-subtitle-1 text-medium-emphasis">Tag</div>
+          <div class="text-body-large text-medium-emphasis">Tag</div>
           <v-autocomplete
             v-model="newFilter.tag"
             hide-details="auto"
@@ -102,23 +102,23 @@ const resetFilter = () => {
             multiple
           >
             <template #item="{ props, item }">
-              <v-list-item v-bind="props" prepend-icon="mdi-tag" :title="item.raw.name">
+              <v-list-item v-bind="props" prepend-icon="mdi-tag" :title="item.name">
                 <template #prepend>
-                  <v-icon icon="mdi-tag" :color="item.raw.hex_color" />
+                  <v-icon icon="mdi-tag" :color="item.hex_color" />
                 </template>
               </v-list-item>
             </template>
             <template #chip="{ props, item }">
-              <v-chip v-bind="props" :text="item.raw.name" close-icon="mdi-close">
+              <v-chip v-bind="props" :text="item.name" close-icon="mdi-close">
                 <template #prepend>
-                  <v-icon icon="mdi-tag" :color="item.raw.hex_color" size="x-large" class="mr-1" />
+                  <v-icon icon="mdi-tag" :color="item.hex_color" size="x-large" class="mr-1" />
                 </template>
               </v-chip>
             </template>
           </v-autocomplete>
         </v-col>
         <v-col cols="12">
-          <div class="text-subtitle-1 text-medium-emphasis">Like</div>
+          <div class="text-body-large text-medium-emphasis">Like</div>
           <v-checkbox v-model="newFilter.onlyLiked" class="mb-n10">
             <template #label>
               <v-icon icon="mdi-heart" class="mx-3"></v-icon>

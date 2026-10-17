@@ -126,7 +126,7 @@ const copyDateToEnd = () => {
 <template>
   <v-card>
     <v-toolbar density="comfortable" color="transparent">
-      <v-toolbar-title class="text-h6">
+      <v-toolbar-title class="text-title-large">
         <template v-if="eventMode">Create New Event</template>
         <template v-else>Create New Note</template>
       </v-toolbar-title>
@@ -147,7 +147,7 @@ const copyDateToEnd = () => {
           <v-col cols="12" md="6">
             <v-row>
               <v-col cols="12">
-                <div class="text-subtitle-1 text-medium-emphasis">Title</div>
+                <div class="text-body-large text-medium-emphasis">Title</div>
                 <v-text-field
                   v-model="form.title"
                   hide-details="auto"
@@ -160,11 +160,11 @@ const copyDateToEnd = () => {
                   required
                   autofocus
                   maxlength="50"
-                  @input="form.errors.title = null"
+                  @update:model-value="form.errors.title = null"
                 />
               </v-col>
               <v-col cols="12">
-                <div class="text-subtitle-1 text-medium-emphasis">Content</div>
+                <div class="text-body-large text-medium-emphasis">Content</div>
                 <v-textarea
                   v-model="form.content"
                   hide-details="auto"
@@ -178,7 +178,7 @@ const copyDateToEnd = () => {
                   auto-grow
                   counter="1000"
                   maxlength="1000"
-                  @input="form.errors.content = null"
+                  @update:model-value="form.errors.content = null"
                 />
               </v-col>
             </v-row>
@@ -187,7 +187,7 @@ const copyDateToEnd = () => {
             <v-row>
               <v-col cols="12">
                 <v-img v-if="previewImagePath" :src="previewImagePath" width="300" />
-                <div class="text-subtitle-1 text-medium-emphasis">Image Upload</div>
+                <div class="text-body-large text-medium-emphasis">Image Upload</div>
                 <v-file-input
                   ref="preview"
                   v-model="form.image"
@@ -203,7 +203,7 @@ const copyDateToEnd = () => {
                 />
               </v-col>
               <v-col v-if="!eventMode" cols="12">
-                <div class="text-subtitle-1 text-medium-emphasis">Category</div>
+                <div class="text-body-large text-medium-emphasis">Category</div>
                 <v-autocomplete
                   v-model="form.category"
                   hide-details="auto"
@@ -216,26 +216,26 @@ const copyDateToEnd = () => {
                   required
                   item-title="name"
                   item-value="id"
-                  @input="form.errors.category = null"
+                  @update:model-value="form.errors.category = null"
                 >
                   <template #item="{ props, item }">
-                    <v-list-item v-bind="props" prepend-icon="mdi-tag" :title="item.raw.name">
+                    <v-list-item v-bind="props" prepend-icon="mdi-tag" :title="item.name">
                       <template #prepend>
-                        <v-icon :icon="item.raw.mdi_name" />
+                        <v-icon :icon="item.mdi_name" />
                       </template>
                     </v-list-item>
                   </template>
                   <template #selection="{ item }">
-                    <v-list-item prepend-icon="mdi-tag" :title="item.raw.name">
+                    <v-list-item prepend-icon="mdi-tag" :title="item.name">
                       <template #prepend>
-                        <v-icon :icon="item.raw.mdi_name" />
+                        <v-icon :icon="item.mdi_name" />
                       </template>
                     </v-list-item>
                   </template>
                 </v-autocomplete>
               </v-col>
               <v-col v-if="form.category === 3" cols="12" lg="6">
-                <div class="text-subtitle-1 text-medium-emphasis">DateTime</div>
+                <div class="text-body-large text-medium-emphasis">DateTime</div>
                 <v-switch
                   v-model="allDay"
                   color="primary"
@@ -256,8 +256,7 @@ const copyDateToEnd = () => {
                   :error="Boolean(form.errors.starts)"
                   :error-messages="form.errors.starts"
                   required
-                  @input="form.errors.starts = null"
-                  @update:model-value="copyDateToEnd"
+                  @update:model-value="form.errors.starts = null; copyDateToEnd()"
                 />
                 <v-text-field
                   v-model="endsDateTime"
@@ -270,11 +269,11 @@ const copyDateToEnd = () => {
                   :error="Boolean(form.errors.ends)"
                   :error-messages="form.errors.ends"
                   required
-                  @input="form.errors.ends = null"
+                  @update:model-value="form.errors.ends = null"
                 />
               </v-col>
               <v-col cols="12">
-                <div class="text-subtitle-1 text-medium-emphasis">Tag</div>
+                <div class="text-body-large text-medium-emphasis">Tag</div>
                 <v-autocomplete
                   v-model="form.tag"
                   hide-details="auto"
@@ -289,30 +288,29 @@ const copyDateToEnd = () => {
                   item-title="name"
                   item-value="id"
                   clearable
-                  @input="form.errors.tag = null"
+                  @update:model-value="form.errors.tag = null"
                   @click:append="dialog.tagCreate = true"
                 >
                   <template #item="{ props, item }">
-                    <v-list-item v-bind="props" :title="item.raw.name">
+                    <v-list-item v-bind="props" :title="item.name">
                       <template #prepend>
-                        <v-icon icon="mdi-tag" :color="item.raw.hex_color" />
+                        <v-icon icon="mdi-tag" :color="item.hex_color" />
                       </template>
                     </v-list-item>
                   </template>
                   <template #selection="{ item }">
-                    <v-list-item :title="item.raw.name">
+                    <v-list-item :title="item.name">
                       <template #prepend>
-                        <v-icon icon="mdi-tag" :color="item.raw.hex_color" />
+                        <v-icon icon="mdi-tag" :color="item.hex_color" />
                       </template>
                     </v-list-item>
                   </template>
                 </v-autocomplete>
               </v-col>
               <v-col cols="12">
-                <div class="text-subtitle-1 text-medium-emphasis">Visibility</div>
+                <div class="text-body-large text-medium-emphasis">Visibility</div>
                 <v-radio-group
                   v-model="form.public"
-                  column
                   :error-messages="form.errors.public"
                   :error="Boolean(form.errors.public)"
                   hide-details="auto"

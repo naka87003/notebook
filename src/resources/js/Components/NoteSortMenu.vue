@@ -23,7 +23,7 @@ const resetSort = () => {
 <template>
   <v-card>
     <v-toolbar density="comfortable" color="transparent">
-      <v-toolbar-title class="text-h6" text="Sort Menu"></v-toolbar-title>
+      <v-toolbar-title class="text-title-large" text="Sort Menu"></v-toolbar-title>
       <template #prepend>
         <v-icon class="ms-3" icon="mdi-sort" />
       </template>
@@ -38,8 +38,8 @@ const resetSort = () => {
     <v-card-text>
       <v-row>
         <v-col cols="12">
-          <div class="text-subtitle-1 text-medium-emphasis">Sort key</div>
-          <v-radio-group v-model="newSort.key" column hide-details="auto">
+          <div class="text-body-large text-medium-emphasis">Sort key</div>
+          <v-radio-group v-model="newSort.key" hide-details="auto">
             <v-radio label="Updated (default)" value="updated_at" />
             <v-radio label="Created" value="created_at" />
             <v-radio label="Starts (Event Category Only)" value="starts_at" />
@@ -49,8 +49,8 @@ const resetSort = () => {
       <v-divider class="my-5" />
       <v-row>
         <v-col cols="12">
-          <div class="text-subtitle-1 text-medium-emphasis">Order</div>
-          <v-radio-group v-model="newSort.order" column hide-details="auto">
+          <div class="text-body-large text-medium-emphasis">Order</div>
+          <v-radio-group v-model="newSort.order" hide-details="auto">
             <v-radio label="Descending (default)" value="desc" />
             <v-radio label="Ascending" value="asc" />
           </v-radio-group>

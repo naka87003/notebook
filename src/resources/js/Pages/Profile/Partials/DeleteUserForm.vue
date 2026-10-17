@@ -32,7 +32,7 @@ const closeModal = () => {
       <v-divider />
       <v-card-text>
         <v-card color="surface-variant" variant="tonal">
-          <v-card-text class="text-medium-emphasis text-caption">
+          <v-card-text class="text-medium-emphasis text-body-small">
             <p>
               Once your account is deleted, all of its resources and data will be permanently
               deleted.
@@ -63,7 +63,7 @@ const closeModal = () => {
           <template #default="{ isActive }">
             <v-card>
               <v-toolbar density="comfortable" color="transparent">
-                <v-toolbar-title class="text-h6" text="Delete Account" />
+                <v-toolbar-title class="text-title-large" text="Delete Account" />
                 <template #append>
                   <v-btn @click="isActive.value = false">
                     <v-icon size="x-large" icon="mdi-close" />
@@ -75,7 +75,7 @@ const closeModal = () => {
               <v-card-text>
                 Are you sure you want to delete your account?
                 <v-card class="my-3" color="surface-variant" variant="tonal">
-                  <v-card-text class="text-medium-emphasis text-caption">
+                  <v-card-text class="text-medium-emphasis text-body-small">
                     <p>
                       Once your account is deleted, all of its resources and data will be
                       permanently deleted.
@@ -87,7 +87,7 @@ const closeModal = () => {
                   </v-card-text>
                 </v-card>
                 <div
-                  class="text-subtitle-1 text-medium-emphasis d-flex align-center justify-space-between"
+                  class="text-body-large text-medium-emphasis d-flex align-center justify-space-between"
                 >
                   Password
                 </div>
@@ -105,7 +105,7 @@ const closeModal = () => {
                   required
                   max-width="600"
                   @click:append-inner="visible = !visible"
-                  @input="form.errors.password = null"
+                  @update:model-value="form.errors.password = null"
                 />
               </v-card-text>
               <v-divider />

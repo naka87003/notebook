@@ -1,11 +1,13 @@
 import eslint from '@eslint/js';
 import eslintConfigPrettier from 'eslint-config-prettier';
 import eslintPluginVue from 'eslint-plugin-vue';
+import vuetify from 'eslint-plugin-vuetify';
 import globals from 'globals';
 import typescriptEslint from 'typescript-eslint';
 
 export default typescriptEslint.config(
   { ignores: ['*.d.ts', '**/coverage', '**/dist', 'vendor/**'] },
+  ...vuetify.configs['flat/recommended-v4'],
   {
     extends: [
       eslint.configs.recommended,

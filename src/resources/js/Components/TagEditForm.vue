@@ -38,7 +38,7 @@ const submit = () => {
 <template>
   <v-card>
     <v-toolbar density="comfortable" color="transparent">
-      <v-toolbar-title class="text-h6" text="Edit Tag"></v-toolbar-title>
+      <v-toolbar-title class="text-title-large" text="Edit Tag"></v-toolbar-title>
       <template #prepend>
         <v-icon class="ms-3" icon="mdi-tag-edit-outline" />
       </template>
@@ -54,7 +54,7 @@ const submit = () => {
       <form @submit.prevent="submit">
         <v-row>
           <v-col cols="12">
-            <div class="text-subtitle-1 text-medium-emphasis">Name</div>
+            <div class="text-body-large text-medium-emphasis">Name</div>
             <v-text-field
               v-model="form.name"
               hide-details="auto"
@@ -66,15 +66,14 @@ const submit = () => {
               :error-messages="form.errors.name"
               required
               maxlength="20"
-              @input="form.errors.name = null"
+              @update:model-value="form.errors.name = null"
             />
           </v-col>
           <v-col cols="12">
-            <div class="text-subtitle-1 text-medium-emphasis">Color</div>
+            <div class="text-body-large text-medium-emphasis">Color</div>
             <v-radio-group
               v-model="specifyColor"
               hide-details="auto"
-              column
               class="mb-2"
               @update:model-value="switchColorValue"
             >
@@ -92,7 +91,7 @@ const submit = () => {
               :error="Boolean(form.errors.color)"
               :error-messages="form.errors.color"
               required
-              @input="form.errors.color = null"
+              @update:model-value="form.errors.color = null"
             />
           </v-col>
         </v-row>

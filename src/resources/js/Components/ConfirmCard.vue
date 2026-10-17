@@ -21,7 +21,7 @@ defineEmits<{
 <template>
   <v-card>
     <v-toolbar density="comfortable" color="transparent">
-      <v-toolbar-title class="text-h6" :text="title"></v-toolbar-title>
+      <v-toolbar-title class="text-title-large" :text="title"></v-toolbar-title>
       <template v-if="icon" #prepend>
         <v-icon class="ms-3" :icon />
       </template>
@@ -36,7 +36,7 @@ defineEmits<{
     <v-card-text>
       {{ message }}
       <v-card v-if="description" class="ma-2" color="surface-variant" variant="tonal">
-        <v-card-text class="text-medium-emphasis text-caption">
+        <v-card-text class="text-medium-emphasis text-body-small">
           <p>{{ description }}</p>
         </v-card-text>
       </v-card>

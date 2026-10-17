@@ -42,17 +42,17 @@ const submit = () => {
     <Head title="Reset Password" />
     <v-card
       class="mx-auto"
-      elevation="8"
+      elevation="3"
       :max-width="isExtraSmallWidth ? '350' : '448'"
       rounded="lg"
     >
       <v-toolbar density="comfortable" color="transparent">
-        <v-toolbar-title class="text-h6"> Password Reset </v-toolbar-title>
+        <v-toolbar-title class="text-title-large"> Password Reset </v-toolbar-title>
       </v-toolbar>
       <v-divider />
       <v-card-text class="pb-8" :class="isExtraSmallWidth ? 'px-6' : 'px-12'">
         <form @submit.prevent="submit">
-          <div class="text-subtitle-1 text-medium-emphasis">Email</div>
+          <div class="text-body-large text-medium-emphasis">Email</div>
           <v-text-field
             v-model="form.email"
             type="email"
@@ -65,10 +65,10 @@ const submit = () => {
             required
             autofocus
             autocomplete="username"
-            @input="form.errors.email = null"
+            @update:model-value="form.errors.email = null"
           />
           <div
-            class="text-subtitle-1 text-medium-emphasis d-flex align-center justify-space-between"
+            class="text-body-large text-medium-emphasis d-flex align-center justify-space-between"
           >
             Password
           </div>
@@ -85,11 +85,11 @@ const submit = () => {
             autocomplete="new-password"
             required
             @click:append-inner="visible = !visible"
-            @input="form.errors.password = null"
+            @update:model-value="form.errors.password = null"
           />
 
           <div
-            class="text-subtitle-1 text-medium-emphasis d-flex align-center justify-space-between"
+            class="text-body-large text-medium-emphasis d-flex align-center justify-space-between"
           >
             Confirm Password
           </div>
@@ -106,7 +106,7 @@ const submit = () => {
             autocomplete="new-password"
             required
             @click:append-inner="visible = !visible"
-            @input="form.errors.password_confirmation = null"
+            @update:model-value="form.errors.password_confirmation = null"
           />
           <v-btn
             color="primary"

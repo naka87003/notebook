@@ -49,12 +49,12 @@ const resizeWindow = () => {
     <Head title="Log in" />
     <v-card
       class="mx-auto"
-      elevation="8"
+      elevation="3"
       :max-width="isExtraSmallWidth ? '350' : '448'"
       rounded="lg"
     >
       <v-toolbar density="comfortable" color="transparent">
-        <v-toolbar-title class="text-h6"> Login </v-toolbar-title>
+        <v-toolbar-title class="text-title-large"> Login </v-toolbar-title>
       </v-toolbar>
       <v-divider />
       <v-card-text :class="isExtraSmallWidth ? 'px-6' : 'px-12'">
@@ -67,7 +67,7 @@ const resizeWindow = () => {
           closable
         />
         <form @submit.prevent="submit" @keyup.enter="submit">
-          <div class="text-subtitle-1 text-medium-emphasis">Email</div>
+          <div class="text-body-large text-medium-emphasis">Email</div>
           <v-text-field
             v-model="form.email"
             type="email"
@@ -80,16 +80,16 @@ const resizeWindow = () => {
             required
             autofocus
             autocomplete="username"
-            @input="form.errors.email = null"
+            @update:model-value="form.errors.email = null"
           />
           <div
-            class="text-subtitle-1 text-medium-emphasis d-flex align-center justify-space-between"
+            class="text-body-large text-medium-emphasis d-flex align-center justify-space-between"
           >
             Password
             <a
               v-if="canResetPassword"
               href="#"
-              class="text-caption text-decoration-none text-primary"
+              class="text-body-small text-decoration-none text-primary"
               rel="noopener noreferrer"
               @click.prevent="pageTransition('password.request')"
             >
@@ -109,7 +109,7 @@ const resizeWindow = () => {
             autocomplete="current-password"
             required
             @click:append-inner="visible = !visible"
-            @input="form.errors.password = null"
+            @update:model-value="form.errors.password = null"
           />
           <v-btn
             color="primary"

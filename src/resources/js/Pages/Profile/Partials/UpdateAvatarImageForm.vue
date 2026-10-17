@@ -50,7 +50,7 @@ const deleteImage = () => {
       <v-divider />
       <v-card-text>
         <v-card class="mb-6" color="surface-variant" variant="tonal">
-          <v-card-text class="text-medium-emphasis text-caption">
+          <v-card-text class="text-medium-emphasis text-body-small">
             <p>Upload your image to use as your avatar.</p>
           </v-card-text>
         </v-card>
@@ -64,7 +64,7 @@ const deleteImage = () => {
           <v-list-item-title>{{ $page.props.auth.user.name }}</v-list-item-title>
         </v-list-item>
         <form enctype="multipart/form-data" @submit.prevent="form.patch(route('profile.update'))">
-          <div class="text-subtitle-1 text-medium-emphasis">Image Upload</div>
+          <div class="text-body-large text-medium-emphasis">Image Upload</div>
           <v-file-input
             ref="preview"
             v-model="form.image"

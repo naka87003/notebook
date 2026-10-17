@@ -38,12 +38,12 @@ const logout = () => {
     <Head title="Email Verification" />
     <v-card
       class="mx-auto"
-      elevation="8"
+      elevation="3"
       :max-width="isExtraSmallWidth ? '350' : '448'"
       rounded="lg"
     >
       <v-toolbar density="comfortable" color="transparent">
-        <v-toolbar-title class="text-h6"> Verify Email </v-toolbar-title>
+        <v-toolbar-title class="text-title-large"> Verify Email </v-toolbar-title>
       </v-toolbar>
       <v-divider />
       <v-card-text :class="isExtraSmallWidth ? 'px-6' : 'px-12'">
@@ -56,7 +56,7 @@ const logout = () => {
           closable
         />
         <v-card class="mb-6" color="surface-variant" variant="tonal">
-          <v-card-text class="text-medium-emphasis text-caption">
+          <v-card-text class="text-medium-emphasis text-body-small">
             <p>Thanks for signing up!</p>
             <p>
               Before getting started, could you verify your email address by clicking on the link we

@@ -18,7 +18,7 @@ const resetFilter = () => {
 <template>
   <v-card>
     <v-toolbar density="compact" color="transparent">
-      <v-toolbar-title class="text-h6" text="Search"></v-toolbar-title>
+      <v-toolbar-title class="text-title-large" text="Search"></v-toolbar-title>
       <template #prepend>
         <v-icon class="ms-3" icon="mdi-magnify" />
       </template>

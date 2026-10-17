@@ -85,9 +85,9 @@ const showSelectedUserPosts = (userId: number) => {
               </v-avatar>
             </template>
             <template #title>
-              <span class="text-body-2 text-truncate">{{ item.name }}</span>
+              <span class="text-body-medium text-truncate">{{ item.name }}</span>
               <v-spacer />
-              <span class="text-caption text-no-wrap">{{ relativeDateTime(item.created_at) }}</span>
+              <span class="text-body-small text-no-wrap">{{ relativeDateTime(item.created_at) }}</span>
             </template>
           </v-alert>
           <v-divider />

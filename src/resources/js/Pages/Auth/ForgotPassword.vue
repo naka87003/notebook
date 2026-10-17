@@ -32,12 +32,12 @@ const submit = () => {
     <Head title="Forgot Password" />
     <v-card
       class="mx-auto"
-      elevation="8"
+      elevation="3"
       :max-width="isExtraSmallWidth ? '350' : '448'"
       rounded="lg"
     >
       <v-toolbar density="comfortable" color="transparent">
-        <v-toolbar-title class="text-h6"> Password Reset </v-toolbar-title>
+        <v-toolbar-title class="text-title-large"> Password Reset </v-toolbar-title>
       </v-toolbar>
       <v-divider />
       <v-card-text class="pb-8" :class="isExtraSmallWidth ? 'px-6' : 'px-12'">
@@ -50,7 +50,7 @@ const submit = () => {
           closable
         />
         <v-card class="mb-6" color="surface-variant" variant="tonal">
-          <v-card-text class="text-medium-emphasis text-caption">
+          <v-card-text class="text-medium-emphasis text-body-small">
             <p>Forgot your password? No problem.</p>
             <p>
               Just let us know your email address and we will email you a password reset link that
@@ -60,7 +60,7 @@ const submit = () => {
         </v-card>
         <form @submit.prevent="submit">
           <div>
-            <div class="text-subtitle-1 text-medium-emphasis">Email</div>
+            <div class="text-body-large text-medium-emphasis">Email</div>
             <v-text-field
               v-model="form.email"
               type="email"
@@ -73,7 +73,7 @@ const submit = () => {
               required
               autofocus
               autocomplete="username"
-              @input="form.errors.email = null"
+              @update:model-value="form.errors.email = null"
             />
           </div>
           <v-btn

@@ -74,8 +74,8 @@ const addReply = async () => {
       </v-avatar>
     </template>
     <template #title>
-      <span class="text-caption text-truncate">{{ reply.user.name }}</span>
-      <span class="text-caption text-no-wrap text-disabled ms-2">{{
+      <span class="text-body-small text-truncate">{{ reply.user.name }}</span>
+      <span class="text-body-small text-no-wrap text-disabled ms-2">{{
         relativeDateTime(reply.created_at)
       }}</span>
     </template>
@@ -91,10 +91,14 @@ const addReply = async () => {
         </v-list>
       </v-menu>
     </template>
-    <p v-if="reply.reply_to" class="text-caption text-primary mt-n1">
+    <p v-if="reply.reply_to" class="text-body-small text-primary mt-1 mb-1">
       {{ '@ ' + reply.addressee.name }}
     </p>
-    <p v-for="(paragraph, index) in paragraphs" :key="index" class="text-body-2 comment-paragraph">
+    <p
+      v-for="(paragraph, index) in paragraphs"
+      :key="index"
+      class="text-body-medium comment-paragraph"
+    >
       {{ paragraph }}
     </p>
     <v-btn
@@ -105,8 +109,9 @@ const addReply = async () => {
       variant="text"
       density="compact"
       @click="truncate = false"
-      >Show more</v-btn
     >
+      Show more
+    </v-btn>
     <div>
       <v-icon
         flat
@@ -149,8 +154,9 @@ const addReply = async () => {
           :class="{ 'text-disabled': form.processing }"
           :disabled="form.processing"
           @click="addReply"
-          >Reply</v-btn
         >
+          Reply
+        </v-btn>
       </v-card-actions>
     </v-card-text>
   </v-card>

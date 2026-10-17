@@ -31,7 +31,7 @@ const pageTransition = (name: string) => {
 <template>
   <v-card>
     <v-toolbar density="comfortable" color="transparent">
-      <v-toolbar-title class="text-h6" text="Menu"></v-toolbar-title>
+      <v-toolbar-title class="text-title-large" text="Menu"></v-toolbar-title>
       <template #append>
         <v-btn @click="$emit('close')">
           <v-icon size="x-large" icon="mdi-close" />

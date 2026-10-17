@@ -41,17 +41,17 @@ const pageTransition = (name: string) => {
     <Head title="Register" />
     <v-card
       class="mx-auto mb-10"
-      elevation="8"
+      elevation="3"
       :max-width="isExtraSmallWidth ? '350' : '448'"
       rounded="lg"
     >
       <v-toolbar density="comfortable" color="transparent">
-        <v-toolbar-title class="text-h6"> Register </v-toolbar-title>
+        <v-toolbar-title class="text-title-large"> Register </v-toolbar-title>
       </v-toolbar>
       <v-divider />
       <v-card-text :class="isExtraSmallWidth ? 'px-6' : 'px-12'">
         <form @submit.prevent="submit">
-          <div class="text-subtitle-1 text-medium-emphasis">Name</div>
+          <div class="text-body-large text-medium-emphasis">Name</div>
           <v-text-field
             v-model="form.name"
             type="text"
@@ -65,10 +65,10 @@ const pageTransition = (name: string) => {
             autofocus
             autocomplete="username"
             maxlength="20"
-            @input="form.errors.name = null"
+            @update:model-value="form.errors.name = null"
           />
 
-          <div class="text-subtitle-1 text-medium-emphasis">Email</div>
+          <div class="text-body-large text-medium-emphasis">Email</div>
           <v-text-field
             v-model="form.email"
             type="email"
@@ -80,11 +80,11 @@ const pageTransition = (name: string) => {
             :error-messages="form.errors.email"
             required
             autocomplete="username"
-            @input="form.errors.email = null"
+            @update:model-value="form.errors.email = null"
           />
 
           <div
-            class="text-subtitle-1 text-medium-emphasis d-flex align-center justify-space-between"
+            class="text-body-large text-medium-emphasis d-flex align-center justify-space-between"
           >
             Password
           </div>
@@ -101,10 +101,10 @@ const pageTransition = (name: string) => {
             autocomplete="new-password"
             required
             @click:append-inner="visible = !visible"
-            @input="form.errors.password = null"
+            @update:model-value="form.errors.password = null"
           />
           <div
-            class="text-subtitle-1 text-medium-emphasis d-flex align-center justify-space-between"
+            class="text-body-large text-medium-emphasis d-flex align-center justify-space-between"
           >
             Confirm Password
           </div>
@@ -121,7 +121,7 @@ const pageTransition = (name: string) => {
             autocomplete="new-password"
             required
             @click:append-inner="visible = !visible"
-            @input="form.errors.password_confirmation = null"
+            @update:model-value="form.errors.password_confirmation = null"
           />
           <v-btn
             color="primary"

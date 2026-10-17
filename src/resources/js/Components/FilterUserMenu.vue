@@ -46,7 +46,7 @@ const loadUsers = useDebounceFn(async (searchText: string): Promise<void> => {
 <template>
   <v-card>
     <v-toolbar density="comfortable" color="transparent">
-      <v-toolbar-title class="text-h6" text="Filter User"></v-toolbar-title>
+      <v-toolbar-title class="text-title-large" text="Filter User"></v-toolbar-title>
       <template #prepend>
         <v-icon class="ms-3" icon="mdi-account-filter-outline" />
       </template>
@@ -75,20 +75,20 @@ const loadUsers = useDebounceFn(async (searchText: string): Promise<void> => {
             @update:search="loadUsers"
           >
             <template #item="{ props, item }">
-              <v-list-item v-bind="props" :title="item.raw.name">
+              <v-list-item v-bind="props" :title="item.name">
                 <template #prepend>
                   <v-avatar color="surface-light">
-                    <v-img v-if="item.raw.image_path" :src="'storage/' + item.raw.image_path" />
+                    <v-img v-if="item.image_path" :src="'storage/' + item.image_path" />
                     <v-icon v-else icon="mdi-account" />
                   </v-avatar>
                 </template>
               </v-list-item>
             </template>
             <template #selection="{ item }">
-              <v-list-item :title="item.raw.name">
+              <v-list-item :title="item.name">
                 <template #prepend>
                   <v-avatar color="surface-light" size="small">
-                    <v-img v-if="item.raw.image_path" :src="'storage/' + item.raw.image_path" />
+                    <v-img v-if="item.image_path" :src="'storage/' + item.image_path" />
                     <v-icon v-else icon="mdi-account" />
                   </v-avatar>
                 </template>

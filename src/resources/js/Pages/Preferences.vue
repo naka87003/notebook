@@ -27,7 +27,7 @@ const form = useForm({ emailPreferences: defaultFormProps });
               <v-divider />
               <v-card-text>
                 <v-card color="surface-variant" variant="tonal">
-                  <v-card-text class="text-medium-emphasis text-caption">
+                  <v-card-text class="text-medium-emphasis text-body-small">
                     <p>Update your preferences.</p>
                   </v-card-text>
                 </v-card>

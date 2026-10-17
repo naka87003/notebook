@@ -60,23 +60,23 @@ const showSelectedUserPosts = (userId: number) => {
     rounded="0"
   >
     <template #title>
-      <span class="font-handwritten text-body-1">{{ note.title }}</span>
+      <span class="font-handwritten text-body-large">{{ note.title }}</span>
     </template>
     <template #append>
-      <p class="text-caption">
+      <p class="text-body-small ma-0">
         {{ relativeDateTime(note.updated_at) }}
       </p>
     </template>
     <v-divider class="border-opacity-25 mx-1" />
-    <v-card-text class="text-h6 py-2">
+    <v-card-text class="text-title-large py-2">
       <v-alert v-if="note.category.id === 3" type="info" variant="tonal" class="mb-3">
-        <p class="text-body-2">from {{ simplifyDateTime(note.starts_at) }}</p>
-        <p class="text-body-2">to {{ simplifyDateTime(note.ends_at) }}</p>
+        <p class="text-body-medium ma-0">from {{ simplifyDateTime(note.starts_at) }}</p>
+        <p class="text-body-medium ma-0">to {{ simplifyDateTime(note.ends_at) }}</p>
       </v-alert>
       <p
         v-for="(paragraph, index) in paragraphs"
         :key="index"
-        class="font-handwritten note-paragraph text-body-1 text-pre-wrap"
+        class="font-handwritten note-paragraph text-body-large text-pre-wrap"
       >
         {{ paragraph }}
       </p>
@@ -114,7 +114,7 @@ const showSelectedUserPosts = (userId: number) => {
           </v-avatar>
         </template>
         <v-list-item-title>{{ note.user.name }}</v-list-item-title>
-        <v-list-item-subtitle v-if="note.tag" class="text-caption">{{
+        <v-list-item-subtitle v-if="note.tag" class="text-body-small">{{
           note.tag?.name
         }}</v-list-item-subtitle>
       </v-list-item>

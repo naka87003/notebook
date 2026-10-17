@@ -134,8 +134,8 @@ const deleteReply = async () => {
       </v-avatar>
     </template>
     <template #title>
-      <span class="text-caption text-truncate">{{ comment.user.name }}</span>
-      <span class="text-caption text-no-wrap text-disabled ms-2">{{
+      <span class="text-body-small text-truncate">{{ comment.user.name }}</span>
+      <span class="text-body-small text-no-wrap text-disabled ms-2">{{
         relativeDateTime(comment.created_at)
       }}</span>
     </template>
@@ -156,7 +156,7 @@ const deleteReply = async () => {
         </v-list>
       </v-menu>
     </template>
-    <p v-for="(paragraph, index) in paragraphs" :key="index" class="text-body-2 comment-paragraph">
+    <p v-for="(paragraph, index) in paragraphs" :key="index" class="text-body-medium comment-paragraph">
       {{ paragraph }}
     </p>
     <v-btn

@@ -14,6 +14,11 @@ import * as components from 'vuetify/components';
 import * as directives from 'vuetify/directives';
 
 const vuetify = createVuetify({
+  // Vuetify 4 defaults to the OS theme. Keep the application's Vuetify 3
+  // light default until the existing dark-mode composable takes control.
+  theme: {
+    defaultTheme: 'light',
+  },
   components: {
     ...components,
   },

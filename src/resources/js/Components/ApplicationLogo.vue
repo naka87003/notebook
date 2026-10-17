@@ -1,5 +1,5 @@
 <template>
-  <div class="logo text-h2 ms-10 text-grey-lighten-1 font-weight-black mt-10 mb-6">
+  <div class="logo text-display-large ms-10 text-grey-lighten-1 font-weight-black mt-10 mb-6">
     NOTEBOOK
   </div>
 </template>

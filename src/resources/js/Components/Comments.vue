@@ -109,7 +109,7 @@ const updateComment = async (id: number) => {
 <template>
   <v-card>
     <v-toolbar density="compact" color="transparent">
-      <v-toolbar-title class="text-h6" text="Comments"></v-toolbar-title>
+      <v-toolbar-title class="text-title-large" text="Comments"></v-toolbar-title>
       <template #prepend>
         <v-btn @click="$emit('close')">
           <v-icon size="x-large" icon="mdi-arrow-left" />

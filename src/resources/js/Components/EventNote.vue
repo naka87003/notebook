@@ -22,7 +22,7 @@ const previewImagePath = computed(() => {
   <v-card rounded="0">
     <v-toolbar density="compact" color="transparent">
       <template #title>
-        <span class="font-handwritten text-body-1">{{ targetNote.title }}</span>
+        <span class="font-handwritten text-body-large">{{ targetNote.title }}</span>
       </template>
       <template #prepend>
         <v-icon :icon="targetNote.category.mdi_name" class="ms-3"></v-icon>
@@ -35,15 +35,15 @@ const previewImagePath = computed(() => {
       </template>
     </v-toolbar>
     <v-divider class="border-opacity-25 mx-1" />
-    <v-card-text class="text-h6 py-2">
+    <v-card-text class="text-title-large py-2">
       <v-alert v-if="targetNote.category.id === 3" type="info" variant="tonal" class="mb-3">
-        <p class="text-body-2">from {{ simplifyDateTime(targetNote.starts_at) }}</p>
-        <p class="text-body-2">to {{ simplifyDateTime(targetNote.ends_at) }}</p>
+        <p class="text-body-medium ma-0">from {{ simplifyDateTime(targetNote.starts_at) }}</p>
+        <p class="text-body-medium ma-0">to {{ simplifyDateTime(targetNote.ends_at) }}</p>
       </v-alert>
       <p
         v-for="(paragraph, index) in splitByNewline(targetNote.content ?? '')"
         :key="index"
-        class="font-handwritten note-paragraph text-body-1 text-pre-wrap"
+        class="font-handwritten note-paragraph text-body-large text-pre-wrap"
       >
         {{ paragraph }}
       </p>
@@ -60,7 +60,7 @@ const previewImagePath = computed(() => {
         <template #prepend>
           <v-icon :color="targetNote.tag?.hex_color">mdi-tag</v-icon>
         </template>
-        <span class="text-caption">{{ targetNote.tag?.name }}</span>
+        <span class="text-body-small">{{ targetNote.tag?.name }}</span>
       </v-btn>
       <v-spacer />
     </v-card-actions>
@@ -70,7 +70,7 @@ const previewImagePath = computed(() => {
           <template #prepend>
             <v-icon :color="targetNote.tag?.hex_color">mdi-tag</v-icon>
           </template>
-          <span class="text-caption">{{ targetNote.tag?.name }}</span>
+          <span class="text-body-small">{{ targetNote.tag?.name }}</span>
         </v-btn>
         <v-icon
           v-if="targetNote.status.name === 'archived'"

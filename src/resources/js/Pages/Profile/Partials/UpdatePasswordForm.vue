@@ -32,13 +32,13 @@ const updatePassword = () => {
       <v-divider />
       <v-card-text>
         <v-card class="mb-6" color="surface-variant" variant="tonal">
-          <v-card-text class="text-medium-emphasis text-caption">
+          <v-card-text class="text-medium-emphasis text-body-small">
             <p>Ensure your account is using a long, random password to stay secure.</p>
           </v-card-text>
         </v-card>
         <form class="mt-6 space-y-6" @submit.prevent="updatePassword">
           <div
-            class="text-subtitle-1 text-medium-emphasis d-flex align-center justify-space-between"
+            class="text-body-large text-medium-emphasis d-flex align-center justify-space-between"
           >
             Current Password
           </div>
@@ -56,10 +56,10 @@ const updatePassword = () => {
             required
             max-width="600"
             @click:append-inner="visible = !visible"
-            @input="form.errors.current_password = null"
+            @update:model-value="form.errors.current_password = null"
           />
           <div
-            class="text-subtitle-1 text-medium-emphasis d-flex align-center justify-space-between"
+            class="text-body-large text-medium-emphasis d-flex align-center justify-space-between"
           >
             Password
           </div>
@@ -77,10 +77,10 @@ const updatePassword = () => {
             required
             max-width="600"
             @click:append-inner="visible = !visible"
-            @input="form.errors.password = null"
+            @update:model-value="form.errors.password = null"
           />
           <div
-            class="text-subtitle-1 text-medium-emphasis d-flex align-center justify-space-between"
+            class="text-body-large text-medium-emphasis d-flex align-center justify-space-between"
           >
             Confirm Password
           </div>
@@ -98,7 +98,7 @@ const updatePassword = () => {
             required
             max-width="600"
             @click:append-inner="visible = !visible"
-            @input="form.errors.password_confirmation = null"
+            @update:model-value="form.errors.password_confirmation = null"
           />
           <Transition>
             <div v-if="form.recentlySuccessful">
