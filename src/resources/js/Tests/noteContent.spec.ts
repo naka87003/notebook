@@ -89,7 +89,7 @@ describe('NoteContent', () => {
       'two',
       'three',
       'four',
-      'five',
+      truncated ? 'five...' : 'five',
     ]);
     expect(wrapper.text().includes('Show more')).toBe(truncated);
   });
@@ -98,7 +98,10 @@ describe('NoteContent', () => {
     const content = 'intro\n```js\none\ntwo\n```\nafter';
     const wrapper = mount(NoteContent, { ...options, props: { content, maxLines: 5 } });
 
-    expect(wrapper.get('.note-paragraph').text()).toBe('intro');
+    expect(wrapper.findAll('.note-paragraph').map((paragraph) => paragraph.text())).toEqual([
+      'intro',
+      '...',
+    ]);
     expect(wrapper.get('code').text()).toBe('one\ntwo');
     expect(wrapper.text()).not.toContain('after');
     expect(wrapper.text()).toContain('Show more');
@@ -110,7 +113,7 @@ describe('NoteContent', () => {
 
     expect(wrapper.findAll('.note-paragraph').map((paragraph) => paragraph.text())).toEqual([
       'first',
-      'second',
+      'second...',
     ]);
     expect(wrapper.find('code').exists()).toBe(false);
     expect(wrapper.text()).toContain('Show more');
@@ -124,12 +127,14 @@ describe('NoteContent', () => {
     await wrapper.get('button').trigger('click');
     expect(wrapper.findAll('.note-paragraph')).toHaveLength(6);
     expect(wrapper.find('button').exists()).toBe(false);
+    expect(wrapper.findAll('.note-paragraph').at(-1)?.text()).toBe('six');
 
     await wrapper.setProps({ content: 'new one\nnew two\nnew three\nnew four\nnew five\nnew six' });
 
     expect(wrapper.findAll('.note-paragraph')).toHaveLength(5);
     expect(wrapper.text()).not.toContain('new six');
     expect(wrapper.text()).toContain('Show more');
+    expect(wrapper.findAll('.note-paragraph').at(-1)?.text()).toBe('new five...');
   });
 
   test('expands long blocks before offering the full code for copying', async () => {
@@ -139,6 +144,7 @@ describe('NoteContent', () => {
     const wrapper = mount(NoteContent, { ...options, props: { content, maxLines: 5 } });
 
     expect(wrapper.find('pre').exists()).toBe(false);
+    expect(wrapper.get('.note-paragraph').text()).toBe('...');
     await wrapper.get('button').trigger('click');
     expect(wrapper.get('code').text()).toBe('<script>\n  one();\n  two();\n  three();\n</script>');
     expect(wrapper.find('script').exists()).toBe(false);

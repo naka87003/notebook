@@ -28,6 +28,12 @@ const visibleBlocks = computed(() => {
   }
   return visible;
 });
+const showEllipsisAfterText = computed(
+  () => isTruncated.value && visibleBlocks.value.at(-1)?.type === 'text'
+);
+const showEllipsisOnSeparateLine = computed(
+  () => isTruncated.value && !showEllipsisAfterText.value
+);
 
 watch(
   () => props.content,
@@ -36,6 +42,11 @@ watch(
     snackbar.value.display = false;
   }
 );
+
+function formatText(content: string, index: number) {
+  const isLastBlock = index === visibleBlocks.value.length - 1;
+  return content + (showEllipsisAfterText.value && isLastBlock ? '...' : '');
+}
 
 async function copyCode(content: string) {
   try {
@@ -55,7 +66,7 @@ async function copyCode(content: string) {
       v-if="block.type === 'text'"
       class="font-handwritten note-paragraph text-body-large text-pre-wrap"
     >
-      {{ block.content }}
+      {{ formatText(block.content, index) }}
     </p>
     <div v-else class="note-code-block">
       <div class="note-code-toolbar">
@@ -74,6 +85,12 @@ async function copyCode(content: string) {
       <HighlightedCode :content="block.content" :language="block.language" />
     </div>
   </template>
+  <p
+    v-if="showEllipsisOnSeparateLine"
+    class="font-handwritten note-paragraph text-body-large text-pre-wrap"
+  >
+    ...
+  </p>
   <v-snackbar
     v-model="snackbar.display"
     location="top right"
