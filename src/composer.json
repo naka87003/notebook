@@ -12,7 +12,7 @@
     "barryvdh/laravel-debugbar": "^4.4.4",
     "inertiajs/inertia-laravel": "^3.5.1",
     "intervention/image": "^3.7",
-    "laravel/framework": "^13.0",
+    "laravel/framework": "^13.37.0",
     "laravel/sanctum": "^4.3.3",
     "laravel/tinker": "^3.0",
     "tightenco/ziggy": "^2.6.5"
@@ -23,7 +23,7 @@
     "laravel/pint": "^1.32.1",
     "laravel/sail": "^1.69.0",
     "mockery/mockery": "^1.6.15",
-    "phpunit/phpunit": "^13.4.2"
+    "phpunit/phpunit": "^13.4.3"
   },
   "autoload": {
     "psr-4": {
