@@ -1,4 +1,5 @@
 <script setup lang="ts">
+import { imageUrl } from '@/Utils/common';
 import { User } from '@/Types/interfaces';
 import { usePage } from '@inertiajs/vue3';
 import { ref, watch, computed } from 'vue';
@@ -72,7 +73,7 @@ const unfollow = async () => {
   <v-card class="mx-auto pa-1" :title="selectedUser.name" border="sm" elevation="5" rounded="xl">
     <template #prepend>
       <v-avatar color="surface-light">
-        <v-img v-if="selectedUser.image_path" :src="'storage/' + selectedUser.image_path" />
+        <v-img v-if="selectedUser.image_path" :src="imageUrl(selectedUser.image_path)" />
         <v-icon v-else icon="mdi-account" />
       </v-avatar>
     </template>

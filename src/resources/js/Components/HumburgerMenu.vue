@@ -1,4 +1,5 @@
 <script setup lang="ts">
+import { imageUrl } from '@/Utils/common';
 import { router, usePage } from '@inertiajs/vue3';
 import { computed } from 'vue';
 
@@ -19,9 +20,7 @@ const userImagePath = computed((): string | null => {
   return user.image_path;
 });
 
-const avatarImagePath = computed(() =>
-  userImagePath.value ? 'storage/' + userImagePath.value : null
-);
+const avatarImagePath = computed(() => imageUrl(userImagePath.value));
 
 const pageTransition = (name: string) => {
   router.visit(route(name));

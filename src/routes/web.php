@@ -4,6 +4,7 @@ use App\Http\Controllers\CalendarController;
 use App\Http\Controllers\CommentController;
 use App\Http\Controllers\DashboardController;
 use App\Http\Controllers\ProfileController;
+use App\Http\Controllers\ImageController;
 use App\Http\Controllers\NoteController;
 use App\Http\Controllers\TagController;
 use App\Http\Controllers\TimelineController;
@@ -61,6 +62,7 @@ Route::middleware(['auth', 'verified'])->group(function () {
 });
 
 Route::middleware('auth')->group(function () {
+    Route::get('/media/{path}', [ImageController::class, 'show'])->where('path', 'images/(notes|user)/[^/]+');
     Route::get('/profile', [ProfileController::class, 'edit'])->name('profile.edit');
     Route::patch('/profile', [ProfileController::class, 'update'])->name('profile.update');
     Route::post('/profile/image', [ProfileController::class, 'upload'])->name('profile.upload');

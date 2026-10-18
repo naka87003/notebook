@@ -1,4 +1,5 @@
 <script setup lang="ts">
+import { imageUrl } from '@/Utils/common';
 import { ref, computed, onMounted } from 'vue';
 import { useForm, usePage } from '@inertiajs/vue3';
 import dayjs from 'dayjs';
@@ -85,7 +86,7 @@ const previewImagePath = computed(() => {
   if (form.image) {
     return URL.createObjectURL(preview.value.files[0]);
   } else {
-    return props.targetNote?.image_path ? 'storage/' + props.targetNote.image_path : null;
+    return imageUrl(props.targetNote?.image_path);
   }
 });
 

@@ -1,4 +1,5 @@
 <script setup lang="ts">
+import { imageUrl } from '@/Utils/common';
 import { useForm, usePage } from '@inertiajs/vue3';
 import { ref, computed } from 'vue';
 import ConfirmCard from '@/Components/ConfirmCard.vue';
@@ -19,7 +20,7 @@ const previewImagePath = computed(() => {
   if (form.image) {
     return URL.createObjectURL(preview.value.files[0]);
   } else {
-    return userImagePath.value ? 'storage/' + userImagePath.value : null;
+    return imageUrl(userImagePath.value);
   }
 });
 

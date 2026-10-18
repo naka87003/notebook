@@ -1,4 +1,5 @@
 <script setup lang="ts">
+import { imageUrl } from '@/Utils/common';
 import { type Ref, ref } from 'vue';
 import type { PostsFilter } from '@/Types/interfaces';
 import { useDebounceFn } from '@vueuse/core';
@@ -78,7 +79,7 @@ const loadUsers = useDebounceFn(async (searchText: string): Promise<void> => {
               <v-list-item v-bind="props" :title="item.name">
                 <template #prepend>
                   <v-avatar color="surface-light">
-                    <v-img v-if="item.image_path" :src="'storage/' + item.image_path" />
+                    <v-img v-if="item.image_path" :src="imageUrl(item.image_path)" />
                     <v-icon v-else icon="mdi-account" />
                   </v-avatar>
                 </template>
@@ -88,7 +89,7 @@ const loadUsers = useDebounceFn(async (searchText: string): Promise<void> => {
               <v-list-item :title="item.name">
                 <template #prepend>
                   <v-avatar color="surface-light" size="small">
-                    <v-img v-if="item.image_path" :src="'storage/' + item.image_path" />
+                    <v-img v-if="item.image_path" :src="imageUrl(item.image_path)" />
                     <v-icon v-else icon="mdi-account" />
                   </v-avatar>
                 </template>

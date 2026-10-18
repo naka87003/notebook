@@ -1,7 +1,7 @@
 <script setup lang="ts">
 import type { Note } from '@/Types/interfaces';
 import { computed, ref } from 'vue';
-import { simplifyDateTime } from '@/Utils/common';
+import { simplifyDateTime, imageUrl } from '@/Utils/common';
 import NoteContent from './NoteContent.vue';
 
 const props = defineProps<{ targetNote: Note }>();
@@ -15,7 +15,7 @@ const dialog = ref({
 });
 
 const previewImagePath = computed(() => {
-  return props.targetNote.image_path ? 'storage/' + props.targetNote.image_path : null;
+  return imageUrl(props.targetNote.image_path);
 });
 </script>
 

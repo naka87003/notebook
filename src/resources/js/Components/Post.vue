@@ -3,7 +3,7 @@ import type { Note } from '@/Types/interfaces';
 import { inject, computed } from 'vue';
 import { router, usePage } from '@inertiajs/vue3';
 import axios from 'axios';
-import { simplifyDateTime, relativeDateTime } from '@/Utils/common';
+import { simplifyDateTime, relativeDateTime, imageUrl } from '@/Utils/common';
 import NoteContent from './NoteContent.vue';
 
 const page = usePage();
@@ -27,7 +27,7 @@ const isLiked = computed((): boolean =>
 );
 
 const previewImagePath = computed(() => {
-  return props.note.image_path ? '/storage/' + props.note.image_path : null;
+  return imageUrl(props.note.image_path);
 });
 
 const like = async () => {
@@ -91,7 +91,7 @@ const showSelectedUserPosts = (userId: number) => {
       <v-list-item @click="showSelectedUserPosts(note.user.id)">
         <template #prepend>
           <v-avatar color="grey-darken-3" size="small" style="z-index: 1">
-            <v-img v-if="note.user.image_path" :src="'/storage/' + note.user.image_path" />
+            <v-img v-if="note.user.image_path" :src="imageUrl(note.user.image_path)" />
             <v-icon v-else icon="mdi-account" />
           </v-avatar>
         </template>

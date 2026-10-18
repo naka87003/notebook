@@ -1,4 +1,5 @@
 <script setup lang="ts">
+import { imageUrl } from '@/Utils/common';
 import { ref, computed } from 'vue';
 import { router, usePage } from '@inertiajs/vue3';
 import HumburgerMenu from '@/Components/HumburgerMenu.vue';
@@ -27,9 +28,7 @@ const userImagePath = computed((): string | null => {
   return user.image_path;
 });
 
-const avatarImagePath = computed(() =>
-  userImagePath.value ? '/storage/' + userImagePath.value : null
-);
+const avatarImagePath = computed(() => imageUrl(userImagePath.value));
 
 const logout = () => {
   router.post('logout');

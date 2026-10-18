@@ -3,6 +3,7 @@
 namespace App\Http\Controllers;
 
 use App\Http\Requests\ProfileUpdateRequest;
+use App\Services\ImageStorage;
 use Illuminate\Contracts\Auth\MustVerifyEmail;
 use Illuminate\Http\RedirectResponse;
 use Illuminate\Http\Request;
@@ -10,9 +11,6 @@ use Illuminate\Support\Facades\Auth;
 use Illuminate\Support\Facades\Redirect;
 use Inertia\Inertia;
 use Inertia\Response;
-use Illuminate\Support\Facades\Storage;
-use Intervention\Image\ImageManager;
-use Intervention\Image\Drivers\Gd\Driver;
 
 class ProfileController extends Controller
 {
@@ -62,18 +60,14 @@ class ProfileController extends Controller
 
         // 画像ファイルの保存場所指定
         if (isset($image)) {
-            if ($user->image_path) {
-                Storage::disk('public')->delete($user->image_path);
-            }
-            $user->image_path = $image->store('images/user', 'public');
-            // 画像のサイズを調整
-            $manager = new ImageManager(Driver::class);
-            $imgPath = storage_path('app/public/' . $user->image_path);
-            $image = $manager->decode($imgPath);
-            $image->scaleDown(width: 100);
-            $image->save(storage_path('app/public/' . $user->image_path));
+            $oldImagePath = $user->image_path;
+            $user->image_path = ImageStorage::store($image, 'images/user', 100);
         }
         $user->save();
+
+        if (isset($oldImagePath) && $oldImagePath) {
+            ImageStorage::disk()->delete($oldImagePath);
+        }
 
         return Redirect::route('profile.edit');
     }
@@ -86,7 +80,7 @@ class ProfileController extends Controller
         $user = $request->user();
 
         if ($user->image_path) {
-            Storage::disk('public')->delete($user->image_path);
+            ImageStorage::disk()->delete($user->image_path);
         }
         $user->image_path = null;
 

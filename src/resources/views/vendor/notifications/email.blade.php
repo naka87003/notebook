@@ -17,8 +17,8 @@
 @endforeach
 
 {{-- Profile Image --}}
-@if (isset($data['image_path']) && $data['image_path'])
-  <img src="{{ $message->embed(storage_path('app/public/' . $data['image_path'])) }}">
+@if (isset($data['image_path']) && $data['image_path'] && \App\Services\ImageStorage::disk()->exists($data['image_path']))
+  <img src="{{ $message->embedData(\App\Services\ImageStorage::disk()->get($data['image_path']), basename($data['image_path'])) }}">
 @endif
 
 {{-- Action Button --}}

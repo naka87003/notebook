@@ -1,4 +1,5 @@
 <script setup lang="ts">
+import { imageUrl } from '@/Utils/common';
 import { useForm, usePage } from '@inertiajs/vue3';
 import { computed, ref, onMounted, inject } from 'vue';
 import axios from 'axios';
@@ -34,9 +35,7 @@ const userImagePath = computed((): string | null => {
   return user.image_path;
 });
 
-const avatarImagePath = computed(() =>
-  userImagePath.value ? '/storage/' + userImagePath.value : null
-);
+const avatarImagePath = computed(() => imageUrl(userImagePath.value));
 
 onMounted(async () => {
   const result = await loadItems();

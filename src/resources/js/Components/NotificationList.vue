@@ -1,7 +1,7 @@
 <script setup lang="ts">
 import { router } from '@inertiajs/vue3';
 import type { Notification } from '@/Types/interfaces';
-import { relativeDateTime } from '@/Utils/common';
+import { relativeDateTime, imageUrl } from '@/Utils/common';
 import { onMounted, Ref, ref } from 'vue';
 import axios from 'axios';
 
@@ -125,7 +125,7 @@ const titleMsg = (item: Notification) => {
           >
             <template #prepend>
               <v-avatar color="surface-light">
-                <v-img v-if="item.user.image_path" :src="'/storage/' + item.user.image_path" />
+                <v-img v-if="item.user.image_path" :src="imageUrl(item.user.image_path)" />
                 <v-icon v-else icon="mdi-account" />
               </v-avatar>
             </template>

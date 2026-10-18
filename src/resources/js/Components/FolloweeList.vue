@@ -1,7 +1,7 @@
 <script setup lang="ts">
 import { router } from '@inertiajs/vue3';
 import { User } from '@/Types/interfaces';
-import { relativeDateTime } from '@/Utils/common';
+import { relativeDateTime, imageUrl } from '@/Utils/common';
 import { onMounted, Ref, ref } from 'vue';
 import axios from 'axios';
 
@@ -80,7 +80,7 @@ const showSelectedUserPosts = (userId: number) => {
           >
             <template #prepend>
               <v-avatar color="surface-light">
-                <v-img v-if="item.image_path" :src="'storage/' + item.image_path" />
+                <v-img v-if="item.image_path" :src="imageUrl(item.image_path)" />
                 <v-icon v-else icon="mdi-account" />
               </v-avatar>
             </template>

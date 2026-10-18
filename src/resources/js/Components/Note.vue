@@ -2,7 +2,7 @@
 import type { Note } from '@/Types/interfaces';
 import { router } from '@inertiajs/vue3';
 import { computed } from 'vue';
-import { simplifyDateTime, relativeDateTime } from '@/Utils/common';
+import { simplifyDateTime, relativeDateTime, imageUrl } from '@/Utils/common';
 import NoteContent from './NoteContent.vue';
 
 const props = defineProps<{
@@ -17,7 +17,7 @@ defineEmits<{
 }>();
 
 const previewImagePath = computed(() => {
-  return props.note.image_path ? '/storage/' + props.note.image_path : null;
+  return imageUrl(props.note.image_path);
 });
 
 const showTaggedNotes = () => {

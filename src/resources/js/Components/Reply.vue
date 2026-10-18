@@ -1,6 +1,6 @@
 <script setup lang="ts">
 import { router, useForm, usePage } from '@inertiajs/vue3';
-import { relativeDateTime } from '@/Utils/common';
+import { relativeDateTime, imageUrl } from '@/Utils/common';
 import type { Reply } from '@/Types/interfaces';
 import { computed, ref } from 'vue';
 import useParagraphs from '@/Composables/useParagraphs';
@@ -34,9 +34,7 @@ const userImagePath = computed((): string | null => {
   return user.image_path;
 });
 
-const avatarImagePath = computed(() =>
-  userImagePath.value ? '/storage/' + userImagePath.value : null
-);
+const avatarImagePath = computed(() => imageUrl(userImagePath.value));
 
 const isMyComment = computed((): boolean => {
   const user = page.props.auth.user;
@@ -70,7 +68,7 @@ const addReply = async () => {
         style="z-index: 1"
         @click="showSelectedUserPosts(reply.user_id)"
       >
-        <v-img v-if="reply.user.image_path" :src="'/storage/' + reply.user.image_path" />
+        <v-img v-if="reply.user.image_path" :src="imageUrl(reply.user.image_path)" />
         <v-icon v-else icon="mdi-account" />
       </v-avatar>
     </template>

@@ -4,13 +4,11 @@ namespace App\Http\Controllers;
 
 use App\Models\Like;
 use App\Models\Note;
+use App\Services\ImageStorage;
 use Illuminate\Http\Request;
 use Illuminate\Http\RedirectResponse;
 use Illuminate\Support\Facades\Auth;
 use Illuminate\Database\Eloquent\Builder;
-use Illuminate\Support\Facades\Storage;
-use Intervention\Image\ImageManager;
-use Intervention\Image\Drivers\Gd\Driver;
 
 class NoteController extends Controller
 {
@@ -69,13 +67,7 @@ class NoteController extends Controller
         $image = $request->file('image');
 
         if (isset($image)) {
-            $newImagePath = $image->store('images/notes', 'public');
-            // 画像のサイズを調整
-            $manager = new ImageManager(Driver::class);
-            $imgPath = storage_path('app/public/' . $newImagePath);
-            $image = $manager->decode($imgPath);
-            $image->scaleDown(width: 600);
-            $image->save(storage_path('app/public/' . $newImagePath));
+            $newImagePath = ImageStorage::store($image, 'images/notes', 600);
         }
 
         Note::create([
@@ -125,21 +117,16 @@ class NoteController extends Controller
         $image = $request->file('image');
 
         if (isset($image)) {
-            if ($note->image_path) {
-                Storage::disk('public')->delete($note->image_path);
-            }
-            $newImagePath = $image->store('images/notes', 'public');
-            // 画像のサイズを調整
-            $manager = new ImageManager(Driver::class);
-            $imgPath = storage_path('app/public/' . $newImagePath);
-            $image = $manager->decode($imgPath);
-            $image->scaleDown(width: 600);
-            $image->save(storage_path('app/public/' . $newImagePath));
+            $newImagePath = ImageStorage::store($image, 'images/notes', 600);
             // 新規画像Pathを更新対象にセット
             $attributes['image_path'] = $newImagePath;
         }
 
+        $oldImagePath = $note->image_path;
         $note->update($attributes);
+        if (isset($newImagePath) && $oldImagePath) {
+            ImageStorage::disk()->delete($oldImagePath);
+        }
 
         return back();
     }
