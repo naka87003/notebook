@@ -1,5 +1,5 @@
 import { ref, computed, type ComputedRef } from 'vue';
-import { splitByNewline } from '@/common';
+import { splitByNewline } from '@/Utils/common';
 
 export default function useParagraphs(content: ComputedRef<string>, rowsCount: number) {
   const truncate = ref(true);

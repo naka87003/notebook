@@ -3,6 +3,7 @@ import { useForm, usePage } from '@inertiajs/vue3';
 import { ref, computed } from 'vue';
 import ConfirmCard from '@/Components/ConfirmCard.vue';
 
+const page = usePage();
 const form = useForm({
   image: null,
 });
@@ -22,7 +23,7 @@ const previewImagePath = computed(() => {
   }
 });
 
-const userImagePath = computed((): string | null => usePage().props.auth.user.image_path);
+const userImagePath = computed((): string | null => page.props.auth.user.image_path);
 
 const uploadImage = () => {
   form.post(route('profile.upload'), {

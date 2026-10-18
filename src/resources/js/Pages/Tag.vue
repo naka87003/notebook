@@ -6,7 +6,7 @@ import axios from 'axios';
 import AuthenticatedLayout from '@/Layouts/AuthenticatedLayout.vue';
 import TagCreateForm from '@/Components/TagCreateForm.vue';
 import TagEditForm from '@/Components/TagEditForm.vue';
-import type { Tag, TagCount } from '@/interfaces';
+import type { Tag, TagCount } from '@/Types/interfaces';
 import ConfirmCard from '@/Components/ConfirmCard.vue';
 import type { DataTableHeader } from 'vuetify';
 

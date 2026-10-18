@@ -1,5 +1,5 @@
 import { describe, expect, test } from 'vitest';
-import { simplifyDateTime, splitByNewline } from '../common.js';
+import { simplifyDateTime, splitByNewline } from '../Utils/common';
 
 describe('simplifyDateTime 関数のテスト', () => {
   test('ISO形式の日付文字列を「YYYY/MM/DD HH:mm」形式に変換できる', () => {

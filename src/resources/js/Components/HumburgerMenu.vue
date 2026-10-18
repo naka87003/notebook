@@ -1,5 +1,4 @@
 <script setup lang="ts">
-import { User } from '@/interfaces';
 import { router, usePage } from '@inertiajs/vue3';
 import { computed } from 'vue';
 
@@ -14,8 +13,9 @@ defineEmits<{
 
 const isDark = defineModel<boolean>('isDark');
 
+const page = usePage();
 const userImagePath = computed((): string | null => {
-  const user = usePage().props.auth.user as User;
+  const user = page.props.auth.user;
   return user.image_path;
 });
 

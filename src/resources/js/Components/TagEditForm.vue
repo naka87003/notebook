@@ -1,7 +1,7 @@
 <script setup lang="ts">
 import { ref } from 'vue';
 import { useForm } from '@inertiajs/vue3';
-import type { Tag } from '@/interfaces';
+import type { Tag } from '@/Types/interfaces';
 
 const props = defineProps<{
   targetTag: Tag;

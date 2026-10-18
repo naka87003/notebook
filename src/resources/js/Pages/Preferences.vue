@@ -1,5 +1,5 @@
 <script setup lang="ts">
-import { EmailPrerefence } from '@/interfaces';
+import { EmailPrerefence } from '@/Types/interfaces';
 import AuthenticatedLayout from '@/Layouts/AuthenticatedLayout.vue';
 import { Head, useForm } from '@inertiajs/vue3';
 

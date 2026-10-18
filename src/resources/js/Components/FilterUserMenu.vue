@@ -1,9 +1,9 @@
 <script setup lang="ts">
 import { type Ref, ref } from 'vue';
-import type { PostsFilter } from '@/interfaces';
+import type { PostsFilter } from '@/Types/interfaces';
 import { useDebounceFn } from '@vueuse/core';
 import axios from 'axios';
-import { User } from '@/interfaces';
+import { User } from '@/Types/interfaces';
 
 defineEmits<{
   close: [];

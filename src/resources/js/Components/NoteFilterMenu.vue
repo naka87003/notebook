@@ -1,7 +1,7 @@
 <script setup lang="ts">
 import { ref } from 'vue';
 import { usePage } from '@inertiajs/vue3';
-import type { NotesFilter, Category } from '@/interfaces';
+import type { NotesFilter, Category } from '@/Types/interfaces';
 import useTagSelectedItems from '@/Composables/useTagSelectedItems';
 
 const emit = defineEmits<{
@@ -9,12 +9,12 @@ const emit = defineEmits<{
   apply: [newFilter: NotesFilter];
 }>();
 
-const page = usePage();
+const page = usePage<{ categoryItems: Category[] }>();
 
 const props = defineProps<{ filter: NotesFilter }>();
 
 const items = ref({
-  category: page.props.categoryItems as Category[],
+  category: page.props.categoryItems,
   status: [
     { id: 1, name: 'Normal', mdi_name: 'mdi-book-open-outline' },
     { id: 2, name: 'Archive', mdi_name: 'mdi-archive-outline' },

@@ -1,5 +1,5 @@
 <script setup lang="ts">
-import { User } from '@/interfaces';
+import { User } from '@/Types/interfaces';
 import { usePage } from '@inertiajs/vue3';
 import { ref, watch, computed } from 'vue';
 import axios from 'axios';
@@ -7,6 +7,7 @@ import FollowButton from './FollowButton.vue';
 import FollowerList from './FollowerList.vue';
 import FolloweeList from './FolloweeList.vue';
 
+const page = usePage();
 const props = defineProps<{
   selectedUser: User;
 }>();
@@ -22,7 +23,7 @@ const count = ref({
   followers: 0,
 });
 
-const isMyself = computed(() => props.selectedUser.id === usePage().props.auth.user.id);
+const isMyself = computed(() => props.selectedUser.id === page.props.auth.user.id);
 
 watch(
   () => props.selectedUser,

@@ -34,6 +34,7 @@ class HandleInertiaRequests extends Middleware
             'auth' => [
                 'user' => $request->user(),
             ],
+            'noteContentMaxLength' => config('notes.content_max_length'),
         ];
     }
 }

@@ -2,7 +2,7 @@
 import { Head } from '@inertiajs/vue3';
 import { ref, computed, onMounted, provide, type Ref } from 'vue';
 import { watchDebounced } from '@vueuse/core';
-import type { Note, Sort, NotesFilter } from '@/interfaces';
+import type { Note, Sort, NotesFilter } from '@/Types/interfaces';
 import axios from 'axios';
 import AuthenticatedLayout from '@/Layouts/AuthenticatedLayout.vue';
 import NoteItem from '@/Components/Note.vue';

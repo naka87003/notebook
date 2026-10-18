@@ -1,6 +1,6 @@
 <script setup lang="ts">
 import { ref } from 'vue';
-import type { Sort } from '@/interfaces';
+import type { Sort } from '@/Types/interfaces';
 
 const emit = defineEmits<{
   close: [];

@@ -5,7 +5,7 @@ import { useAsyncState } from '@vueuse/core';
 import axios from 'axios';
 import AuthenticatedLayout from '@/Layouts/AuthenticatedLayout.vue';
 import type { CalendarWeekdays } from 'vuetify/lib/composables/calendar.d.ts';
-import { Note as NoteType } from '@/interfaces';
+import { Note as NoteType } from '@/Types/interfaces';
 import EventNote from '@/Components/EventNote.vue';
 import ConfirmCard from '@/Components/ConfirmCard.vue';
 import NoteEditForm from '@/Components/NoteEditForm.vue';

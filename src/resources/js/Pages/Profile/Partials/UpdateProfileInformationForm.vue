@@ -1,5 +1,4 @@
 <script setup lang="ts">
-import { User } from '@/interfaces';
 import { useForm, usePage, router } from '@inertiajs/vue3';
 
 defineProps({
@@ -11,7 +10,8 @@ defineProps({
   },
 });
 
-const user = usePage().props.auth.user as User;
+const page = usePage();
+const user = page.props.auth.user;
 
 const form = useForm({
   name: user.name,

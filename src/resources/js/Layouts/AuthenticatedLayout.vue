@@ -1,11 +1,11 @@
 <script setup lang="ts">
 import { ref, computed } from 'vue';
 import { router, usePage } from '@inertiajs/vue3';
-import type { User } from '@/interfaces';
 import HumburgerMenu from '@/Components/HumburgerMenu.vue';
 import NotificationList from '@/Components/NotificationList.vue';
 import { useDarkMode } from '@/Composables/useDarkMode';
 
+const page = usePage<{ unreadNotificationCount: number }>();
 const { isDark } = useDarkMode();
 
 const dialog = ref({
@@ -13,7 +13,7 @@ const dialog = ref({
   notifications: false,
 });
 
-const unreadNotificationCount = ref(usePage().props.unreadNotificationCount as number);
+const unreadNotificationCount = ref(page.props.unreadNotificationCount);
 
 const currentPageName = computed({
   get() {
@@ -23,7 +23,7 @@ const currentPageName = computed({
 });
 
 const userImagePath = computed((): string | null => {
-  const user = usePage().props.auth.user as User;
+  const user = page.props.auth.user;
   return user.image_path;
 });
 
@@ -59,20 +59,23 @@ const markAllAsRead = () => {
             value="dashboard"
             prepend-icon="mdi-note-multiple-outline"
             @click="pageTransition('dashboard')"
-            >Notes</v-tab
           >
+            Notes
+          </v-tab>
           <v-tab
             value="calendar"
             prepend-icon="mdi-calendar-outline"
             @click="pageTransition('calendar')"
-            >Calendar</v-tab
           >
+            Calendar
+          </v-tab>
           <v-tab
             value="timeline"
             prepend-icon="mdi-timeline-outline"
             @click="pageTransition('timeline')"
-            >Timeline</v-tab
           >
+            Timeline
+          </v-tab>
         </v-tabs>
         <v-spacer />
         <v-btn

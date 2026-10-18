@@ -1,6 +1,6 @@
 import { ref, computed, provide } from 'vue';
 import axios from 'axios';
-import type { Note } from '@/interfaces';
+import type { Note } from '@/Types/interfaces';
 
 export default function useNotes() {
   const notes = ref(new Map<number, Note>());

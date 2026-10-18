@@ -1,11 +1,12 @@
 <script setup lang="ts">
-import type { Note } from '@/interfaces';
+import type { Note } from '@/Types/interfaces';
 import { inject, computed } from 'vue';
 import { router, usePage } from '@inertiajs/vue3';
 import axios from 'axios';
-import { simplifyDateTime, relativeDateTime } from '@/common';
+import { simplifyDateTime, relativeDateTime } from '@/Utils/common';
 import NoteContent from './NoteContent.vue';
 
+const page = usePage();
 const props = defineProps<{
   note: Note;
   commentLinkDisabled?: boolean;
@@ -22,7 +23,7 @@ const updatePosts = inject<(id: number) => Promise<void>>('updatePosts');
 const likeCount = computed((): number => props.note.likes_count);
 
 const isLiked = computed((): boolean =>
-  props.note.likes.some((like) => like.user_id === usePage().props.auth.user.id)
+  props.note.likes.some((like) => like.user_id === page.props.auth.user.id)
 );
 
 const previewImagePath = computed(() => {

@@ -3,7 +3,7 @@ import { useForm, usePage } from '@inertiajs/vue3';
 import { computed, ref, onMounted, inject } from 'vue';
 import axios from 'axios';
 import CommentItem from '@/Components/Comment.vue';
-import type { Comment, Note, User } from '@/interfaces';
+import type { Comment, Note } from '@/Types/interfaces';
 import ConfirmCard from './ConfirmCard.vue';
 
 const props = defineProps<{
@@ -28,8 +28,9 @@ const targetCommentId = ref();
 
 const comments = ref(new Map<number, Comment>());
 
+const page = usePage();
 const userImagePath = computed((): string | null => {
-  const user = usePage().props.auth.user as User;
+  const user = page.props.auth.user;
   return user.image_path;
 });
 

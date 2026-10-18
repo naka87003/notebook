@@ -4,7 +4,7 @@ import { useForm, usePage } from '@inertiajs/vue3';
 import dayjs from 'dayjs';
 import utc from 'dayjs/plugin/utc';
 import TagCreateForm from './TagCreateForm.vue';
-import type { Note, Category } from '@/interfaces';
+import type { Note, Category } from '@/Types/interfaces';
 import useTagSelectedItems from '@/Composables/useTagSelectedItems';
 
 dayjs.extend(utc);
@@ -19,7 +19,7 @@ const emit = defineEmits<{
   noteUpdated: [];
 }>();
 
-const page = usePage();
+const page = usePage<{ categoryItems: Category[] }>();
 const form = useForm({
   id: props.targetNote.id,
   title: props.targetNote.title,
@@ -44,7 +44,7 @@ const preview = ref();
 const eventMode = computed((): boolean => props.variant === 'event');
 
 const items = ref({
-  category: page.props.categoryItems as Category[],
+  category: page.props.categoryItems,
 });
 
 const startsDateTime = computed({
@@ -180,8 +180,8 @@ const copyDateToEnd = () => {
                   :error-messages="form.errors.content"
                   required
                   auto-grow
-                  counter="1000"
-                  maxlength="1000"
+                  :counter="page.props.noteContentMaxLength"
+                  :maxlength="page.props.noteContentMaxLength"
                   @update:model-value="form.errors.content = null"
                 />
                 <div class="text-body-small text-medium-emphasis mt-1">

@@ -1,7 +1,7 @@
 <script setup lang="ts">
-import type { Note } from '@/interfaces';
+import type { Note } from '@/Types/interfaces';
 import { computed, ref } from 'vue';
-import { simplifyDateTime } from '@/common';
+import { simplifyDateTime } from '@/Utils/common';
 import NoteContent from './NoteContent.vue';
 
 const props = defineProps<{ targetNote: Note }>();

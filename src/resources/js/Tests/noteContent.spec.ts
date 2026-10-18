@@ -1,7 +1,7 @@
 import { mount } from '@vue/test-utils';
 import { afterEach, describe, expect, test, vi } from 'vitest';
 import NoteContent from '../Components/NoteContent.vue';
-import { parseNoteContent } from '../noteContent';
+import { parseNoteContent } from '../Utils/noteContent';
 
 const options = {
   global: {

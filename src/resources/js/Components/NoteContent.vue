@@ -1,6 +1,6 @@
 <script setup lang="ts">
 import { computed, ref, watch } from 'vue';
-import { parseNoteContent } from '../noteContent';
+import { parseNoteContent } from '../Utils/noteContent';
 import useSnackbar from '../Composables/useSnackbar';
 import HighlightedCode from './HighlightedCode.vue';
 

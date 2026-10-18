@@ -1,7 +1,7 @@
 <script setup lang="ts">
 import { router } from '@inertiajs/vue3';
-import type { Notification } from '@/interfaces';
-import { relativeDateTime } from '@/common';
+import type { Notification } from '@/Types/interfaces';
+import { relativeDateTime } from '@/Utils/common';
 import { onMounted, Ref, ref } from 'vue';
 import axios from 'axios';
 

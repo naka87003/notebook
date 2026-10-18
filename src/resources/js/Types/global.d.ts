@@ -1,4 +1,4 @@
-import type { User } from '@/interfaces';
+import type { User } from '@/Types/interfaces';
 import { route as ziggyRoute } from '../../../vendor/tightenco/ziggy/src/js';
 
 type RouteHelper = typeof ziggyRoute;
@@ -8,11 +8,13 @@ declare global {
 }
 
 declare module '@inertiajs/core' {
-  interface PageProps {
-    auth: {
-      user: User | null;
+  interface InertiaConfig {
+    sharedPageProps: {
+      auth: {
+        user: User | null;
+      };
+      noteContentMaxLength: number;
     };
-    unreadNotificationCount?: number;
   }
 }
 

@@ -1,7 +1,7 @@
 <script setup lang="ts">
 import { router, useForm, usePage } from '@inertiajs/vue3';
-import { relativeDateTime } from '@/common';
-import { Reply, User } from '@/interfaces';
+import { relativeDateTime } from '@/Utils/common';
+import type { Reply } from '@/Types/interfaces';
 import { computed, ref } from 'vue';
 import useParagraphs from '@/Composables/useParagraphs';
 
@@ -28,8 +28,9 @@ const display = ref({
   replies: false,
 });
 
+const page = usePage();
 const userImagePath = computed((): string | null => {
-  const user = usePage().props.auth.user as User;
+  const user = page.props.auth.user;
   return user.image_path;
 });
 
@@ -38,7 +39,7 @@ const avatarImagePath = computed(() =>
 );
 
 const isMyComment = computed((): boolean => {
-  const user = usePage().props.auth.user as User;
+  const user = page.props.auth.user;
   return props.reply.user_id === user.id;
 });
 

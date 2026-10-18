@@ -1,8 +1,8 @@
 <script setup lang="ts">
-import type { Note } from '@/interfaces';
+import type { Note } from '@/Types/interfaces';
 import { router } from '@inertiajs/vue3';
 import { computed } from 'vue';
-import { simplifyDateTime, relativeDateTime } from '@/common';
+import { simplifyDateTime, relativeDateTime } from '@/Utils/common';
 import NoteContent from './NoteContent.vue';
 
 const props = defineProps<{
