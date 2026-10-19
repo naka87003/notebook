@@ -16,6 +16,7 @@
     "laravel/sanctum": "^4.3.3",
     "laravel/tinker": "^3.0",
     "league/flysystem-aws-s3-v3": "^3.0",
+    "resend/resend-php": "^1.16",
     "tightenco/ziggy": "^2.6.5"
   },
   "require-dev": {
