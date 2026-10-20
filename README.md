@@ -2,7 +2,7 @@
 
 Laravel application for creating, editing, searching, and sharing notes.
 
-- Demo: https://xs257355.xsrv.jp/
+- Production: https://notebook.naka87003.com/
 - Backend: Laravel
 - Frontend: Vue, Inertia.js, Vuetify
 
@@ -12,7 +12,6 @@ Laravel application for creating, editing, searching, and sharing notes.
 src/                  Laravel application
 docker/               Local development container configuration
 docker-compose.yml    Local development environment
-.github/workflows/    Automated deployment to Xserver
 ```
 
 ## Local development
@@ -31,6 +30,20 @@ The application is available at http://localhost:8000.
 
 ## Deployment
 
-When changes under `src/` are pushed to the `main` branch, GitHub Actions automatically deploys the application to Xserver.
+The production environment runs on Laravel Cloud. Laravel Cloud deploys the application when changes are pushed to the branch configured for the production environment.
 
-Production connection details are stored in the GitHub Actions `production` environment. The `.env` file and `storage` directory are managed on the server and are not included in this repository. Non-sensitive frontend build variables are managed in the `production` environment's GitHub Actions Variables. Do not store secrets in variables whose names start with `VITE_`, as Vite exposes them to the browser.
+Configure production settings through Laravel Cloud resources and Custom Environment Variables. Do not store credentials in this repository or in variables whose names start with `VITE_`, because Vite exposes them to the browser.
+
+The production environment uses the following Laravel Cloud resources:
+
+- MySQL database for application data and database-backed queues
+- Private object-storage bucket for note and profile images
+- Resend email resource for transactional email
+
+Run a long-running process for the database queue worker:
+
+```bash
+php artisan queue:work database --sleep=10
+```
+
+The App environment must remain awake while this self-managed queue worker is used.
