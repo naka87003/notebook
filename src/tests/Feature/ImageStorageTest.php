@@ -17,7 +17,7 @@ class ImageStorageTest extends TestCase
 
     public function test_note_images_are_stored_and_private_images_are_only_accessible_to_the_owner(): void
     {
-        config(['filesystems.images' => 'images']);
+        config(['filesystems.default' => 'images']);
         $disk = Storage::fake('images');
         $this->seed([CategorySeeder::class, StatusSeeder::class]);
         /** @var User $owner */
@@ -44,7 +44,7 @@ class ImageStorageTest extends TestCase
 
     public function test_profile_images_can_be_uploaded_viewed_and_deleted(): void
     {
-        config(['filesystems.images' => 'images']);
+        config(['filesystems.default' => 'images']);
         $disk = Storage::fake('images');
         /** @var User $user */
         $user = User::factory()->create();

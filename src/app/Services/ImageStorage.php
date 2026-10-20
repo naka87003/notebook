@@ -13,7 +13,7 @@ class ImageStorage
 {
     public static function disk(): FilesystemAdapter
     {
-        return Storage::disk(config('filesystems.images'));
+        return Storage::disk();
     }
 
     public static function store(UploadedFile $file, string $directory, int $width): string
