@@ -87,8 +87,8 @@ const showSelectedUserPosts = (userId: number) => {
         </template>
       </v-img>
     </v-card-text>
-    <v-card-actions>
-      <v-list-item @click="showSelectedUserPosts(note.user.id)">
+    <v-card-actions class="flex-wrap">
+      <v-list-item class="flex-grow-1" @click="showSelectedUserPosts(note.user.id)">
         <template #prepend>
           <v-avatar color="grey-darken-3" size="small" style="z-index: 1">
             <v-img v-if="note.user.image_path" :src="imageUrl(note.user.image_path)" />
@@ -96,48 +96,30 @@ const showSelectedUserPosts = (userId: number) => {
           </v-avatar>
         </template>
         <v-list-item-title>{{ note.user.name }}</v-list-item-title>
-        <v-list-item-subtitle v-if="note.tag" class="text-body-small">{{
-          note.tag?.name
-        }}</v-list-item-subtitle>
       </v-list-item>
-      <v-spacer />
-      <v-btn
-        prepend-icon="mdi-comment-outline"
-        class="hidden-xs"
-        :readonly="Boolean(commentLinkDisabled)"
-        @click="$emit('showComments')"
-      >
-        {{ note.comments_count || '' }}
-        <v-tooltip activator="parent" location="bottom" text="Show comments" />
-      </v-btn>
-      <v-btn
-        :prepend-icon="isLiked ? 'mdi-heart' : 'mdi-heart-outline'"
-        class="hidden-xs"
-        :class="{ 'text-pink': isLiked }"
-        @click="like"
-      >
-        {{ likeCount }}
-        <v-tooltip activator="parent" location="bottom" :text="isLiked ? 'Unlike' : 'Like'" />
-      </v-btn>
-    </v-card-actions>
-    <v-card-actions class="hidden-sm-and-up">
-      <v-spacer />
-      <v-btn
-        prepend-icon="mdi-comment-outline"
-        :readonly="Boolean(commentLinkDisabled)"
-        @click="$emit('showComments')"
-      >
-        {{ note.comments_count || '' }}
-        <v-tooltip activator="parent" location="bottom" text="Show comments" />
-      </v-btn>
-      <v-btn
-        :prepend-icon="isLiked ? 'mdi-heart' : 'mdi-heart-outline'"
-        :class="{ 'text-pink': isLiked }"
-        @click="like"
-      >
-        {{ likeCount }}
-        <v-tooltip activator="parent" location="bottom" :text="isLiked ? 'Unlike' : 'Like'" />
-      </v-btn>
+      <div class="d-flex align-center flex-grow-1 justify-end">
+        <div v-if="note.tag" class="d-flex align-center ga-2 pl-2 pr-3">
+          <v-icon :color="note.tag?.hex_color" size="small">mdi-tag</v-icon>
+          <span class="text-body-small">{{ note.tag?.name }}</span>
+        </div>
+        <v-spacer />
+        <v-btn
+          prepend-icon="mdi-comment-outline"
+          :readonly="Boolean(commentLinkDisabled)"
+          @click="$emit('showComments')"
+        >
+          {{ note.comments_count || '' }}
+          <v-tooltip activator="parent" location="bottom" text="Show comments" />
+        </v-btn>
+        <v-btn
+          :prepend-icon="isLiked ? 'mdi-heart' : 'mdi-heart-outline'"
+          :class="{ 'text-pink': isLiked }"
+          @click="like"
+        >
+          {{ likeCount }}
+          <v-tooltip activator="parent" location="bottom" :text="isLiked ? 'Unlike' : 'Like'" />
+        </v-btn>
+      </div>
     </v-card-actions>
   </v-card>
 </template>
