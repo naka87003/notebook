@@ -32,8 +32,14 @@ describe('parseNoteContent', () => {
       parseNoteContent('before\r\n```js\r\n  x();\r\n\r\n  y();\r\n```\r\n```\r\n<code>\r\n```')
     ).toEqual([
       { type: 'text', content: 'before', lines: 1 },
-      { type: 'code', content: '  x();\n\n  y();', language: 'js', lines: 5 },
-      { type: 'code', content: '<code>', language: '', lines: 3 },
+      { type: 'code', content: '  x();\n\n  y();', language: 'js', lines: 3 },
+      { type: 'code', content: '<code>', language: '', lines: 1 },
+    ]);
+  });
+
+  test('counts only the code content, excluding its fences', () => {
+    expect(parseNoteContent('```js\n\n```')).toEqual([
+      { type: 'code', content: '', language: 'js', lines: 1 },
     ]);
   });
 
@@ -79,9 +85,9 @@ describe('NoteContent', () => {
   });
 
   test.each([
-    { content: 'one\ntwo\nthree\nfour\nfive\nsix\nseven\neight', truncated: false },
-    { content: 'one\ntwo\nthree\nfour\nfive\nsix\nseven\neight\nnine', truncated: true },
-  ])('limits the preview to eight lines', ({ content, truncated }) => {
+    { content: 'one\ntwo\nthree\nfour\nfive\nsix', truncated: false },
+    { content: 'one\ntwo\nthree\nfour\nfive\nsix\nseven', truncated: true },
+  ])('limits the preview to six lines', ({ content, truncated }) => {
     const wrapper = mount(NoteContent, { ...options, props: { content } });
 
     expect(wrapper.findAll('.note-paragraph').map((paragraph) => paragraph.text())).toEqual([
@@ -90,15 +96,14 @@ describe('NoteContent', () => {
       'three',
       'four',
       'five',
-      'six',
-      'seven',
-      truncated ? 'eight...' : 'eight',
+      truncated ? 'six...' : 'six',
     ]);
     expect(wrapper.text().includes('Show more')).toBe(truncated);
   });
 
   test('shows a complete code block when it fits after the preceding text', () => {
-    const content = 'intro\n```js\none\ntwo\n```\nafter\nlater one\nlater two\nlater three';
+    const content =
+      'intro\n```js\none\ntwo\n```\nafter\nlater one\nlater two\nlater three\nlater four\nlater five';
     const wrapper = mount(NoteContent, { ...options, props: { content } });
 
     expect(wrapper.findAll('.note-paragraph').map((paragraph) => paragraph.text())).toEqual([
@@ -113,7 +118,7 @@ describe('NoteContent', () => {
   });
 
   test('hides a code block that does not fit after the preceding text', () => {
-    const content = 'first\nsecond\nthird\nfourth\nfifth\n```js\none\ntwo\n```';
+    const content = 'first\nsecond\nthird\nfourth\nfifth\n```js\none\ntwo\nthree\nfour\n```';
     const wrapper = mount(NoteContent, { ...options, props: { content } });
 
     expect(wrapper.findAll('.note-paragraph').map((paragraph) => paragraph.text())).toEqual([
@@ -141,29 +146,29 @@ describe('NoteContent', () => {
       content: 'new one\nnew two\nnew three\nnew four\nnew five\nnew six\nnew seven\nnew eight\nnew nine',
     });
 
-    expect(wrapper.findAll('.note-paragraph')).toHaveLength(8);
-    expect(wrapper.text()).not.toContain('new nine');
+    expect(wrapper.findAll('.note-paragraph')).toHaveLength(6);
+    expect(wrapper.text()).not.toContain('new seven');
     expect(wrapper.text()).toContain('Show more');
-    expect(wrapper.findAll('.note-paragraph').at(-1)?.text()).toBe('new eight...');
+    expect(wrapper.findAll('.note-paragraph').at(-1)?.text()).toBe('new six...');
   });
 
   test('expands long blocks before offering the full code for copying', async () => {
     const writeText = vi.fn().mockResolvedValue(undefined);
     vi.stubGlobal('navigator', { clipboard: { writeText } });
     const content =
-      '```js\n<script>\n  one();\n  two();\n  three();\n  four();\n  five();\n</script>\n```';
+      '```js\n<script>\n  one();\n  two();\n  three();\n  four();\n  five();\n  six();\n  seven();\n</script>\n```';
     const wrapper = mount(NoteContent, { ...options, props: { content } });
 
     expect(wrapper.find('pre').exists()).toBe(false);
     expect(wrapper.get('.note-paragraph').text()).toBe('...');
     await wrapper.get('button').trigger('click');
     expect(wrapper.get('code').text()).toBe(
-      '<script>\n  one();\n  two();\n  three();\n  four();\n  five();\n</script>'
+      '<script>\n  one();\n  two();\n  three();\n  four();\n  five();\n  six();\n  seven();\n</script>'
     );
     expect(wrapper.find('script').exists()).toBe(false);
     await wrapper.get('.note-code-copy').trigger('click');
     expect(writeText).toHaveBeenCalledWith(
-      '<script>\n  one();\n  two();\n  three();\n  four();\n  five();\n</script>'
+      '<script>\n  one();\n  two();\n  three();\n  four();\n  five();\n  six();\n  seven();\n</script>'
     );
     expect(wrapper.text()).toContain('Copied');
     expect(wrapper.getComponent(options.global.stubs.VSnackbar).props('color')).toBe('success');

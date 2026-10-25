@@ -17,7 +17,7 @@ export function parseNoteContent(content: string): NoteContentBlock[] {
           type: 'code',
           content: lines.slice(i + 1, end).join('\n'),
           language: opening[1].trim(),
-          lines: end - i + 1,
+          lines: end - i - 1,
         });
         i = end;
         continue;

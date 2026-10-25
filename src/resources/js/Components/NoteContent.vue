@@ -4,7 +4,7 @@ import { parseNoteContent } from '../Utils/noteContent';
 import useSnackbar from '../Composables/useSnackbar';
 import HighlightedCode from './HighlightedCode.vue';
 
-const PREVIEW_MAX_LINES = 8;
+const PREVIEW_MAX_LINES = 6;
 
 const props = defineProps<{ content: string }>();
 const expanded = ref(false);
