@@ -97,27 +97,29 @@ const showSelectedUserPosts = (userId: number) => {
         </template>
         <v-list-item-title>{{ note.user.name }}</v-list-item-title>
       </v-list-item>
-      <div class="d-flex align-center ms-auto">
+      <div class="d-flex align-center flex-grow-1">
         <div v-if="note.tag" class="d-flex align-center ga-2 px-2">
           <v-icon :color="note.tag?.hex_color" size="small">mdi-tag</v-icon>
           <span class="text-body-small">{{ note.tag?.name }}</span>
         </div>
-        <v-btn
-          prepend-icon="mdi-comment-outline"
-          :readonly="Boolean(commentLinkDisabled)"
-          @click="$emit('showComments')"
-        >
-          {{ note.comments_count || '' }}
-          <v-tooltip activator="parent" location="bottom" text="Show comments" />
-        </v-btn>
-        <v-btn
-          :prepend-icon="isLiked ? 'mdi-heart' : 'mdi-heart-outline'"
-          :class="{ 'text-pink': isLiked }"
-          @click="like"
-        >
-          {{ likeCount }}
-          <v-tooltip activator="parent" location="bottom" :text="isLiked ? 'Unlike' : 'Like'" />
-        </v-btn>
+        <div class="ms-auto">
+          <v-btn
+            prepend-icon="mdi-comment-outline"
+            :readonly="Boolean(commentLinkDisabled)"
+            @click="$emit('showComments')"
+          >
+            {{ note.comments_count || '' }}
+            <v-tooltip activator="parent" location="bottom" text="Show comments" />
+          </v-btn>
+          <v-btn
+            :prepend-icon="isLiked ? 'mdi-heart' : 'mdi-heart-outline'"
+            :class="{ 'text-pink': isLiked }"
+            @click="like"
+          >
+            {{ likeCount }}
+            <v-tooltip activator="parent" location="bottom" :text="isLiked ? 'Unlike' : 'Like'" />
+          </v-btn>
+        </div>
       </div>
     </v-card-actions>
   </v-card>
