@@ -69,50 +69,42 @@ const showTaggedNotes = () => {
         </template>
       </v-img>
     </v-card-text>
-    <v-card-actions v-if="note.tag" class="hidden-sm-and-up">
-      <v-btn @click="showTaggedNotes">
+    <v-card-actions class="flex-wrap justify-space-between">
+      <v-btn v-if="note.tag" @click="showTaggedNotes">
         <template #prepend>
           <v-icon :color="note.tag?.hex_color">mdi-tag</v-icon>
         </template>
         <span class="text-body-small">{{ note.tag?.name }}</span>
+        <v-tooltip activator="parent" location="bottom" text="Filter by tag" />
       </v-btn>
-    </v-card-actions>
-    <v-card-actions>
-      <template v-if="note.tag">
-        <v-btn class="hidden-xs" @click="showTaggedNotes">
-          <template #prepend>
-            <v-icon :color="note.tag?.hex_color">mdi-tag</v-icon>
-          </template>
-          <span class="text-body-small">{{ note.tag?.name }}</span>
-          <v-tooltip activator="parent" location="bottom" text="Filter by tag" />
+      <div class="d-flex align-center flex-grow-1">
+        <v-btn
+          v-if="note.status.name === 'archived'"
+          size="small"
+          icon="mdi-archive-outline"
+          readonly
+        />
+        <v-btn v-if="!note.public" size="small" icon="mdi-lock-outline" readonly />
+        <v-btn
+          v-if="note.public && note.comments_count"
+          prepend-icon="mdi-comment-outline"
+          :readonly="Boolean(commentLinkDisabled)"
+          @click="$emit('showComments')"
+        >
+          {{ note.comments_count || '' }}
+          <v-tooltip activator="parent" location="bottom" text="Show comments" />
         </v-btn>
-      </template>
-      <v-btn
-        v-if="note.status.name === 'archived'"
-        size="small"
-        icon="mdi-archive-outline"
-        readonly
-      />
-      <v-btn v-if="!note.public" size="small" icon="mdi-lock-outline" readonly />
-      <v-btn
-        v-if="note.public && note.comments_count"
-        prepend-icon="mdi-comment-outline"
-        :readonly="Boolean(commentLinkDisabled)"
-        @click="$emit('showComments')"
-      >
-        {{ note.comments_count || '' }}
-        <v-tooltip activator="parent" location="bottom" text="Show comments" />
-      </v-btn>
-      <v-btn
-        v-if="note.public && note.likes_count"
-        prepend-icon="mdi-heart"
-        @click="$emit('showLikedUserList')"
-      >
-        {{ note.likes_count }}
-        <v-tooltip activator="parent" location="bottom" text="Show liked users" />
-      </v-btn>
-      <v-spacer />
-      <slot name="actions" />
+        <v-btn
+          v-if="note.public && note.likes_count"
+          prepend-icon="mdi-heart"
+          @click="$emit('showLikedUserList')"
+        >
+          {{ note.likes_count }}
+          <v-tooltip activator="parent" location="bottom" text="Show liked users" />
+        </v-btn>
+        <v-spacer />
+        <slot name="actions" />
+      </div>
     </v-card-actions>
   </v-card>
 </template>
