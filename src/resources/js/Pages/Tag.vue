@@ -153,8 +153,10 @@ const showTaggedNotes = (item: Tag, status: number) => {
         @update:options="loadItems"
       >
         <template #item.name="{ item }">
-          <v-icon class="me-3" size="small" :color="item.hex_color" icon="mdi-tag" />
-          {{ item.name }}
+          <div class="text-no-wrap">
+            <v-icon class="me-2" size="small" :color="item.hex_color" icon="mdi-tag" />
+            {{ item.name }}
+          </div>
         </template>
         <template #item.normal_count="{ item }">
           <v-btn
@@ -179,8 +181,10 @@ const showTaggedNotes = (item: Tag, status: number) => {
           <v-btn v-else variant="plain" disabled>0</v-btn>
         </template>
         <template #item.actions="{ item }">
-          <v-icon icon="mdi-pencil-outline" class="me-3" size="small" @click="editItem(item)" />
-          <v-icon icon="mdi-delete-outline" size="small" @click="showDeleteConfirmDialog(item)" />
+          <div class="text-no-wrap">
+            <v-icon icon="mdi-pencil-outline" class="me-3" size="small" @click="editItem(item)" />
+            <v-icon icon="mdi-delete-outline" size="small" @click="showDeleteConfirmDialog(item)" />
+          </div>
         </template>
       </v-data-table-server>
     </v-container>
