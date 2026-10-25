@@ -1,12 +1,12 @@
 <script setup lang="ts">
-import { imageUrl } from '@/Utils/common';
-import { User } from '@/Types/interfaces';
-import { usePage } from '@inertiajs/vue3';
 import { ref, watch, computed } from 'vue';
+import { usePage } from '@inertiajs/vue3';
 import axios from 'axios';
-import FollowButton from './FollowButton.vue';
-import FollowerList from './FollowerList.vue';
-import FolloweeList from './FolloweeList.vue';
+import FollowButton from '@/Components/FollowButton.vue';
+import FollowerList from '@/Components/FollowerList.vue';
+import FolloweeList from '@/Components/FolloweeList.vue';
+import { imageUrl } from '@/Utils/common';
+import type { User } from '@/Types/interfaces';
 
 const page = usePage();
 const props = defineProps<{
@@ -24,7 +24,7 @@ const count = ref({
   followers: 0,
 });
 
-const isMyself = computed(() => props.selectedUser.id === page.props.auth.user.id);
+const isMyself = computed(() => props.selectedUser.id === page.props.auth.user?.id);
 
 watch(
   () => props.selectedUser,
@@ -105,7 +105,7 @@ const unfollow = async () => {
       >
         {{ count.followers }} Followers
       </v-btn>
-      <v-spacer></v-spacer>
+      <v-spacer />
       <FollowButton v-if="isMyself === false" :is-following @follow="follow" @unfollow="unfollow" />
     </v-card-actions>
   </v-card>

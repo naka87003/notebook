@@ -8,7 +8,7 @@ const emit = defineEmits<{
 
 const props = defineProps<{ search: string | null }>();
 
-const search = ref(props.search);
+const search = ref(props.search ?? '');
 
 const resetFilter = () => {
   search.value = '';
@@ -46,7 +46,7 @@ const resetFilter = () => {
     <v-divider />
     <template #actions>
       <v-btn variant="plain" @click="resetFilter">Reset</v-btn>
-      <v-spacer></v-spacer>
+      <v-spacer />
       <v-btn variant="plain" @click="$emit('close')">Close</v-btn>
       <v-btn color="primary" variant="tonal" @click="$emit('apply', search)">Apply</v-btn>
     </template>

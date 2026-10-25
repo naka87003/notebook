@@ -1,17 +1,17 @@
 <script setup lang="ts">
 import { useForm, usePage, router } from '@inertiajs/vue3';
 
-defineProps({
-  mustVerifyEmail: {
-    type: Boolean,
-  },
-  status: {
-    type: String,
-  },
-});
+defineProps<{
+  mustVerifyEmail: boolean;
+  status?: string;
+}>();
 
 const page = usePage();
 const user = page.props.auth.user;
+
+if (user === null) {
+  throw new Error('Profile information requires an authenticated user.');
+}
 
 const form = useForm({
   name: user.name,
@@ -55,7 +55,7 @@ const verificationSend = () => {
             autocomplete="name"
             max-width="600"
             maxlength="20"
-            @update:model-value="form.errors.name = null"
+            @update:model-value="form.clearErrors('name')"
           />
           <div class="text-body-large text-medium-emphasis">Email</div>
           <v-text-field
@@ -70,7 +70,7 @@ const verificationSend = () => {
             required
             autocomplete="username"
             max-width="600"
-            @update:model-value="form.errors.email = null"
+            @update:model-value="form.clearErrors('email')"
           />
           <div class="text-body-large text-medium-emphasis">Comment</div>
           <v-textarea
@@ -86,7 +86,7 @@ const verificationSend = () => {
             max-width="600"
             counter="160"
             maxlength="160"
-            @update:model-value="form.errors.comment = null"
+            @update:model-value="form.clearErrors('comment')"
           />
         </form>
         <div v-if="mustVerifyEmail && user.email_verified_at === null">

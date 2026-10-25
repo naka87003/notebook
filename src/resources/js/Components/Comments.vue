@@ -1,11 +1,13 @@
 <script setup lang="ts">
-import { imageUrl } from '@/Utils/common';
-import { useForm, usePage } from '@inertiajs/vue3';
-import { computed, ref, onMounted, inject } from 'vue';
+import { useForm } from '@inertiajs/vue3';
+import { ref, onMounted, inject } from 'vue';
 import axios from 'axios';
 import CommentItem from '@/Components/Comment.vue';
+import ConfirmCard from '@/Components/ConfirmCard.vue';
+import { useCurrentUser } from '@/Composables/useCurrentUser';
+import { updatePostsKey } from '@/Keys/notes';
 import type { Comment, Note } from '@/Types/interfaces';
-import ConfirmCard from './ConfirmCard.vue';
+import type { InfiniteScrollLoadOptions } from '@/Types/infiniteScroll';
 
 const props = defineProps<{
   targetNote: Note;
@@ -15,7 +17,7 @@ defineEmits<{
   close: [];
 }>();
 
-const updatePosts: (id: number) => Promise<void> = inject('updatePosts');
+const updatePosts = inject(updatePostsKey);
 
 const form = useForm({
   comment: '',
@@ -25,17 +27,11 @@ const dialog = ref({
   deleteConfirm: false,
 });
 
-const targetCommentId = ref();
+const targetCommentId = ref<number | null>(null);
 
 const comments = ref(new Map<number, Comment>());
 
-const page = usePage();
-const userImagePath = computed((): string | null => {
-  const user = page.props.auth.user;
-  return user.image_path;
-});
-
-const avatarImagePath = computed(() => imageUrl(userImagePath.value));
+const { avatarImagePath } = useCurrentUser();
 
 onMounted(async () => {
   const result = await loadItems();
@@ -44,18 +40,14 @@ onMounted(async () => {
   }
 });
 
-const loadItems = async (fresh: boolean = false): Promise<Comment[]> => {
-  const params = {};
-  if (fresh === false) {
-    params['offset'] = comments.value.size;
-  }
-  const response = await axios.get(route('comments', props.targetNote.id), {
-    params,
+const loadItems = async (fresh = false): Promise<Comment[]> => {
+  const { data } = await axios.get<Comment[]>(route('comments', props.targetNote.id), {
+    params: fresh ? undefined : { offset: comments.value.size },
   });
-  return response.data;
+  return data;
 };
 
-const load = async ({ done }): Promise<void> => {
+const load = async ({ done }: InfiniteScrollLoadOptions): Promise<void> => {
   const result = await loadItems();
   if (result.length > 0) {
     for (const comment of result) {
@@ -77,31 +69,36 @@ const addComment = async () => {
       for (const comment of result) {
         comments.value.set(comment.id, comment);
       }
-      updatePosts(props.targetNote.id);
+      await updatePosts?.(props.targetNote.id);
     },
   });
 };
 
-const showDeleteConfirmDialog = (id: number): void => {
+const showDeleteConfirmDialog = (id: number) => {
   targetCommentId.value = id;
   dialog.value.deleteConfirm = true;
 };
 
-const deleteComment = async () => {
+const deleteComment = async (): Promise<void> => {
+  if (targetCommentId.value === null) {
+    return;
+  }
+
+  const commentId = targetCommentId.value;
   dialog.value.deleteConfirm = false;
   await axios
-    .delete(route('comments.destroy', targetCommentId.value))
+    .delete(route('comments.destroy', commentId))
     .then(async () => {
-      comments.value.delete(targetCommentId.value);
-      updatePosts(props.targetNote.id);
+      comments.value.delete(commentId);
+      await updatePosts?.(props.targetNote.id);
     })
     .catch((error) => {
       console.log(error);
     });
 };
 
-const updateComment = async (id: number) => {
-  const response = await axios.get(route('comments.comment', id));
+const updateComment = async (id: number): Promise<void> => {
+  const response = await axios.get<Comment>(route('comments.comment', id));
   comments.value.set(id, response.data);
 };
 </script>

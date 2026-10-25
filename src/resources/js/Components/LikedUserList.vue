@@ -1,9 +1,10 @@
 <script setup lang="ts">
 import { router } from '@inertiajs/vue3';
-import { Like, Note } from '@/Types/interfaces';
-import { relativeDateTime, imageUrl } from '@/Utils/common';
-import { onMounted, Ref, ref } from 'vue';
+import { onMounted, ref } from 'vue';
 import axios from 'axios';
+import { relativeDateTime, imageUrl } from '@/Utils/common';
+import type { InfiniteScrollLoadOptions } from '@/Types/infiniteScroll';
+import type { Like, Note } from '@/Types/interfaces';
 
 const props = defineProps<{
   targetNote: Note;
@@ -13,7 +14,7 @@ defineEmits<{
   close: [];
 }>();
 
-const items: Ref<Like[]> = ref([]);
+const items = ref<Like[]>([]);
 
 onMounted(async () => {
   const result = await loadItems();
@@ -29,7 +30,7 @@ const loadItems = async (): Promise<Like[]> => {
   return response.data;
 };
 
-const load = async ({ done }): Promise<void> => {
+const load = async ({ done }: InfiniteScrollLoadOptions): Promise<void> => {
   const result = await loadItems();
   if (result.length > 0) {
     items.value.push(...result);
@@ -39,7 +40,8 @@ const load = async ({ done }): Promise<void> => {
   }
 };
 
-const showSelectedUserPosts = (userId: number) => {
+const showSelectedUserPosts = (userId?: number) => {
+  if (!userId) return;
   router.get(route('timeline'), {
     user: userId,
   });
@@ -73,20 +75,20 @@ const showSelectedUserPosts = (userId: number) => {
             class="cursor-pointer"
             density="compact"
             variant="text"
-            @click="showSelectedUserPosts(item.user.id)"
+            @click="showSelectedUserPosts(item.user?.id)"
           >
             <template #prepend>
               <v-avatar color="surface-light">
-                <v-img v-if="item.user.image_path" :src="imageUrl(item.user.image_path)" />
+                <v-img v-if="item.user?.image_path" :src="imageUrl(item.user.image_path)" />
                 <v-icon v-else icon="mdi-account" />
               </v-avatar>
             </template>
             <template #title>
-              <span class="text-body-medium text-truncate">{{ item.user.name }}</span>
+              <span class="text-body-medium text-truncate">{{ item.user?.name }}</span>
               <v-spacer />
-              <span class="text-body-small text-no-wrap">{{
-                relativeDateTime(item.updated_at)
-              }}</span>
+              <span class="text-body-small text-no-wrap">
+                {{ relativeDateTime(item.updated_at) }}
+              </span>
             </template>
           </v-alert>
           <v-divider />

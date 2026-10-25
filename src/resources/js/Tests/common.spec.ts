@@ -19,6 +19,10 @@ describe('simplifyDateTime 関数のテスト', () => {
     const result = simplifyDateTime(input);
     expect(result).toBe('Invalid Date');
   });
+
+  test.each([null, undefined])('未設定の日付は空文字を返す: %s', (input) => {
+    expect(simplifyDateTime(input)).toBe('');
+  });
 });
 
 describe('splitByNewline', () => {

@@ -11,7 +11,7 @@ vi.mock('shiki', () => ({
 beforeEach(() => vi.resetAllMocks());
 
 test('keeps the latest highlighted code when an older request finishes later', async () => {
-  let resolveOld: (html: string) => void;
+  let resolveOld: ((html: string) => void) | undefined;
   const oldResult = new Promise<string>((resolve) => {
     resolveOld = resolve;
   });
@@ -27,6 +27,9 @@ test('keeps the latest highlighted code when an older request finishes later', a
 
   expect(wrapper.get('pre.shiki code').text()).toBe('new code');
 
+  if (resolveOld === undefined) {
+    throw new Error('The old highlight request was not initialized.');
+  }
   resolveOld('<pre class="shiki"><code>old code</code></pre>');
   await flushPromises();
 

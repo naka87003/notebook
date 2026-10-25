@@ -1,9 +1,9 @@
 <script setup lang="ts">
 import { useForm } from '@inertiajs/vue3';
-import { ref } from 'vue';
+import { ref, useTemplateRef } from 'vue';
 
 const confirmingUserDeletion = ref(false);
-const passwordInput = ref(null);
+const passwordInput = useTemplateRef('passwordInput');
 
 const form = useForm({
   password: '',
@@ -15,7 +15,7 @@ const deleteUser = () => {
   form.delete(route('profile.destroy'), {
     preserveScroll: true,
     onSuccess: () => closeModal(),
-    onError: () => passwordInput.value.focus(),
+    onError: () => passwordInput.value?.focus(),
     onFinish: () => form.reset(),
   });
 };
@@ -92,6 +92,7 @@ const closeModal = () => {
                   Password
                 </div>
                 <v-text-field
+                  ref="passwordInput"
                   v-model="form.password"
                   :append-inner-icon="visible ? 'mdi-eye-off' : 'mdi-eye'"
                   :type="visible ? 'text' : 'password'"
@@ -105,7 +106,7 @@ const closeModal = () => {
                   required
                   max-width="600"
                   @click:append-inner="visible = !visible"
-                  @update:model-value="form.errors.password = null"
+                  @update:model-value="form.clearErrors('password')"
                 />
               </v-card-text>
               <v-divider />

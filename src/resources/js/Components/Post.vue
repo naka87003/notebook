@@ -1,14 +1,21 @@
 <script setup lang="ts">
-import type { Note } from '@/Types/interfaces';
 import { inject, computed } from 'vue';
 import { router, usePage } from '@inertiajs/vue3';
 import axios from 'axios';
 import { simplifyDateTime, relativeDateTime, imageUrl } from '@/Utils/common';
-import NoteContent from './NoteContent.vue';
+import NoteContent from '@/Components/NoteContent.vue';
+import { updatePostsKey } from '@/Keys/notes';
+import type { Category, Like, Note, User } from '@/Types/interfaces';
+
+type PostNote = Note & {
+  category: Category;
+  user: User;
+  likes: Like[];
+};
 
 const page = usePage();
 const props = defineProps<{
-  note: Note;
+  note: PostNote;
   commentLinkDisabled?: boolean;
 }>();
 
@@ -18,11 +25,13 @@ defineEmits<{
 
 const showEnlargedImage = inject<(src: string) => void>('showEnlargedImage');
 
-const updatePosts = inject<(id: number) => Promise<void>>('updatePosts');
+const updatePosts = inject(updatePostsKey);
 
-const isLiked = computed((): boolean =>
-  props.note.likes.some((like) => like.user_id === page.props.auth.user.id)
-);
+const isLiked = computed((): boolean => {
+  const user = page.props.auth.user;
+
+  return user !== null && props.note.likes.some((like) => like.user_id === user.id);
+});
 
 const previewImagePath = computed(() => {
   return imageUrl(props.note.image_path);
@@ -31,10 +40,10 @@ const previewImagePath = computed(() => {
 const like = async () => {
   if (isLiked.value === false) {
     await axios.post(route('likes.like', props.note.id));
-    updatePosts(props.note.id);
+    await updatePosts?.(props.note.id);
   } else {
     await axios.delete(route('likes.unlike', props.note.id));
-    updatePosts(props.note.id);
+    await updatePosts?.(props.note.id);
   }
 };
 

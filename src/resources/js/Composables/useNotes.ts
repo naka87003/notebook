@@ -1,5 +1,6 @@
 import { ref, computed, provide } from 'vue';
 import axios from 'axios';
+import { updatePostsKey } from '@/Keys/notes';
 import type { Note } from '@/Types/interfaces';
 
 export default function useNotes() {
@@ -7,14 +8,16 @@ export default function useNotes() {
 
   const targetNoteId = ref<number | null>(null);
 
-  const targetNote = computed(() => notes.value.get(targetNoteId.value));
+  const targetNote = computed(() =>
+    targetNoteId.value === null ? undefined : notes.value.get(targetNoteId.value)
+  );
 
   const updatePosts = async (id: number) => {
     const response = await axios.get(route('notes.note', id));
     notes.value.set(id, response.data);
   };
 
-  provide('updatePosts', updatePosts);
+  provide(updatePostsKey, updatePosts);
 
   return {
     notes,

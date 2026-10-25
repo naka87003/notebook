@@ -1,5 +1,5 @@
 import axios from 'axios';
-import { Tag } from '@/Types/interfaces';
+import type { Tag } from '@/Types/interfaces';
 import { useAsyncState } from '@vueuse/core';
 
 export default function useTagSelectedItems() {

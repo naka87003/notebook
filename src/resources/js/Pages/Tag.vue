@@ -8,7 +8,13 @@ import TagCreateForm from '@/Components/TagCreateForm.vue';
 import TagEditForm from '@/Components/TagEditForm.vue';
 import type { Tag, TagCount } from '@/Types/interfaces';
 import ConfirmCard from '@/Components/ConfirmCard.vue';
-import type { DataTableHeader } from 'vuetify';
+import type { DataTableHeader, DataTableSortItem } from 'vuetify';
+
+type DataTableServerOptions = {
+  page: number;
+  itemsPerPage: number;
+  sortBy: readonly DataTableSortItem[];
+};
 
 const searchText = ref('');
 
@@ -28,7 +34,7 @@ const snackbar = ref({
 const search = ref('');
 const itemsPerPage = ref(10);
 
-const headers = ref<DataTableHeader[]>([
+const headers = ref<DataTableHeader<Tag & TagCount>[]>([
   { title: 'Tag', key: 'name' },
   { title: 'Normal', key: 'normal_count' },
   { title: 'Archived', key: 'archived_count' },
@@ -53,7 +59,7 @@ watchDebounced(
   }
 );
 
-const loadItems = async ({ page, itemsPerPage, sortBy }) => {
+const loadItems = async ({ page, itemsPerPage, sortBy }: DataTableServerOptions) => {
   loading.value = true;
   await axios
     .get(route('tags.items.datatable'), {
@@ -138,7 +144,7 @@ const showTaggedNotes = (item: Tag, status: number) => {
         hide-details
         single-line
       ></v-text-field>
-      <v-spacer></v-spacer>
+      <v-spacer />
       <v-btn icon="mdi-tag-plus-outline" variant="flat" @click="dialog.create = true" />
     </template>
     <v-container>

@@ -1,9 +1,10 @@
 <script setup lang="ts">
-import { router, useForm, usePage } from '@inertiajs/vue3';
+import { router, useForm } from '@inertiajs/vue3';
 import { relativeDateTime, imageUrl } from '@/Utils/common';
 import type { Reply } from '@/Types/interfaces';
 import { computed, ref } from 'vue';
 import useParagraphs from '@/Composables/useParagraphs';
+import { useCurrentUser } from '@/Composables/useCurrentUser';
 
 const props = defineProps<{
   reply: Reply;
@@ -28,17 +29,10 @@ const display = ref({
   replies: false,
 });
 
-const page = usePage();
-const userImagePath = computed((): string | null => {
-  const user = page.props.auth.user;
-  return user.image_path;
-});
-
-const avatarImagePath = computed(() => imageUrl(userImagePath.value));
+const { user, avatarImagePath } = useCurrentUser();
 
 const isMyComment = computed((): boolean => {
-  const user = page.props.auth.user;
-  return props.reply.user_id === user.id;
+  return props.reply.user_id === user.value?.id;
 });
 
 const showSelectedUserPosts = (userId: number) => {
@@ -68,12 +62,12 @@ const addReply = async () => {
         style="z-index: 1"
         @click="showSelectedUserPosts(reply.user_id)"
       >
-        <v-img v-if="reply.user.image_path" :src="imageUrl(reply.user.image_path)" />
+        <v-img v-if="reply.user?.image_path" :src="imageUrl(reply.user.image_path)" />
         <v-icon v-else icon="mdi-account" />
       </v-avatar>
     </template>
     <template #title>
-      <span class="text-body-small text-truncate">{{ reply.user.name }}</span>
+      <span class="text-body-small text-truncate">{{ reply.user?.name }}</span>
       <span class="text-body-small text-no-wrap text-disabled ms-2">{{
         relativeDateTime(reply.created_at)
       }}</span>
@@ -90,7 +84,7 @@ const addReply = async () => {
         </v-list>
       </v-menu>
     </template>
-    <p v-if="reply.reply_to" class="text-body-small text-primary mt-1 mb-1">
+    <p v-if="reply.addressee" class="text-body-small text-primary mt-1 mb-1">
       {{ '@ ' + reply.addressee.name }}
     </p>
     <p
@@ -127,7 +121,7 @@ const addReply = async () => {
           v-model="form.reply"
           density="compact"
           variant="underlined"
-          :placeholder="`To ${reply.user.name}`"
+          :placeholder="`To ${reply.user?.name ?? ''}`"
           hide-details
           clearable
           auto-grow

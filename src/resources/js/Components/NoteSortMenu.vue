@@ -60,7 +60,7 @@ const resetSort = () => {
     <v-divider />
     <template #actions>
       <v-btn variant="plain" @click="resetSort">Reset</v-btn>
-      <v-spacer></v-spacer>
+      <v-spacer />
       <v-btn variant="plain" @click="$emit('close')">Close</v-btn>
       <v-btn color="primary" variant="tonal" @click="$emit('apply', newSort)">Apply</v-btn>
     </template>

@@ -1,14 +1,17 @@
 <script setup lang="ts">
 import { ref } from 'vue';
 import { useForm } from '@inertiajs/vue3';
-import axios, { AxiosResponse } from 'axios';
+import axios, { type AxiosResponse } from 'axios';
 
 const emit = defineEmits<{
   close: [];
   tagCreated: [id: number];
 }>();
 
-const form = useForm({
+const form = useForm<{
+  name: string;
+  color: string | null;
+}>({
   name: '',
   color: null,
 });
@@ -66,7 +69,7 @@ const submit = async () => {
               :error-messages="form.errors.name"
               required
               maxlength="20"
-              @update:model-value="form.errors.name = null"
+              @update:model-value="form.clearErrors('name')"
             />
           </v-col>
           <v-col cols="12">
@@ -91,7 +94,7 @@ const submit = async () => {
               :error="Boolean(form.errors.color)"
               :error-messages="form.errors.color"
               required
-              @update:model-value="form.errors.color = null"
+              @update:model-value="form.clearErrors('color')"
             />
           </v-col>
         </v-row>
@@ -99,7 +102,7 @@ const submit = async () => {
     </v-card-text>
     <v-divider />
     <template #actions>
-      <v-spacer></v-spacer>
+      <v-spacer />
       <v-btn variant="plain" @click="$emit('close')">Close</v-btn>
       <v-btn color="primary" variant="tonal" :disabled="form.processing" @click="submit">Add</v-btn>
     </template>

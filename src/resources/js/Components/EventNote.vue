@@ -26,7 +26,7 @@ const previewImagePath = computed(() => {
         <span class="font-handwritten text-body-large">{{ targetNote.title }}</span>
       </template>
       <template #prepend>
-        <v-icon :icon="targetNote.category.mdi_name" class="ms-3"></v-icon>
+        <v-icon :icon="targetNote.category?.mdi_name" class="ms-3"></v-icon>
       </template>
       <template #append>
         <v-btn @click="$emit('close')">
@@ -37,7 +37,7 @@ const previewImagePath = computed(() => {
     </v-toolbar>
     <v-divider class="border-opacity-25 mx-1" />
     <v-card-text class="text-title-large py-2">
-      <v-alert v-if="targetNote.category.id === 3" type="info" variant="tonal" class="mb-3">
+      <v-alert v-if="targetNote.category?.id === 3" type="info" variant="tonal" class="mb-3">
         <p class="text-body-medium ma-0">from {{ simplifyDateTime(targetNote.starts_at) }}</p>
         <p class="text-body-medium ma-0">to {{ simplifyDateTime(targetNote.ends_at) }}</p>
       </v-alert>
@@ -68,7 +68,7 @@ const previewImagePath = computed(() => {
           <span class="text-body-small">{{ targetNote.tag?.name }}</span>
         </v-btn>
         <v-icon
-          v-if="targetNote.status.name === 'archived'"
+          v-if="targetNote.status?.name === 'archived'"
           size="small"
           class="me-5"
           icon="mdi-archive-outline"

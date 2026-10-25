@@ -1,9 +1,10 @@
 <script setup lang="ts">
 import { router } from '@inertiajs/vue3';
-import { User } from '@/Types/interfaces';
-import { relativeDateTime, imageUrl } from '@/Utils/common';
-import { onMounted, Ref, ref } from 'vue';
+import { onMounted, ref } from 'vue';
 import axios from 'axios';
+import { relativeDateTime, imageUrl } from '@/Utils/common';
+import type { User } from '@/Types/interfaces';
+import type { InfiniteScrollLoadOptions } from '@/Types/infiniteScroll';
 
 const props = defineProps<{
   selectedUser: User;
@@ -13,7 +14,7 @@ defineEmits<{
   close: [];
 }>();
 
-const items: Ref<User[]> = ref([]);
+const items = ref<User[]>([]);
 
 onMounted(async () => {
   const result = await loadItems();
@@ -29,7 +30,7 @@ const loadItems = async (): Promise<User[]> => {
   return response.data;
 };
 
-const load = async ({ done }): Promise<void> => {
+const load = async ({ done }: InfiniteScrollLoadOptions): Promise<void> => {
   const result = await loadItems();
   if (result.length > 0) {
     items.value.push(...result);

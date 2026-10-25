@@ -1,19 +1,32 @@
 <script setup lang="ts">
-import { EmailPrerefence } from '@/Types/interfaces';
 import AuthenticatedLayout from '@/Layouts/AuthenticatedLayout.vue';
 import { Head, useForm } from '@inertiajs/vue3';
+import type {
+  EmailPreference,
+  EmailPreferenceType,
+  EmailPreferenceValue,
+} from '@/Types/interfaces';
+
+type EmailPreferencesForm = Record<EmailPreferenceType, EmailPreferenceValue>;
 
 const props = defineProps<{
-  emailPreferences: EmailPrerefence[];
+  emailPreferences: EmailPreference[];
 }>();
 
-const defaultFormProps = {};
-
-for (const item of props.emailPreferences) {
-  defaultFormProps[item.type] = item.value;
-}
-
-const form = useForm({ emailPreferences: defaultFormProps });
+const form = useForm<{ emailPreferences: EmailPreferencesForm }>({
+  emailPreferences: props.emailPreferences.reduce<EmailPreferencesForm>(
+    (preferences, { type, value }) => {
+      preferences[type] = value;
+      return preferences;
+    },
+    {
+      like: 0,
+      follow: 0,
+      comment: 0,
+      reply: 0,
+    }
+  ),
+});
 </script>
 
 <template>

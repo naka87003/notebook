@@ -1,8 +1,7 @@
 <script setup lang="ts">
-import { Head } from '@inertiajs/vue3';
-import { ref, computed, onMounted, provide, type Ref } from 'vue';
+import { Head, usePage } from '@inertiajs/vue3';
+import { ref, computed, onMounted, provide } from 'vue';
 import { watchDebounced } from '@vueuse/core';
-import type { Note, Sort, NotesFilter } from '@/Types/interfaces';
 import axios from 'axios';
 import AuthenticatedLayout from '@/Layouts/AuthenticatedLayout.vue';
 import NoteItem from '@/Components/Note.vue';
@@ -16,6 +15,8 @@ import Comments from '@/Components/Comments.vue';
 import SearchTextForm from '@/Components/SearchTextForm.vue';
 import useNotes from '@/Composables/useNotes';
 import useSnackbar from '@/Composables/useSnackbar';
+import type { Note, Sort, NotesFilter } from '@/Types/interfaces';
+import type { InfiniteScrollLoadOptions } from '@/Types/infiniteScroll';
 
 const props = defineProps<{
   tag?: number;
@@ -23,6 +24,12 @@ const props = defineProps<{
   newRegisteredUser: boolean;
   note?: Note;
 }>();
+
+const currentUser = usePage().props.auth.user;
+
+if (currentUser === null) {
+  throw new Error('Dashboard requires an authenticated user.');
+}
 
 const isInProgress = ref(true);
 
@@ -91,7 +98,7 @@ const loadNotes = async (): Promise<Note[]> => {
   });
   return response.data;
 };
-const load = async ({ done }): Promise<void> => {
+const load = async ({ done }: InfiniteScrollLoadOptions): Promise<void> => {
   const result = await loadNotes();
   if (result.length > 0) {
     for (const note of result) {
@@ -113,11 +120,16 @@ const refreshDisplay = async (): Promise<void> => {
 };
 
 const archiveNote = async (): Promise<void> => {
+  const note = targetNote.value;
+  if (note === undefined) {
+    return;
+  }
+
   dialog.value.archiveConfirm = false;
   await axios
-    .put(route('notes.archive', targetNote.value.id))
+    .put(route('notes.archive', note.id))
     .then(async () => {
-      notes.value.delete(targetNote.value.id);
+      notes.value.delete(note.id);
       showSnackBar('Archived Successfully.');
     })
     .catch((error) => {
@@ -125,11 +137,16 @@ const archiveNote = async (): Promise<void> => {
     });
 };
 const retrieveNote = async (): Promise<void> => {
+  const note = targetNote.value;
+  if (note === undefined) {
+    return;
+  }
+
   dialog.value.retrieveConfirm = false;
   await axios
-    .put(route('notes.retrieve', targetNote.value.id))
+    .put(route('notes.retrieve', note.id))
     .then(async () => {
-      notes.value.delete(targetNote.value.id);
+      notes.value.delete(note.id);
       showSnackBar('Retrieved Successfully.');
     })
     .catch((error) => {
@@ -137,11 +154,16 @@ const retrieveNote = async (): Promise<void> => {
     });
 };
 const deleteNote = async (): Promise<void> => {
+  const note = targetNote.value;
+  if (note === undefined) {
+    return;
+  }
+
   dialog.value.deleteConfirm = false;
   await axios
-    .delete(route('notes.destroy', targetNote.value.id))
+    .delete(route('notes.destroy', note.id))
     .then(async () => {
-      notes.value.delete(targetNote.value.id);
+      notes.value.delete(note.id);
       showSnackBar('Deleted Successfully.');
     })
     .catch((error) => {
@@ -162,7 +184,7 @@ watchDebounced(search, () => refreshDisplay(), {
 });
 
 // Sort
-const sort: Ref<Sort> = ref({
+const sort = ref<Sort>({
   key: 'updated_at',
   order: 'desc',
 });
@@ -188,7 +210,7 @@ const sortApply = async (newSort: Sort): Promise<void> => {
 };
 
 // Filter
-const filter: Ref<NotesFilter> = ref({
+const filter = ref<NotesFilter>({
   category: [1, 2, 3],
   tag: [],
   status: props.status ?? 1,
@@ -261,7 +283,7 @@ onMounted(async () => {
         <v-icon size="x-large" icon="mdi-magnify" :class="{ 'text-red': searchEntered }" />
         <v-tooltip activator="parent" location="bottom" text="Search" />
       </v-btn>
-      <v-spacer></v-spacer>
+      <v-spacer />
       <v-btn @click="dialog.create = true">
         <v-icon size="x-large" icon="mdi-plus" />
         <v-tooltip activator="parent" location="bottom" text="New" />
@@ -278,11 +300,11 @@ onMounted(async () => {
     <v-container>
       <template v-if="newRegisteredUser">
         <v-alert icon="mdi-hand-clap" color="success" variant="tonal" class="hidden-xs">
-          <v-alert-title>Welcome to Notebook, {{ $page.props.auth.user.name }}!</v-alert-title>
+          <v-alert-title>Welcome to Notebook, {{ currentUser.name }}!</v-alert-title>
           Let's click the plus button at the top right to create your first note!
         </v-alert>
         <v-alert icon="mdi-hand-clap" color="success" variant="tonal" class="hidden-sm-and-up">
-          <v-alert-title>Welcome, {{ $page.props.auth.user.name }}!</v-alert-title>
+          <v-alert-title>Welcome, {{ currentUser.name }}!</v-alert-title>
           Let's click the plus button above to create your first note!
         </v-alert>
       </template>
@@ -308,7 +330,7 @@ onMounted(async () => {
                     <v-tooltip activator="parent" location="bottom" text="Edit" />
                   </v-btn>
                   <v-btn
-                    v-if="note.status.name === 'archived'"
+                    v-if="note.status?.name === 'archived'"
                     size="small"
                     @click="showRetrieveConfirmDialog(note)"
                   >
@@ -335,7 +357,12 @@ onMounted(async () => {
     <NoteCreateForm @note-created="noteCreated" @close="dialog.create = false" />
   </v-dialog>
   <v-dialog v-model="dialog.edit" fullscreen scrollable>
-    <NoteEditForm :target-note @note-updated="noteUpdated" @close="dialog.edit = false" />
+    <NoteEditForm
+      v-if="targetNote"
+      :target-note
+      @note-updated="noteUpdated"
+      @close="dialog.edit = false"
+    />
   </v-dialog>
   <v-dialog v-model="dialog.archiveConfirm" max-width="600">
     <ConfirmCard
@@ -382,10 +409,10 @@ onMounted(async () => {
     <v-img :src="previewImagePath" height="90vh" />
   </v-dialog>
   <v-dialog v-model="dialog.likedUserList" max-width="600px" scrollable>
-    <LikedUserList :target-note @close="dialog.likedUserList = false" />
+    <LikedUserList v-if="targetNote" :target-note @close="dialog.likedUserList = false" />
   </v-dialog>
   <v-dialog v-model="dialog.noteComments" fullscreen scrollable transition="scroll-x-transition">
-    <Comments :target-note @close="dialog.noteComments = false">
+    <Comments v-if="targetNote" :target-note @close="dialog.noteComments = false">
       <NoteItem
         :note="targetNote"
         comment-link-disabled

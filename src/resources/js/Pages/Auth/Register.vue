@@ -65,7 +65,7 @@ const pageTransition = (name: string) => {
             autofocus
             autocomplete="username"
             maxlength="20"
-            @update:model-value="form.errors.name = null"
+            @update:model-value="form.clearErrors('name')"
           />
 
           <div class="text-body-large text-medium-emphasis">Email</div>
@@ -80,7 +80,7 @@ const pageTransition = (name: string) => {
             :error-messages="form.errors.email"
             required
             autocomplete="username"
-            @update:model-value="form.errors.email = null"
+            @update:model-value="form.clearErrors('email')"
           />
 
           <div
@@ -101,7 +101,7 @@ const pageTransition = (name: string) => {
             autocomplete="new-password"
             required
             @click:append-inner="visible = !visible"
-            @update:model-value="form.errors.password = null"
+            @update:model-value="form.clearErrors('password')"
           />
           <div
             class="text-body-large text-medium-emphasis d-flex align-center justify-space-between"
@@ -121,7 +121,7 @@ const pageTransition = (name: string) => {
             autocomplete="new-password"
             required
             @click:append-inner="visible = !visible"
-            @update:model-value="form.errors.password_confirmation = null"
+            @update:model-value="form.clearErrors('password_confirmation')"
           />
           <v-btn
             color="primary"

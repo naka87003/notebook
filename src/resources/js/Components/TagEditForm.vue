@@ -12,12 +12,15 @@ const emit = defineEmits<{
   tagUpdated: [];
 }>();
 
-const form = useForm({
+const form = useForm<{
+  name: string;
+  color: string | null;
+}>({
   name: props.targetTag.name,
-  color: props.targetTag.hex_color,
+  color: props.targetTag.hex_color ?? null,
 });
 
-const specifyColor = ref(props.targetTag.hex_color !== null);
+const specifyColor = ref(props.targetTag.hex_color != null);
 
 const switchColorValue = () => {
   if (specifyColor.value) {
@@ -66,7 +69,7 @@ const submit = () => {
               :error-messages="form.errors.name"
               required
               maxlength="20"
-              @update:model-value="form.errors.name = null"
+              @update:model-value="form.clearErrors('name')"
             />
           </v-col>
           <v-col cols="12">
@@ -91,7 +94,7 @@ const submit = () => {
               :error="Boolean(form.errors.color)"
               :error-messages="form.errors.color"
               required
-              @update:model-value="form.errors.color = null"
+              @update:model-value="form.clearErrors('color')"
             />
           </v-col>
         </v-row>
@@ -99,11 +102,11 @@ const submit = () => {
     </v-card-text>
     <v-divider />
     <template #actions>
-      <v-spacer></v-spacer>
+      <v-spacer />
       <v-btn variant="plain" @click="$emit('close')">Close</v-btn>
-      <v-btn color="primary" variant="tonal" :disabled="form.processing" @click="submit"
-        >Update</v-btn
-      >
+      <v-btn color="primary" variant="tonal" :disabled="form.processing" @click="submit">
+        Update
+      </v-btn>
     </template>
   </v-card>
 </template>

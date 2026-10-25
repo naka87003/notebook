@@ -1,10 +1,10 @@
 <script setup lang="ts">
-import { imageUrl } from '@/Utils/common';
 import { ref, computed } from 'vue';
 import { router, usePage } from '@inertiajs/vue3';
 import HumburgerMenu from '@/Components/HumburgerMenu.vue';
 import NotificationList from '@/Components/NotificationList.vue';
 import { useDarkMode } from '@/Composables/useDarkMode';
+import { useCurrentUser } from '@/Composables/useCurrentUser';
 
 const page = usePage<{ unreadNotificationCount: number }>();
 const { isDark } = useDarkMode();
@@ -16,19 +16,9 @@ const dialog = ref({
 
 const unreadNotificationCount = ref(page.props.unreadNotificationCount);
 
-const currentPageName = computed({
-  get() {
-    return route().current();
-  },
-  set() {},
-});
+const currentPageName = computed<string>(() => route().current() ?? '');
 
-const userImagePath = computed((): string | null => {
-  const user = page.props.auth.user;
-  return user.image_path;
-});
-
-const avatarImagePath = computed(() => imageUrl(userImagePath.value));
+const { avatarImagePath, userName, userEmail } = useCurrentUser();
 
 const logout = () => {
   router.post('logout');
@@ -53,7 +43,7 @@ const markAllAsRead = () => {
         </v-container>
       </template>
       <v-container class="d-flex align-center justify-center" fluid>
-        <v-tabs v-model="currentPageName" class="hidden-xs">
+        <v-tabs :model-value="currentPageName" class="hidden-xs">
           <v-tab
             value="dashboard"
             prepend-icon="mdi-note-multiple-outline"
@@ -113,10 +103,10 @@ const markAllAsRead = () => {
           <v-list>
             <v-list-item class="hidden-sm-and-down">
               <v-list-item-title>
-                {{ $page.props.auth.user.name }}
+                {{ userName }}
               </v-list-item-title>
               <v-list-item-subtitle>
-                {{ $page.props.auth.user.email }}
+                {{ userEmail }}
               </v-list-item-subtitle>
               <template #prepend>
                 <v-avatar color="surface-light">

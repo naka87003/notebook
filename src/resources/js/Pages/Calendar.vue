@@ -4,13 +4,13 @@ import { ref, useTemplateRef, watch } from 'vue';
 import { useAsyncState } from '@vueuse/core';
 import axios from 'axios';
 import AuthenticatedLayout from '@/Layouts/AuthenticatedLayout.vue';
-import type { CalendarWeekdays } from 'vuetify/lib/composables/calendar.d.ts';
-import { Note as NoteType } from '@/Types/interfaces';
 import EventNote from '@/Components/EventNote.vue';
 import ConfirmCard from '@/Components/ConfirmCard.vue';
 import NoteEditForm from '@/Components/NoteEditForm.vue';
 import NoteCreateForm from '@/Components/NoteCreateForm.vue';
 import useSnackbar from '@/Composables/useSnackbar';
+import type { CalendarWeekdays } from 'vuetify/lib/composables/calendar.js';
+import type { Note } from '@/Types/interfaces';
 
 const dialog = ref({
   eventNote: false,
@@ -24,16 +24,25 @@ const dialog = ref({
 const calendar = useTemplateRef('calendar');
 
 const type = ref<'month' | 'day' | 'week' | '4day'>('month');
-const targetNote = ref<NoteType>();
+const targetNote = ref<Note>();
+
+type CalendarEvent = {
+  id: number;
+  name: string;
+  start: Date;
+  end: Date;
+  color?: string;
+  timed: boolean;
+};
 
 const weekdays = ref<CalendarWeekdays[]>([0, 1, 2, 3, 4, 5, 6]);
 
-const focus = ref();
+const focus = ref('');
 
-const events = ref([]);
+const events = ref<CalendarEvent[]>([]);
 
 const { state: schedule, execute } = useAsyncState(async () => {
-  const response = await axios.get<NoteType[]>(route('notes.schedule'), {
+  const response = await axios.get<Note[]>(route('notes.schedule'), {
     params: {},
   });
   return response.data;
@@ -42,10 +51,14 @@ const { state: schedule, execute } = useAsyncState(async () => {
 watch(
   schedule,
   (newData) => {
-    events.value = newData.map((item: NoteType) => {
+    events.value = newData.flatMap((item: Note) => {
+      if (!item.starts_at || !item.ends_at) {
+        return [];
+      }
+
       return {
         id: item.id,
-        name: item.title,
+        name: item.title ?? '',
         start: new Date(item.starts_at),
         end: new Date(item.ends_at),
         color: item.tag?.hex_color,
@@ -56,9 +69,13 @@ watch(
   { immediate: true }
 );
 
-const showEvent = (nativeEvent, { event }): void => {
+const showEvent = (_nativeEvent: Event, { event }: { event: { id?: unknown } }): void => {
+  if (typeof event.id !== 'number') {
+    return;
+  }
+
   targetNote.value = schedule.value.find((item) => item.id === event.id);
-  dialog.value.eventNote = true;
+  dialog.value.eventNote = targetNote.value !== undefined;
 };
 
 // Snackbar
@@ -76,17 +93,21 @@ const noteUpdated = async () => {
   showSnackBar('Updated Successfully.');
 };
 
-const showEditDialog = (item: NoteType): void => {
+const showEditDialog = (item: Note): void => {
   targetNote.value = item;
   dialog.value.edit = true;
 };
 
-const showDeleteConfirmDialog = (item: NoteType): void => {
+const showDeleteConfirmDialog = (item: Note): void => {
   targetNote.value = item;
   dialog.value.deleteConfirm = true;
 };
 
 const deleteNote = async (): Promise<void> => {
+  if (targetNote.value === undefined) {
+    return;
+  }
+
   dialog.value.deleteConfirm = false;
   await axios
     .delete(route('notes.destroy', targetNote.value.id))
@@ -100,7 +121,7 @@ const deleteNote = async (): Promise<void> => {
     });
 };
 
-const viewDay = (nativeEvent, { date }) => {
+const viewDay = (_nativeEvent: Event, { date }: { date: string }) => {
   focus.value = date;
   type.value = 'day';
 };
@@ -172,7 +193,7 @@ const setToday = () => {
       </v-sheet>
     </v-container>
     <v-dialog v-model="dialog.eventNote" max-width="1000">
-      <EventNote :target-note @close="dialog.eventNote = false">
+      <EventNote v-if="targetNote" :target-note @close="dialog.eventNote = false">
         <template #actions="{ targetNote }">
           <v-btn size="small" @click="showEditDialog(targetNote)">
             <v-icon size="large" icon="mdi-pencil-outline" />
@@ -190,6 +211,7 @@ const setToday = () => {
     </v-dialog>
     <v-dialog v-model="dialog.edit" fullscreen scrollable>
       <NoteEditForm
+        v-if="targetNote"
         :target-note
         variant="event"
         @note-updated="noteUpdated"

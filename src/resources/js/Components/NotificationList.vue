@@ -1,9 +1,10 @@
 <script setup lang="ts">
 import { router } from '@inertiajs/vue3';
-import type { Notification } from '@/Types/interfaces';
-import { relativeDateTime, imageUrl } from '@/Utils/common';
-import { onMounted, Ref, ref } from 'vue';
+import { onMounted, ref } from 'vue';
 import axios from 'axios';
+import { relativeDateTime, imageUrl } from '@/Utils/common';
+import type { Notification } from '@/Types/interfaces';
+import type { InfiniteScrollLoadOptions } from '@/Types/infiniteScroll';
 
 defineProps<{
   unreadNotificationCount: number;
@@ -14,7 +15,7 @@ const emit = defineEmits<{
   markAllAsRead: [];
 }>();
 
-const items: Ref<Notification[]> = ref([]);
+const items = ref<Notification[]>([]);
 
 onMounted(async () => {
   const result = await loadItems();
@@ -30,7 +31,7 @@ const loadItems = async (): Promise<Notification[]> => {
   return response.data;
 };
 
-const load = async ({ done }): Promise<void> => {
+const load = async ({ done }: InfiniteScrollLoadOptions): Promise<void> => {
   const result = await loadItems();
   if (result.length > 0) {
     items.value.push(...result);
@@ -47,13 +48,17 @@ const selectItem = async (item: Notification) => {
       router.get(route('timeline'), { user: item.user.id });
       break;
     case 'comment':
-      router.get(route('dashboard'), { note: item.data.comment.note_id });
+      if (item.data.comment) {
+        router.get(route('dashboard'), { note: item.data.comment.note_id });
+      }
       break;
     case 'like':
       router.get(route('dashboard'), { note: item.data.note_id });
       break;
     case 'reply':
-      router.get(route('timeline'), { note: item.data.comment.note_id });
+      if (item.data.comment) {
+        router.get(route('timeline'), { note: item.data.comment.note_id });
+      }
       break;
   }
 };
@@ -144,7 +149,7 @@ const titleMsg = (item: Notification) => {
     </v-card-text>
     <template #actions>
       <v-btn variant="plain" @click="$emit('close')">Close</v-btn>
-      <v-spacer></v-spacer>
+      <v-spacer />
       <v-btn
         color="secondary"
         variant="tonal"

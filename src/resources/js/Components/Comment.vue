@@ -1,12 +1,14 @@
 <script setup lang="ts">
-import { router, useForm, usePage } from '@inertiajs/vue3';
+import { router, useForm } from '@inertiajs/vue3';
 import { relativeDateTime, imageUrl } from '@/Utils/common';
 import type { Comment, Reply } from '@/Types/interfaces';
+import type { InfiniteScrollLoadOptions } from '@/Types/infiniteScroll';
 import { computed, ref } from 'vue';
 import axios from 'axios';
 import ReplyItem from './Reply.vue';
 import ConfirmCard from './ConfirmCard.vue';
 import useParagraphs from '@/Composables/useParagraphs';
+import { useCurrentUser } from '@/Composables/useCurrentUser';
 
 const props = defineProps<{
   comment: Comment;
@@ -36,19 +38,12 @@ const display = ref({
   replies: false,
 });
 
-const targetReplyId = ref();
+const targetReplyId = ref<number | null>(null);
 
-const page = usePage();
-const userImagePath = computed((): string | null => {
-  const user = page.props.auth.user;
-  return user.image_path;
-});
+const { user, avatarImagePath } = useCurrentUser();
 
-const avatarImagePath = computed(() => imageUrl(userImagePath.value));
-
-const isMyComment = computed((): boolean => {
-  const user = page.props.auth.user;
-  return props.comment.user_id === user.id;
+const isMyComment = computed<boolean>(() => {
+  return props.comment.user_id === user.value?.id;
 });
 
 const showSelectedUserPosts = (userId: number) => {
@@ -57,18 +52,15 @@ const showSelectedUserPosts = (userId: number) => {
   });
 };
 
-const loadItems = async (fresh: boolean = false): Promise<Reply[]> => {
-  const params = {};
-  if (fresh === false) {
-    params['offset'] = replies.value.size;
-  }
-  const response = await axios.get(route('replies', props.comment.id), {
-    params,
+const loadItems = async (fresh = false): Promise<Reply[]> => {
+  const { data } = await axios.get<Reply[]>(route('replies', props.comment.id), {
+    params: fresh ? undefined : { offset: replies.value.size },
   });
-  return response.data;
+
+  return data;
 };
 
-const load = async ({ done }): Promise<void> => {
+const load = async ({ done }: InfiniteScrollLoadOptions): Promise<void> => {
   const result = await loadItems();
   if (result.length > 0) {
     for (const reply of result) {
@@ -106,11 +98,14 @@ const showDeleteConfirmDialog = (id: number): void => {
 };
 
 const deleteReply = async () => {
+  const replyId = targetReplyId.value;
+  if (replyId === null) return;
+
   dialog.value.deleteConfirm = false;
   await axios
-    .delete(route('replies.destroy', targetReplyId.value))
+    .delete(route('replies.destroy', replyId))
     .then(async () => {
-      replies.value.delete(targetReplyId.value);
+      replies.value.delete(replyId);
       emit('updateComment');
     })
     .catch((error) => {
@@ -128,12 +123,12 @@ const deleteReply = async () => {
         style="z-index: 1"
         @click="showSelectedUserPosts(comment.user_id)"
       >
-        <v-img v-if="comment.user.image_path" :src="imageUrl(comment.user.image_path)" />
+        <v-img v-if="comment.user?.image_path" :src="imageUrl(comment.user?.image_path)" />
         <v-icon v-else icon="mdi-account" />
       </v-avatar>
     </template>
     <template #title>
-      <span class="text-body-small text-truncate">{{ comment.user.name }}</span>
+      <span class="text-body-small text-truncate">{{ comment.user?.name }}</span>
       <span class="text-body-small text-no-wrap text-disabled ms-2">{{
         relativeDateTime(comment.created_at)
       }}</span>

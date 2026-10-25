@@ -73,7 +73,7 @@ const submit = () => {
               required
               autofocus
               autocomplete="username"
-              @update:model-value="form.errors.email = null"
+              @update:model-value="form.clearErrors('email')"
             />
           </div>
           <v-btn

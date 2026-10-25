@@ -3,10 +3,11 @@ import relativeTime from 'dayjs/plugin/relativeTime';
 
 extend(relativeTime);
 
-export const simplifyDateTime = (str: string): string => dayjs(str).format('YYYY/MM/DD HH:mm');
+export const simplifyDateTime = (str: string | null | undefined): string =>
+  str ? dayjs(str).format('YYYY/MM/DD HH:mm') : '';
 export const splitByNewline = (text: string): string[] => text.split(/\r?\n/);
-export const imageUrl = (path: string | null | undefined): string | null =>
-  path ? '/media/' + path : null;
+export const imageUrl = (path: string | null | undefined): string | undefined =>
+  path ? '/media/' + path : undefined;
 
 export const relativeDateTime = (str: string): string => {
   const now = dayjs();

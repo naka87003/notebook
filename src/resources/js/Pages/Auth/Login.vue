@@ -80,7 +80,7 @@ const resizeWindow = () => {
             required
             autofocus
             autocomplete="username"
-            @update:model-value="form.errors.email = null"
+            @update:model-value="form.clearErrors('email')"
           />
           <div
             class="text-body-large text-medium-emphasis d-flex align-center justify-space-between"
@@ -109,7 +109,7 @@ const resizeWindow = () => {
             autocomplete="current-password"
             required
             @click:append-inner="visible = !visible"
-            @update:model-value="form.errors.password = null"
+            @update:model-value="form.clearErrors('password')"
           />
           <v-btn
             color="primary"

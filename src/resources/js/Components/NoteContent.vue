@@ -17,7 +17,7 @@ const isTruncated = computed(
 );
 const visibleBlocks = computed(() => {
   if (!isTruncated.value) return blocks.value;
-  let remaining = props.maxLines;
+  let remaining = props.maxLines ?? 0;
   const visible = [];
   for (const block of blocks.value) {
     if (remaining <= 0) break;

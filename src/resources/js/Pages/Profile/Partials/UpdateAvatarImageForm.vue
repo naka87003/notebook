@@ -1,10 +1,10 @@
 <script setup lang="ts">
-import { imageUrl } from '@/Utils/common';
-import { useForm, usePage } from '@inertiajs/vue3';
+import { useForm } from '@inertiajs/vue3';
 import { ref, computed } from 'vue';
 import ConfirmCard from '@/Components/ConfirmCard.vue';
+import { useCurrentUser } from '@/Composables/useCurrentUser';
 
-const page = usePage();
+const { avatarImagePath, userImagePath, userName } = useCurrentUser();
 const form = useForm({
   image: null,
 });
@@ -20,11 +20,9 @@ const previewImagePath = computed(() => {
   if (form.image) {
     return URL.createObjectURL(preview.value.files[0]);
   } else {
-    return imageUrl(userImagePath.value);
+    return avatarImagePath.value;
   }
 });
-
-const userImagePath = computed((): string | null => page.props.auth.user.image_path);
 
 const uploadImage = () => {
   form.post(route('profile.upload'), {
@@ -63,7 +61,7 @@ const deleteImage = () => {
               <v-icon v-else icon="mdi-account" />
             </v-avatar>
           </template>
-          <v-list-item-title>{{ $page.props.auth.user.name }}</v-list-item-title>
+          <v-list-item-title>{{ userName }}</v-list-item-title>
         </v-list-item>
         <form enctype="multipart/form-data" @submit.prevent="form.patch(route('profile.update'))">
           <div class="text-body-large text-medium-emphasis">Image Upload</div>
@@ -78,7 +76,7 @@ const deleteImage = () => {
             required
             max-width="600"
             accept="image/png, image/jpeg"
-            @update:model-value="form.errors.image = null"
+            @update:model-value="form.clearErrors('image')"
           />
         </form>
         <Transition>
@@ -105,7 +103,7 @@ const deleteImage = () => {
           size="large"
           variant="tonal"
           :class="{ 'text-disabled': form.processing }"
-          :disabled="form.processing || $page.props.auth.user.image_path === null"
+          :disabled="form.processing || userImagePath === null"
           @click="dialog.deleteConfirm = true"
         >
           Delete

@@ -43,7 +43,7 @@ defineEmits<{
     </v-card-text>
     <v-divider />
     <template #actions>
-      <v-spacer></v-spacer>
+      <v-spacer />
       <v-btn variant="plain" @click="$emit('close')">Cancel</v-btn>
       <v-btn :color="confirmBtnColor" variant="tonal" @click="$emit('confirmed')">
         {{ confirmBtnName }}

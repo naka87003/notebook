@@ -2,7 +2,8 @@
 import { Head } from '@inertiajs/vue3';
 import { ref, computed, onMounted, provide, type Ref } from 'vue';
 import { watchDebounced } from '@vueuse/core';
-import type { Note, PostsFilter, User } from '@/Types/interfaces';
+import type { Category, Like, Note, PostsFilter, User } from '@/Types/interfaces';
+import type { InfiniteScrollLoadOptions } from '@/Types/infiniteScroll';
 import axios from 'axios';
 import AuthenticatedLayout from '@/Layouts/AuthenticatedLayout.vue';
 import Post from '@/Components/Post.vue';
@@ -33,6 +34,12 @@ const previewImagePath = ref('');
 
 // Note
 const { notes, targetNoteId, targetNote, updatePosts } = useNotes();
+
+type TimelineNote = Note & {
+  category: Category;
+  user: User;
+  likes: Like[];
+};
 
 const filter = ref<PostsFilter>({
   onlyMyLiked: false,
@@ -76,7 +83,7 @@ const loadNotes = async (): Promise<Note[]> => {
   return response.data;
 };
 
-const load = async ({ done }): Promise<void> => {
+const load = async ({ done }: InfiniteScrollLoadOptions): Promise<void> => {
   const result = await loadNotes();
   if (result.length > 0) {
     for (const note of result) {
@@ -108,7 +115,7 @@ const searchApply = (newSearch: string) => {
   search.value = newSearch;
 };
 
-const filterUser = async (user: number): Promise<void> => {
+const filterUser = async (user: number | null): Promise<void> => {
   filter.value.following = false;
   filter.value.onlyMyLiked = false;
   dialog.value.filterUserMenu = false;
@@ -134,9 +141,14 @@ const showComments = (id: number) => {
 };
 
 const closeComments = async () => {
-  await updatePosts(targetNoteId.value);
+  if (targetNoteId.value !== null) {
+    await updatePosts(targetNoteId.value);
+  }
   dialog.value.postComments = false;
 };
+
+const isTimelineNote = (note: Note | undefined): note is TimelineNote =>
+  note?.category != null && note.user != null && Array.isArray(note.likes);
 
 provide('showEnlargedImage', showEnlargedImage);
 </script>
@@ -164,7 +176,7 @@ provide('showEnlargedImage', showEnlargedImage);
         <v-icon size="x-large" icon="mdi-magnify" :class="{ 'text-red': searchEntered }" />
         <v-tooltip activator="parent" location="bottom" text="Search" />
       </v-btn>
-      <v-spacer></v-spacer>
+      <v-spacer />
       <v-btn :class="{ 'text-red': filter.following }" @click="filterFollowing">
         <v-icon size="x-large" icon="mdi-account-multiple-outline" />
         <v-tooltip activator="parent" location="bottom" text="Filter by following users" />
@@ -191,7 +203,7 @@ provide('showEnlargedImage', showEnlargedImage);
             text="No data available"
           />
           <template v-for="note in notes.values()" v-else :key="note.id">
-            <v-col cols="12">
+            <v-col v-if="isTimelineNote(note)" cols="12">
               <Post
                 :note
                 @show-enlarged-image="showEnlargedImage"
@@ -218,7 +230,7 @@ provide('showEnlargedImage', showEnlargedImage);
       <v-img :src="previewImagePath" height="90vh" />
     </v-dialog>
     <v-dialog v-model="dialog.postComments" fullscreen scrollable transition="scroll-x-transition">
-      <Comments :target-note @close="closeComments">
+      <Comments v-if="isTimelineNote(targetNote)" :target-note @close="closeComments">
         <Post :note="targetNote" comment-link-disabled />
       </Comments>
     </v-dialog>

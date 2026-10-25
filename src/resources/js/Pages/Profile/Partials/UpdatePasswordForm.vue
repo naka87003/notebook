@@ -56,7 +56,7 @@ const updatePassword = () => {
             required
             max-width="600"
             @click:append-inner="visible = !visible"
-            @update:model-value="form.errors.current_password = null"
+            @update:model-value="form.clearErrors('current_password')"
           />
           <div
             class="text-body-large text-medium-emphasis d-flex align-center justify-space-between"
@@ -77,7 +77,7 @@ const updatePassword = () => {
             required
             max-width="600"
             @click:append-inner="visible = !visible"
-            @update:model-value="form.errors.password = null"
+            @update:model-value="form.clearErrors('password')"
           />
           <div
             class="text-body-large text-medium-emphasis d-flex align-center justify-space-between"
@@ -98,7 +98,7 @@ const updatePassword = () => {
             required
             max-width="600"
             @click:append-inner="visible = !visible"
-            @update:model-value="form.errors.password_confirmation = null"
+            @update:model-value="form.clearErrors('password_confirmation')"
           />
           <Transition>
             <div v-if="form.recentlySuccessful">

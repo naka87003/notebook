@@ -1,9 +1,10 @@
 <script setup lang="ts">
 import { router } from '@inertiajs/vue3';
-import { User } from '@/Types/interfaces';
-import { relativeDateTime, imageUrl } from '@/Utils/common';
-import { onMounted, Ref, ref } from 'vue';
+import { onMounted, ref } from 'vue';
 import axios from 'axios';
+import type { User } from '@/Types/interfaces';
+import { relativeDateTime, imageUrl } from '@/Utils/common';
+import type { InfiniteScrollLoadOptions } from '@/Types/infiniteScroll';
 
 const props = defineProps<{
   selectedUser: User;
@@ -13,7 +14,7 @@ defineEmits<{
   close: [];
 }>();
 
-const items: Ref<User[]> = ref([]);
+const items = ref<User[]>([]);
 
 onMounted(async () => {
   const result = await loadItems();
@@ -29,7 +30,7 @@ const loadItems = async (): Promise<User[]> => {
   return response.data;
 };
 
-const load = async ({ done }): Promise<void> => {
+const load = async ({ done }: InfiniteScrollLoadOptions): Promise<void> => {
   const result = await loadItems();
   if (result.length > 0) {
     items.value.push(...result);
@@ -87,9 +88,9 @@ const showSelectedUserPosts = (userId: number) => {
             <template #title>
               <span class="text-body-medium text-truncate">{{ item.name }}</span>
               <v-spacer />
-              <span class="text-body-small text-no-wrap">{{
-                relativeDateTime(item.created_at)
-              }}</span>
+              <span class="text-body-small text-no-wrap">
+                {{ relativeDateTime(item.created_at) }}
+              </span>
             </template>
           </v-alert>
           <v-divider />

@@ -1,5 +1,5 @@
 import type { User } from '@/Types/interfaces';
-import { route as ziggyRoute } from '../../../vendor/tightenco/ziggy/src/js';
+import type { route as ziggyRoute } from '../../../vendor/tightenco/ziggy/src/js';
 
 type RouteHelper = typeof ziggyRoute;
 

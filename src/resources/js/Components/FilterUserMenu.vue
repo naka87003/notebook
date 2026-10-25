@@ -1,14 +1,13 @@
 <script setup lang="ts">
-import { imageUrl } from '@/Utils/common';
-import { type Ref, ref } from 'vue';
-import type { PostsFilter } from '@/Types/interfaces';
+import { ref } from 'vue';
 import { useDebounceFn } from '@vueuse/core';
 import axios from 'axios';
-import { User } from '@/Types/interfaces';
+import { imageUrl } from '@/Utils/common';
+import type { User, PostsFilter } from '@/Types/interfaces';
 
 defineEmits<{
   close: [];
-  apply: [user: number];
+  apply: [user: number | null];
 }>();
 
 const props = defineProps<{ filter: PostsFilter }>();
@@ -17,7 +16,7 @@ const userItems = defineModel<User[]>('userItems');
 
 const message = ref('Please enter any text.');
 
-const user: Ref<number> = ref(props.filter.user);
+const user = ref<number | null>(props.filter.user);
 
 const loadUsers = useDebounceFn(async (searchText: string): Promise<void> => {
   if (searchText.length > 0) {
@@ -31,7 +30,7 @@ const loadUsers = useDebounceFn(async (searchText: string): Promise<void> => {
       .then((response) => {
         userItems.value = Array.from(
           new Map(
-            [...userItems.value, ...response.data].map((user: User) => [user.id, user])
+            [...(userItems.value ?? []), ...response.data].map((user: User) => [user.id, user])
           ).values()
         );
         message.value = 'No data available';
@@ -101,7 +100,7 @@ const loadUsers = useDebounceFn(async (searchText: string): Promise<void> => {
     </v-card-text>
     <v-divider />
     <template #actions>
-      <v-spacer></v-spacer>
+      <v-spacer />
       <v-btn variant="plain" @click="$emit('close')">Close</v-btn>
       <v-btn color="primary" variant="tonal" @click="$emit('apply', user)">Apply</v-btn>
     </template>

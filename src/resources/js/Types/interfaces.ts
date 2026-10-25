@@ -45,7 +45,7 @@ export type NotesFilter = {
 
 export type PostsFilter = {
   onlyMyLiked: boolean;
-  user: number;
+  user: number | null;
   following: boolean;
 };
 
@@ -118,11 +118,16 @@ export type Reply = {
   addressee?: User;
 };
 
-export type EmailPrerefence = {
+export const EMAIL_PREFERENCE_TYPES = ['like', 'follow', 'comment', 'reply'] as const;
+
+export type EmailPreferenceType = (typeof EMAIL_PREFERENCE_TYPES)[number];
+export type EmailPreferenceValue = 0 | 1;
+
+export type EmailPreference = {
   id: number;
   user_id: number;
-  type: string;
-  value: number;
+  type: EmailPreferenceType;
+  value: EmailPreferenceValue;
   created_at: string;
   updated_at: string;
 };

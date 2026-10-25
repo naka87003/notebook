@@ -1,7 +1,6 @@
 <script setup lang="ts">
-import { imageUrl } from '@/Utils/common';
-import { router, usePage } from '@inertiajs/vue3';
-import { computed } from 'vue';
+import { router } from '@inertiajs/vue3';
+import { useCurrentUser } from '@/Composables/useCurrentUser';
 
 defineProps<{
   currentPageName: string;
@@ -14,13 +13,7 @@ defineEmits<{
 
 const isDark = defineModel<boolean>('isDark');
 
-const page = usePage();
-const userImagePath = computed((): string | null => {
-  const user = page.props.auth.user;
-  return user.image_path;
-});
-
-const avatarImagePath = computed(() => imageUrl(userImagePath.value));
+const { avatarImagePath, userName, userEmail } = useCurrentUser();
 
 const pageTransition = (name: string) => {
   router.visit(route(name));
@@ -108,11 +101,11 @@ const pageTransition = (name: string) => {
             </v-radio>
           </v-radio-group>
         </v-list-item>
-        <v-divider></v-divider>
+        <v-divider />
         <v-list-subheader>Account</v-list-subheader>
         <v-list-item
-          :title="$page.props.auth.user.name"
-          :subtitle="$page.props.auth.user.email"
+          :title="userName"
+          :subtitle="userEmail"
           density="compact"
           :active="currentPageName === 'profile.edit'"
           @click="pageTransition('profile.edit')"
@@ -147,7 +140,7 @@ const pageTransition = (name: string) => {
     </v-card-text>
     <v-divider />
     <template #actions>
-      <v-spacer></v-spacer>
+      <v-spacer />
       <v-btn variant="plain" @click="$emit('close')">Close</v-btn>
     </template>
   </v-card>

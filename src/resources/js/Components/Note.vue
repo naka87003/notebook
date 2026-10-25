@@ -21,6 +21,8 @@ const previewImagePath = computed(() => {
 });
 
 const showTaggedNotes = () => {
+  if (!props.note.tag) return;
+
   router.get(route('dashboard'), {
     tag: props.note.tag.id,
     status: props.note.status_id,
@@ -30,6 +32,7 @@ const showTaggedNotes = () => {
 
 <template>
   <v-card
+    v-if="note.category"
     :color="note.category.vuetify_theme_color_name"
     variant="tonal"
     class="mx-auto"
@@ -79,7 +82,7 @@ const showTaggedNotes = () => {
       </v-btn>
       <div class="d-flex align-center flex-grow-1">
         <v-btn
-          v-if="note.status.name === 'archived'"
+          v-if="note.status?.name === 'archived'"
           size="small"
           icon="mdi-archive-outline"
           readonly

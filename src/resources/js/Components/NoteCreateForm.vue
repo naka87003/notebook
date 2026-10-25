@@ -19,7 +19,16 @@ const emit = defineEmits<{
 }>();
 
 const page = usePage<{ categoryItems: Category[] }>();
-const form = useForm({
+const form = useForm<{
+  title: string;
+  content: string;
+  category: number;
+  public: number;
+  tag: number | null;
+  starts: string;
+  ends: string;
+  image: File | null;
+}>({
   title: '',
   content: '',
   category: 1,
@@ -160,7 +169,7 @@ const copyDateToEnd = () => {
                   required
                   autofocus
                   maxlength="50"
-                  @update:model-value="form.errors.title = null"
+                  @update:model-value="form.clearErrors('title')"
                 />
               </v-col>
               <v-col cols="12">
@@ -178,7 +187,7 @@ const copyDateToEnd = () => {
                   auto-grow
                   :counter="page.props.noteContentMaxLength"
                   :maxlength="page.props.noteContentMaxLength"
-                  @update:model-value="form.errors.content = null"
+                  @update:model-value="form.clearErrors('content')"
                 />
                 <div class="text-body-small text-medium-emphasis mt-1">
                   For code, add ``` on separate lines before and after it. Add a language after the
@@ -203,7 +212,7 @@ const copyDateToEnd = () => {
                   required
                   max-width="600"
                   accept="image/png, image/jpeg"
-                  @update:model-value="form.errors.image = null"
+                  @update:model-value="form.clearErrors('image')"
                 />
               </v-col>
               <v-col v-if="!eventMode" cols="12">
@@ -220,7 +229,7 @@ const copyDateToEnd = () => {
                   required
                   item-title="name"
                   item-value="id"
-                  @update:model-value="form.errors.category = null"
+                  @update:model-value="form.clearErrors('category')"
                 >
                   <template #item="{ props, item }">
                     <v-list-item v-bind="props" prepend-icon="mdi-tag" :title="item.name">
@@ -261,7 +270,7 @@ const copyDateToEnd = () => {
                   :error-messages="form.errors.starts"
                   required
                   @update:model-value="
-                    form.errors.starts = null;
+                    form.clearErrors('starts');
                     copyDateToEnd();
                   "
                 />
@@ -276,7 +285,7 @@ const copyDateToEnd = () => {
                   :error="Boolean(form.errors.ends)"
                   :error-messages="form.errors.ends"
                   required
-                  @update:model-value="form.errors.ends = null"
+                  @update:model-value="form.clearErrors('ends')"
                 />
               </v-col>
               <v-col cols="12">
@@ -295,7 +304,7 @@ const copyDateToEnd = () => {
                   item-title="name"
                   item-value="id"
                   clearable
-                  @update:model-value="form.errors.tag = null"
+                  @update:model-value="form.clearErrors('tag')"
                   @click:append="dialog.tagCreate = true"
                 >
                   <template #item="{ props, item }">
@@ -333,7 +342,7 @@ const copyDateToEnd = () => {
     </v-card-text>
     <v-divider />
     <template #actions>
-      <v-spacer></v-spacer>
+      <v-spacer />
       <v-btn variant="plain" @click="$emit('close')">Close</v-btn>
       <v-btn color="primary" variant="tonal" :disabled="form.processing" @click="submit"
         >Save</v-btn
