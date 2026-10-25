@@ -87,7 +87,7 @@ const showSelectedUserPosts = (userId: number) => {
         </template>
       </v-img>
     </v-card-text>
-    <v-card-actions class="flex-wrap">
+    <v-card-actions class="flex-wrap gc-2 gr-0">
       <v-list-item prepend-gap="10" @click="showSelectedUserPosts(note.user.id)">
         <template #prepend>
           <v-avatar color="grey-darken-3" size="x-small" style="z-index: 1">
@@ -98,7 +98,7 @@ const showSelectedUserPosts = (userId: number) => {
         <v-list-item-title>{{ note.user.name }}</v-list-item-title>
       </v-list-item>
       <div class="d-flex align-center ms-auto">
-        <div v-if="note.tag" class="d-flex align-center ga-2 pl-2 pr-3">
+        <div v-if="note.tag" class="d-flex align-center ga-2 px-2">
           <v-icon :color="note.tag?.hex_color" size="small">mdi-tag</v-icon>
           <span class="text-body-small">{{ note.tag?.name }}</span>
         </div>

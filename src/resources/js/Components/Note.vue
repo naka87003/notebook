@@ -69,7 +69,7 @@ const showTaggedNotes = () => {
         </template>
       </v-img>
     </v-card-text>
-    <v-card-actions class="flex-wrap justify-space-between">
+    <v-card-actions class="flex-wrap justify-space-between gc-2 gr-0">
       <v-btn v-if="note.tag" @click="showTaggedNotes">
         <template #prepend>
           <v-icon :color="note.tag?.hex_color">mdi-tag</v-icon>
