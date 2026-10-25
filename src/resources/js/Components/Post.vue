@@ -88,9 +88,13 @@ const showSelectedUserPosts = (userId: number) => {
       </v-img>
     </v-card-text>
     <v-card-actions class="flex-wrap">
-      <v-list-item class="flex-grow-1" @click="showSelectedUserPosts(note.user.id)">
+      <v-list-item
+        class="flex-grow-1"
+        prepend-gap="10"
+        @click="showSelectedUserPosts(note.user.id)"
+      >
         <template #prepend>
-          <v-avatar color="grey-darken-3" size="small" style="z-index: 1">
+          <v-avatar color="grey-darken-3" size="x-small" style="z-index: 1">
             <v-img v-if="note.user.image_path" :src="imageUrl(note.user.image_path)" />
             <v-icon v-else icon="mdi-account" />
           </v-avatar>
