@@ -20,8 +20,6 @@ const showEnlargedImage = inject<(src: string) => void>('showEnlargedImage');
 
 const updatePosts = inject<(id: number) => Promise<void>>('updatePosts');
 
-const likeCount = computed((): number => props.note.likes_count);
-
 const isLiked = computed((): boolean =>
   props.note.likes.some((like) => like.user_id === page.props.auth.user.id)
 );
@@ -108,7 +106,7 @@ const showSelectedUserPosts = (userId: number) => {
             :readonly="Boolean(commentLinkDisabled)"
             @click="$emit('showComments')"
           >
-            {{ note.comments_count || '' }}
+            {{ note.comments_count }}
             <v-tooltip activator="parent" location="bottom" text="Show comments" />
           </v-btn>
           <v-btn
@@ -116,7 +114,7 @@ const showSelectedUserPosts = (userId: number) => {
             :class="{ 'text-pink': isLiked }"
             @click="like"
           >
-            {{ likeCount }}
+            {{ note.likes_count }}
             <v-tooltip activator="parent" location="bottom" :text="isLiked ? 'Unlike' : 'Like'" />
           </v-btn>
         </div>

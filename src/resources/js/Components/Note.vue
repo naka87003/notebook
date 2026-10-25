@@ -91,7 +91,7 @@ const showTaggedNotes = () => {
           :readonly="Boolean(commentLinkDisabled)"
           @click="$emit('showComments')"
         >
-          {{ note.comments_count || '' }}
+          {{ note.comments_count }}
           <v-tooltip activator="parent" location="bottom" text="Show comments" />
         </v-btn>
         <v-btn
