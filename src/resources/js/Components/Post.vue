@@ -4,7 +4,7 @@ import { router, usePage } from '@inertiajs/vue3';
 import axios from 'axios';
 import { simplifyDateTime, relativeDateTime, imageUrl } from '@/Utils/common';
 import NoteContent from '@/Components/NoteContent.vue';
-import { updatePostsKey } from '@/Keys/notes';
+import { refreshNoteKey } from '@/Keys/notes';
 import type { Category, Like, Note, User } from '@/Types/interfaces';
 
 type PostNote = Note & {
@@ -25,7 +25,7 @@ defineEmits<{
 
 const showEnlargedImage = inject<(src: string) => void>('showEnlargedImage');
 
-const updatePosts = inject(updatePostsKey);
+const refreshNote = inject(refreshNoteKey);
 
 const isLiked = computed((): boolean => {
   const user = page.props.auth.user;
@@ -40,10 +40,10 @@ const previewImagePath = computed(() => {
 const like = async () => {
   if (isLiked.value === false) {
     await axios.post(route('likes.like', props.note.id));
-    await updatePosts?.(props.note.id);
+    await refreshNote?.(props.note.id);
   } else {
     await axios.delete(route('likes.unlike', props.note.id));
-    await updatePosts?.(props.note.id);
+    await refreshNote?.(props.note.id);
   }
 };
 

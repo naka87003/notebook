@@ -1,6 +1,6 @@
 import { ref, computed, provide } from 'vue';
 import axios from 'axios';
-import { updatePostsKey } from '@/Keys/notes';
+import { refreshNoteKey } from '@/Keys/notes';
 import type { Note } from '@/Types/interfaces';
 
 export default function useNotes() {
@@ -12,17 +12,17 @@ export default function useNotes() {
     targetNoteId.value === null ? undefined : notes.value.get(targetNoteId.value)
   );
 
-  const updatePosts = async (id: number) => {
+  const refreshNote = async (id: number) => {
     const response = await axios.get(route('notes.note', id));
     notes.value.set(id, response.data);
   };
 
-  provide(updatePostsKey, updatePosts);
+  provide(refreshNoteKey, refreshNote);
 
   return {
     notes,
     targetNoteId,
     targetNote,
-    updatePosts,
+    refreshNote,
   };
 }

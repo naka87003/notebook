@@ -5,7 +5,7 @@ import axios from 'axios';
 import CommentItem from '@/Components/Comment.vue';
 import ConfirmCard from '@/Components/ConfirmCard.vue';
 import { useCurrentUser } from '@/Composables/useCurrentUser';
-import { updatePostsKey } from '@/Keys/notes';
+import { refreshNoteKey } from '@/Keys/notes';
 import type { Comment, Note } from '@/Types/interfaces';
 import type { InfiniteScrollLoadOptions } from '@/Types/infiniteScroll';
 
@@ -17,7 +17,7 @@ defineEmits<{
   close: [];
 }>();
 
-const updatePosts = inject(updatePostsKey);
+const refreshNote = inject(refreshNoteKey);
 
 const form = useForm({
   comment: '',
@@ -69,7 +69,7 @@ const addComment = async () => {
       for (const comment of result) {
         comments.value.set(comment.id, comment);
       }
-      await updatePosts?.(props.targetNote.id);
+      await refreshNote?.(props.targetNote.id);
     },
   });
 };
@@ -90,7 +90,7 @@ const deleteComment = async (): Promise<void> => {
     .delete(route('comments.destroy', commentId))
     .then(async () => {
       comments.value.delete(commentId);
-      await updatePosts?.(props.targetNote.id);
+      await refreshNote?.(props.targetNote.id);
     })
     .catch((error) => {
       console.log(error);

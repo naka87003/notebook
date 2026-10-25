@@ -1,7 +1,7 @@
 <script setup lang="ts">
 import { ref, computed } from 'vue';
 import { router, usePage } from '@inertiajs/vue3';
-import HumburgerMenu from '@/Components/HumburgerMenu.vue';
+import HamburgerMenu from '@/Components/HamburgerMenu.vue';
 import NotificationList from '@/Components/NotificationList.vue';
 import { useDarkMode } from '@/Composables/useDarkMode';
 import { useCurrentUser } from '@/Composables/useCurrentUser';
@@ -10,7 +10,7 @@ const page = usePage<{ unreadNotificationCount: number }>();
 const { isDark } = useDarkMode();
 
 const dialog = ref({
-  humburgerMenu: false,
+  hamburgerMenu: false,
   notifications: false,
 });
 
@@ -140,7 +140,7 @@ const markAllAsRead = () => {
         <v-btn
           class="hidden-md-and-up"
           stacked
-          @click="dialog.humburgerMenu = !dialog.humburgerMenu"
+          @click="dialog.hamburgerMenu = !dialog.hamburgerMenu"
         >
           <v-icon icon="mdi-menu" />
           <v-tooltip activator="parent" location="bottom" text="Menu" />
@@ -148,12 +148,12 @@ const markAllAsRead = () => {
       </v-container>
     </v-app-bar>
     <v-main>
-      <v-dialog v-model="dialog.humburgerMenu" scrollable>
-        <HumburgerMenu
+      <v-dialog v-model="dialog.hamburgerMenu" scrollable>
+        <HamburgerMenu
           v-model:is-dark="isDark"
           :current-page-name
           @logout="logout"
-          @close="dialog.humburgerMenu = false"
+          @close="dialog.hamburgerMenu = false"
         />
       </v-dialog>
       <v-dialog v-model="dialog.notifications" max-width="600px" scrollable>

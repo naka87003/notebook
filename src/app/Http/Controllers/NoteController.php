@@ -209,7 +209,7 @@ class NoteController extends Controller
         return response()->json();
     }
 
-    public function Schedule()
+    public function schedule()
     {
         $schedule = Note::where('user_id', Auth::id())->where('category_id', 3)->with(['user', 'category', 'status', 'tag'])->get();
 

@@ -33,7 +33,7 @@ const search = ref('');
 const previewImagePath = ref('');
 
 // Note
-const { notes, targetNoteId, targetNote, updatePosts } = useNotes();
+const { notes, targetNoteId, targetNote, refreshNote } = useNotes();
 
 type TimelineNote = Note & {
   category: Category;
@@ -142,7 +142,7 @@ const showComments = (id: number) => {
 
 const closeComments = async () => {
   if (targetNoteId.value !== null) {
-    await updatePosts(targetNoteId.value);
+    await refreshNote(targetNoteId.value);
   }
   dialog.value.postComments = false;
 };
@@ -208,7 +208,7 @@ provide('showEnlargedImage', showEnlargedImage);
                 :note
                 @show-enlarged-image="showEnlargedImage"
                 @show-comments="showComments(note.id)"
-                @update="updatePosts(note.id)"
+                @update="refreshNote(note.id)"
               />
             </v-col>
           </template>
