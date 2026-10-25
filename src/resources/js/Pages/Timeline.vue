@@ -1,6 +1,6 @@
 <script setup lang="ts">
 import { Head } from '@inertiajs/vue3';
-import { ref, computed, onMounted, provide, type Ref } from 'vue';
+import { ref, computed, onMounted, type Ref } from 'vue';
 import { watchDebounced } from '@vueuse/core';
 import type { Category, Like, Note, PostsFilter, User } from '@/Types/interfaces';
 import type { InfiniteScrollLoadOptions } from '@/Types/infiniteScroll';
@@ -150,7 +150,6 @@ const closeComments = async () => {
 const isTimelineNote = (note: Note | undefined): note is TimelineNote =>
   note?.category != null && note.user != null && Array.isArray(note.likes);
 
-provide('showEnlargedImage', showEnlargedImage);
 </script>
 
 <template>
@@ -231,7 +230,11 @@ provide('showEnlargedImage', showEnlargedImage);
     </v-dialog>
     <v-dialog v-model="dialog.postComments" fullscreen scrollable transition="scroll-x-transition">
       <Comments v-if="isTimelineNote(targetNote)" :target-note @close="closeComments">
-        <Post :note="targetNote" comment-link-disabled />
+        <Post
+          :note="targetNote"
+          comment-link-disabled
+          @show-enlarged-image="showEnlargedImage"
+        />
       </Comments>
     </v-dialog>
   </AuthenticatedLayout>

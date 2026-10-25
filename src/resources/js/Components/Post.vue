@@ -20,10 +20,9 @@ const props = defineProps<{
 }>();
 
 defineEmits<{
+  showEnlargedImage: [src: string];
   showComments: [];
 }>();
-
-const showEnlargedImage = inject<(src: string) => void>('showEnlargedImage');
 
 const refreshNote = inject(refreshNoteKey);
 
@@ -85,7 +84,7 @@ const showSelectedUserPosts = (userId: number) => {
         class="mt-3 cursor-pointer"
         style="z-index: 1"
         lazy-src="/lazy-src.gif"
-        @click="showEnlargedImage(previewImagePath)"
+        @click="$emit('showEnlargedImage', previewImagePath)"
       >
         <template #placeholder>
           <div class="d-flex align-center justify-center fill-height">

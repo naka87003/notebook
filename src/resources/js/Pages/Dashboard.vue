@@ -1,6 +1,6 @@
 <script setup lang="ts">
 import { Head, usePage } from '@inertiajs/vue3';
-import { ref, computed, onMounted, provide } from 'vue';
+import { ref, computed, onMounted } from 'vue';
 import { watchDebounced } from '@vueuse/core';
 import axios from 'axios';
 import AuthenticatedLayout from '@/Layouts/AuthenticatedLayout.vue';
@@ -238,7 +238,6 @@ const showEnlargedImage = (src: string) => {
   dialog.value.enlargedImage = true;
   previewImagePath.value = src;
 };
-provide('showEnlargedImage', showEnlargedImage);
 
 // Lifecycle Events
 onMounted(async () => {
