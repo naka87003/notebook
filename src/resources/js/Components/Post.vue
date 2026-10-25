@@ -101,12 +101,11 @@ const showSelectedUserPosts = (userId: number) => {
         </template>
         <v-list-item-title>{{ note.user.name }}</v-list-item-title>
       </v-list-item>
-      <div class="d-flex align-center flex-grow-1 justify-end">
+      <div class="d-flex align-center">
         <div v-if="note.tag" class="d-flex align-center ga-2 pl-2 pr-3">
           <v-icon :color="note.tag?.hex_color" size="small">mdi-tag</v-icon>
           <span class="text-body-small">{{ note.tag?.name }}</span>
         </div>
-        <v-spacer />
         <v-btn
           prepend-icon="mdi-comment-outline"
           :readonly="Boolean(commentLinkDisabled)"
