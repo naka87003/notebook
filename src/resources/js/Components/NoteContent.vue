@@ -4,7 +4,9 @@ import { parseNoteContent } from '../Utils/noteContent';
 import useSnackbar from '../Composables/useSnackbar';
 import HighlightedCode from './HighlightedCode.vue';
 
-const props = defineProps<{ content: string; maxLines?: number }>();
+const PREVIEW_MAX_LINES = 8;
+
+const props = defineProps<{ content: string }>();
 const expanded = ref(false);
 const { snackbar, showSnackBar } = useSnackbar();
 const copyFailed = ref(false);
@@ -12,12 +14,11 @@ const blocks = computed(() => parseNoteContent(props.content));
 const isTruncated = computed(
   () =>
     !expanded.value &&
-    props.maxLines != null &&
-    blocks.value.reduce((total, block) => total + block.lines, 0) > props.maxLines
+    blocks.value.reduce((total, block) => total + block.lines, 0) > PREVIEW_MAX_LINES
 );
 const visibleBlocks = computed(() => {
   if (!isTruncated.value) return blocks.value;
-  let remaining = props.maxLines ?? 0;
+  let remaining = PREVIEW_MAX_LINES;
   const visible = [];
   for (const block of blocks.value) {
     if (remaining <= 0) break;

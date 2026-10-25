@@ -55,7 +55,7 @@ const showTaggedNotes = () => {
         <p class="text-body-medium ma-0">from {{ simplifyDateTime(note.starts_at) }}</p>
         <p class="text-body-medium ma-0">to {{ simplifyDateTime(note.ends_at) }}</p>
       </v-alert>
-      <NoteContent :content="note.content ?? ''" :max-lines="5" />
+      <NoteContent :content="note.content ?? ''" />
       <v-img
         v-if="previewImagePath"
         :src="previewImagePath"
