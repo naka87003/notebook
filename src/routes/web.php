@@ -2,7 +2,7 @@
 
 use App\Http\Controllers\CalendarController;
 use App\Http\Controllers\CommentController;
-use App\Http\Controllers\DashboardController;
+use App\Http\Controllers\NotesController;
 use App\Http\Controllers\ProfileController;
 use App\Http\Controllers\ImageController;
 use App\Http\Controllers\NoteController;
@@ -17,7 +17,7 @@ use App\Http\Controllers\PreferenceController;
 use Illuminate\Support\Facades\Route;
 
 Route::middleware(['auth', 'verified'])->group(function () {
-    Route::get('/', [DashboardController::class, 'index'])->name('dashboard');
+    Route::get('/', [NotesController::class, 'index'])->name('notes');
     Route::get('/calendar', [CalendarController::class, 'index'])->name('calendar');
     Route::get('/timeline', [TimelineController::class, 'index'])->name('timeline');
   

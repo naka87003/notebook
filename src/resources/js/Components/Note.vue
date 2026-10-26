@@ -23,7 +23,7 @@ const previewImagePath = computed(() => {
 const showTaggedNotes = () => {
   if (!props.note.tag) return;
 
-  router.get(route('dashboard'), {
+  router.get(route('notes'), {
     tag: props.note.tag.id,
     status: props.note.status_id,
   });

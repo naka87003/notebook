@@ -8,7 +8,7 @@ use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Auth;
 use Inertia\Inertia;
 
-class DashboardController extends Controller
+class NotesController extends Controller
 {
     /**
      * Display a listing of the resource.
@@ -35,6 +35,6 @@ class DashboardController extends Controller
             }
         }
 
-        return Inertia::render('Dashboard', $props);
+        return Inertia::render('Notes', $props);
     }
 }

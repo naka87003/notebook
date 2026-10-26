@@ -49,11 +49,11 @@ const selectItem = async (item: Notification) => {
       break;
     case 'comment':
       if (item.data.comment) {
-        router.get(route('dashboard'), { note: item.data.comment.note_id });
+        router.get(route('notes'), { note: item.data.comment.note_id });
       }
       break;
     case 'like':
-      router.get(route('dashboard'), { note: item.data.note_id });
+      router.get(route('notes'), { note: item.data.note_id });
       break;
     case 'reply':
       if (item.data.comment) {

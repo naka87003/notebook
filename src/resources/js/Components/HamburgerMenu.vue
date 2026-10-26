@@ -38,8 +38,8 @@ const pageTransition = (name: string) => {
         <v-list-item
           title="Notes"
           density="compact"
-          :active="currentPageName === 'dashboard'"
-          @click="pageTransition('dashboard')"
+          :active="currentPageName === 'notes'"
+          @click="pageTransition('notes')"
         >
           <template #prepend>
             <v-avatar density="compact">

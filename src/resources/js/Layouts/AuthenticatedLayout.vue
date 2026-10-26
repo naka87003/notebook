@@ -45,9 +45,9 @@ const markAllAsRead = () => {
       <v-container class="d-flex align-center justify-center" fluid>
         <v-tabs :model-value="currentPageName" class="hidden-xs">
           <v-tab
-            value="dashboard"
+            value="notes"
             prepend-icon="mdi-note-multiple-outline"
-            @click="pageTransition('dashboard')"
+            @click="pageTransition('notes')"
           >
             Notes
           </v-tab>

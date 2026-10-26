@@ -28,7 +28,7 @@ const props = defineProps<{
 const currentUser = usePage().props.auth.user;
 
 if (currentUser === null) {
-  throw new Error('Dashboard requires an authenticated user.');
+  throw new Error('Notes requires an authenticated user.');
 }
 
 const isInProgress = ref(true);

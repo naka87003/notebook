@@ -121,7 +121,7 @@ const deleteTag = async () => {
 };
 
 const showTaggedNotes = (item: Tag, status: number) => {
-  router.get(route('dashboard'), {
+  router.get(route('notes'), {
     tag: item.id,
     status,
   });
