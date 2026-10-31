@@ -31,7 +31,7 @@ const display = ref({
 
 const { user, avatarImagePath } = useCurrentUser();
 
-const isMyComment = computed((): boolean => {
+const isMyReply = computed((): boolean => {
   return props.reply.user_id === user.value?.id;
 });
 
@@ -73,7 +73,7 @@ const addReply = async () => {
       }}</span>
     </template>
     <template #append>
-      <v-menu v-if="isMyComment">
+      <v-menu v-if="isMyReply">
         <template #activator="{ props }">
           <v-icon v-bind="props" icon="mdi-dots-vertical" variant="plain" size="small" />
         </template>

@@ -3,12 +3,12 @@ import { splitByNewline } from '@/Utils/common';
 
 export default function useParagraphs(content: ComputedRef<string>, rowsCount: number) {
   const truncate = ref(true);
-  const arrCommentLines = computed(() => splitByNewline(content.value));
+  const contentLines = computed(() => splitByNewline(content.value));
 
-  const isTruncated = computed(() => truncate.value && arrCommentLines.value.length > rowsCount);
+  const isTruncated = computed(() => truncate.value && contentLines.value.length > rowsCount);
 
   const paragraphs = computed(() => {
-    let lines = arrCommentLines.value;
+    let lines = contentLines.value;
     if (truncate.value && lines.length > rowsCount) {
       lines = lines.slice(0, rowsCount);
       lines[lines.length - 1] += '...';
@@ -18,7 +18,6 @@ export default function useParagraphs(content: ComputedRef<string>, rowsCount: n
 
   return {
     truncate,
-    arrCommentLines,
     isTruncated,
     paragraphs,
   };

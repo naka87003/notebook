@@ -21,7 +21,7 @@ import type { InfiniteScrollLoadOptions } from '@/Types/infiniteScroll';
 const props = defineProps<{
   tag?: number;
   status?: number;
-  newRegisteredUser: boolean;
+  hasNoNotes: boolean;
   note?: Note;
 }>();
 
@@ -297,7 +297,7 @@ onMounted(async () => {
       </v-btn>
     </template>
     <v-container>
-      <template v-if="newRegisteredUser">
+      <template v-if="hasNoNotes">
         <v-alert icon="mdi-hand-clap" color="success" variant="tonal" class="hidden-xs">
           <v-alert-title>Welcome to Notebook, {{ currentUser.name }}!</v-alert-title>
           Let's click the plus button at the top right to create your first note!

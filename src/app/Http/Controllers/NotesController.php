@@ -19,7 +19,7 @@ class NotesController extends Controller
         $props = [
             'categoryItems' => Category::get(),
             'unreadNotificationCount' => $user->unreadNotifications->count(),
-            'newRegisteredUser' => Note::where('user_id', $user->id)->doesntExist()
+            'hasNoNotes' => Note::where('user_id', $user->id)->doesntExist()
         ];
         if (isset($request->tag) && is_numeric($request->tag)) {
             $props['tag'] = (int)$request->tag;

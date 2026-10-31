@@ -5,7 +5,7 @@ import dayjs from 'dayjs';
 import utc from 'dayjs/plugin/utc';
 import TagCreateForm from './TagCreateForm.vue';
 import type { Category } from '@/Types/interfaces';
-import useTagSelectedItems from '@/Composables/useTagSelectedItems';
+import useTagOptions from '@/Composables/useTagOptions';
 
 dayjs.extend(utc);
 
@@ -47,13 +47,11 @@ const dialog = ref({
 
 const allDay = ref(false);
 
-const items = ref({
-  category: page.props.categoryItems,
-});
+const categoryOptions = computed(() => page.props.categoryItems);
 
 const eventMode = computed((): boolean => props.variant === 'event');
 
-const startsDateTime = computed({
+const startDateTime = computed({
   get() {
     if (allDay.value) {
       return dayjs(form.starts).format('YYYY-MM-DD');
@@ -70,7 +68,7 @@ const startsDateTime = computed({
   },
 });
 
-const endsDateTime = computed({
+const endDateTime = computed({
   get() {
     if (allDay.value) {
       return dayjs(form.ends).format('YYYY-MM-DD');
@@ -101,7 +99,7 @@ onMounted(async () => {
   }
 });
 
-const { state: tagItems, execute } = useTagSelectedItems();
+const { state: tagItems, execute } = useTagOptions();
 
 const toAllDayRange = () => {
   form.starts = dayjs(form.starts).startOf('day').utc().format();
@@ -220,7 +218,7 @@ const copyDateToEnd = () => {
                 <v-autocomplete
                   v-model="form.category"
                   hide-details="auto"
-                  :items="items.category"
+                  :items="categoryOptions"
                   density="compact"
                   placeholder="Select Category"
                   variant="outlined"
@@ -259,7 +257,7 @@ const copyDateToEnd = () => {
                   @update:model-value="toAllDayRange"
                 ></v-switch>
                 <v-text-field
-                  v-model="startsDateTime"
+                  v-model="startDateTime"
                   class="mt-3"
                   label="Starts"
                   hide-details="auto"
@@ -275,7 +273,7 @@ const copyDateToEnd = () => {
                   "
                 />
                 <v-text-field
-                  v-model="endsDateTime"
+                  v-model="endDateTime"
                   class="mt-3"
                   label="Ends"
                   hide-details="auto"

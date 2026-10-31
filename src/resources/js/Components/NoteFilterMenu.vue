@@ -2,7 +2,7 @@
 import { ref } from 'vue';
 import { usePage } from '@inertiajs/vue3';
 import type { NotesFilter, Category } from '@/Types/interfaces';
-import useTagSelectedItems from '@/Composables/useTagSelectedItems';
+import useTagOptions from '@/Composables/useTagOptions';
 
 const emit = defineEmits<{
   close: [];
@@ -28,7 +28,7 @@ const newFilter = ref<NotesFilter>({
   onlyLiked: props.filter.onlyLiked,
 });
 
-const { state: tagItems } = useTagSelectedItems();
+const { state: tagItems } = useTagOptions();
 
 const resetFilter = () => {
   newFilter.value.category = [1, 2, 3];
